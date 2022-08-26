@@ -136,6 +136,8 @@
     <ClCompile Include="Sandbox\main.cpp" />
     <ClCompile Include="Sandbox\TestLayer.cpp" />
     <ClCompile Include="Src\Core\Application.cpp" />
+    <ClCompile Include="Src\Core\Callbacks.cpp" />
+    <ClCompile Include="Src\Core\Callbacks.h" />
     <ClCompile Include="Src\Core\Layer.cpp" />
     <ClCompile Include="Src\Core\Layerstack.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />

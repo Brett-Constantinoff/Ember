@@ -13,7 +13,7 @@ public:
         float yaw = -90.0f,
         float pitch = 0.0f,
         float moveSpeed = 3.0f,
-        float rotationSpeed = 2.0f
+        float rotationSpeed = 45.0f
     );
     void move(GLFWwindow* win, float dt);
     glm::mat4* getView(void);

@@ -4,8 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
-
-
 struct SceneSettings
 {
 	float m_fov;
@@ -21,14 +19,15 @@ public:
 	~Scene();
 
 	void addMesh(Mesh* mesh);
-	void addCamera(Camera* camera);
+	void addCamera(Camera* camera, bool mainCam);
 	void update(GLFWwindow* win, float dt);
 	void render();
 
 private:
 	SceneSettings m_settings;
 	std::vector<Mesh*> m_meshes;
-	Camera* m_camera;
+	std::vector<Camera*> m_cameras;
+	Camera* m_mainCamera;
 	glm::mat4 m_view;
 	glm::mat4 m_proj;
 };

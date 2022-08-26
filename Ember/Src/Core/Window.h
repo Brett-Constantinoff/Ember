@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "../Gui/gui.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "../Gui/gui.h"
+#include "Callbacks.h"
 
 class Window
 {
@@ -16,6 +17,7 @@ public:
     uint32_t getHeight();
     void update();
     bool isOpen();
+
 
 private:
     GLFWwindow* m_winID;

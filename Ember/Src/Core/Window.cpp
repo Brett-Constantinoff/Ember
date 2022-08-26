@@ -15,7 +15,7 @@ Window::Window(const std::string& label, uint32_t width, uint32_t height) :
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(m_winID);
-    glViewport(0, 0, m_width, m_height);
+    glfwSetFramebufferSizeCallback(m_winID, resize);
 
     glewExperimental = true;
     if (glewInit() != GLEW_OK)

@@ -12,7 +12,10 @@ Scene::~Scene()
 		m_meshes.pop_back();
 	}
 
-	delete m_camera;
+	while (m_cameras.size() > 0)
+	{
+		m_cameras.pop_back();
+	}
 }
 
 void Scene::addMesh(Mesh* mesh)
@@ -20,15 +23,19 @@ void Scene::addMesh(Mesh* mesh)
 	m_meshes.push_back(mesh);
 }
 
-void Scene::addCamera(Camera* camera)
+void Scene::addCamera(Camera* camera, bool mainCam)
 {
-	m_camera = camera;
+	if (mainCam)
+	{
+		m_mainCamera = camera;
+	}
+	m_cameras.push_back(camera);
 }
 
 void Scene::update(GLFWwindow* win, float dt)
 {
-	m_camera->move(win, dt);
-	m_view = *m_camera->getView();
+	m_mainCamera->move(win, dt);
+	m_view = *m_mainCamera->getView();
 	m_proj = glm::perspective(m_settings.m_fov, m_settings.m_asspect, m_settings.m_near, m_settings.m_far);
 }
 

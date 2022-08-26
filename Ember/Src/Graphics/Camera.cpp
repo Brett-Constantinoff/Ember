@@ -53,21 +53,23 @@ void Camera::updateEuler(GLFWwindow* win, float dt)
         m_pitch = -90.0f;
     }
 
+    const float rotationSpeed = (m_rotationSpeed * dt) + 0.5f;
+
     if (glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        m_yaw += m_rotationSpeed;
+        m_yaw += rotationSpeed;
     }
     if (glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        m_yaw -= m_rotationSpeed;
+        m_yaw -= rotationSpeed;
     }
     if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        m_pitch += m_rotationSpeed;
+        m_pitch += rotationSpeed;
     }
     if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        m_pitch -= m_rotationSpeed;
+        m_pitch -= rotationSpeed;
     }
 }
 

@@ -1,7 +1,7 @@
 #include "../Src/Core/Application.h"
 #include "TestLayer.h"
 
-class Sandbox : public Application
+class Sandbox :  public Application
 {
 public:
 	Sandbox(const std::string label) : Application(label)
