@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include <GLFW/glfw3.h>
+#include <iostream>
 #include <vector>
 
 struct SceneSettings
@@ -20,12 +21,15 @@ public:
 
 	void addMesh(Mesh* mesh);
 	void addCamera(Camera* camera, bool mainCam);
+	void addSkybox(std::vector<const char*> files);
 	void update(GLFWwindow* win, float dt);
 	void render();
+	void renderSkybox();
 
 private:
 	SceneSettings m_settings;
 	std::vector<Mesh*> m_meshes;
+	Mesh* m_skybox;
 	std::vector<Camera*> m_cameras;
 	Camera* m_mainCamera;
 	glm::mat4 m_view;

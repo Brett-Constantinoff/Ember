@@ -47,7 +47,6 @@ uint32_t Shader::compileShader(const std::string& source, uint32_t type)
         glGetShaderInfoLog(shadermID, 512, NULL, infoLog);
         std::cout << "ERROR:SHADER::" + std::to_string(type) + "::COMPILATION_FAILED\n" << infoLog << std::endl;
         glDeleteShader(shadermID);
-        exit(EXIT_FAILURE);
     }
     return shadermID;
 }
@@ -65,7 +64,7 @@ shaderSource Shader::parseShader(const std::string& filePath)
     if (!stream)
     {
         std::cout << "ERROR::CANNOT FIND FILE : " << filePath << std::endl;
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
     }
     std::string line; //string to hold each line from file
     std::stringstream ss[2];
@@ -100,7 +99,7 @@ int32_t Shader::checkUniform(const char* location)
     if (result == -1)
     {
         std::cout << "ERROR SETTING UNIFORM : " << location << std::endl;
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
     }
     return result;
 }

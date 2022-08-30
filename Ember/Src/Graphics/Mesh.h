@@ -1,39 +1,16 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
+#include <limits>
 #include "../Math/glm.hpp"
 #include "../Math/gtc/matrix_transform.hpp"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
-
-enum class Primitive
-{
-	QUAD = 0,
-	CUBE = 1,
-};
-
-struct Geometry
-{
-	std::vector<float> m_vertexPos;
-	std::vector<uint32_t> m_indices;
-	//add other vertex info here
-	//things like normals etc
-
-	//filepath will be for custom meshes
-	Geometry(Primitive type, const char* filePath = nullptr);
-};
-
-struct Material
-{
-	const char* m_shader;
-	glm::vec3 m_diff;
-	glm::vec3 m_amb;
-	glm::vec3 m_spec;
-	float m_shine;
-};
-
+#include "Texture.h"
+#include "Material.h"
+#include "Geometry.h"
 
 class Mesh
 {
@@ -54,11 +31,16 @@ private:
 
 	VertexArray* m_vao;
 	VertexBuffer* m_posBuffer;
+	VertexBuffer* m_uvBuffer;
 	IndexBuffer* m_ibo = nullptr;
+	Texture* m_texture2D;
+	Texture* m_textureSkybox;
+	bool m_enableTexture = false;
+	bool m_enableSkybox = false;
 
 	glm::vec3 m_pos = {0.0f, 0.0f, 0.0f};
 	glm::vec3 m_scale = { 1.0f, 1.0f, 1.0f };
 	glm::mat4 m_rotation = glm::mat4(1.0f);
+	glm::mat4 m_model;
 	float m_rotAngle = 0.0f;
-
 };

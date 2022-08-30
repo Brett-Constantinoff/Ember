@@ -2,16 +2,16 @@
 
 LayerStack::LayerStack()
 {
-
 }
 
 LayerStack::~LayerStack()
 {
-    while (!isEmpty())
+    for (Layer* layer : m_layers)
     {
-        m_layers.back()->onDetach();
-        m_layers.pop_back();
+        layer->onDetach();
+        delete layer;
     }
+    m_layers.clear();
 }
 
 void LayerStack::push(Layer* layer, Window* win)
@@ -23,7 +23,7 @@ void LayerStack::push(Layer* layer, Window* win)
 void LayerStack::pop()
 {
     m_layers.back()->onDetach();
-    m_layers.pop_back();
+    delete m_layers.back();
 }
 
 bool LayerStack::isEmpty()

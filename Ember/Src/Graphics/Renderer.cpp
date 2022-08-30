@@ -3,7 +3,6 @@
 Renderer::Renderer(RenderSettings settings) : 
 	m_settings{settings}
 {
-	
 	glEnable(GL_DEPTH_TEST);
 
 	if (m_settings.m_blend)
@@ -15,7 +14,6 @@ Renderer::Renderer(RenderSettings settings) :
 
 Renderer::~Renderer()
 {
-
 }
 
 void Renderer::clear()
@@ -34,5 +32,21 @@ void Renderer::clear()
 void Renderer::render(Scene* scene)
 {
 	clear();
+
+	//render scene
 	scene->render();
+
+	//render skybox last
+	if (m_skybox)
+	{
+		glDepthFunc(GL_LEQUAL);
+		scene->renderSkybox();
+		glDepthFunc(GL_LESS);
+	}
+
+}
+
+void Renderer::enableSkybox()
+{
+	m_skybox = true;
 }

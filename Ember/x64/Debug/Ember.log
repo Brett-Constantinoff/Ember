@@ -1,6 +1,4 @@
-﻿  TestLayer.cpp
-  Mesh.cpp
-  Renderer.cpp
-  Scene.cpp
-  Generating Code...
+﻿  main.cpp
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Core\AllocationMetrics.h(27,47): warning C4267: '+=': conversion from 'size_t' to 'int32_t', possible loss of data
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Core\AllocationMetrics.h(34,43): warning C4267: '+=': conversion from 'size_t' to 'int32_t', possible loss of data
   Ember.vcxproj -> C:\Users\const\OneDrive\Desktop\Ember\x64\Debug\Ember.exe

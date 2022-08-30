@@ -1,18 +1,51 @@
 #include "../Src/Core/Application.h"
 #include "TestLayer.h"
 
-class Sandbox :  public Application
+class Ember : public Application
 {
 public:
-	Sandbox(const std::string label) : Application(label)
+	Ember(const std::string label) : Application(label)
 	{
 	}
 };
 
+
+#ifdef _DEBUG
+#include "../Src/Core/AllocationMetrics.h"
+
 int main()
 {
-	Sandbox engine("Hello World!");
-	engine.pushLayer(new TestLayer());
-	engine.start();
-	return 0;
+	s_allocationMetrics.currentUsage();
+
+	Ember* engine = new Ember("Ember");
+	s_allocationMetrics.currentUsage();
+
+	engine->pushLayer(new TestLayer());
+	s_allocationMetrics.currentUsage();
+
+	engine->start();
+	s_allocationMetrics.currentUsage();
+
+	delete engine;
+	s_allocationMetrics.currentUsage();
+
+	std::cin.get();
 }
+
+#else
+int main()
+{
+	Ember* engine = new Ember("Ember")
+	engine->pushLayer(new TestLayer());
+	engine->start();
+	delete engine;
+}
+
+#endif
+
+
+
+
+
+
+

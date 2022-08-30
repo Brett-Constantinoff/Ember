@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\STBI\;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\STBI\;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,11 +142,14 @@
     <ClCompile Include="Src\Core\Layerstack.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
     <ClCompile Include="Src\Graphics\Camera.cpp" />
+    <ClCompile Include="Src\Graphics\Geometry.cpp" />
     <ClCompile Include="Src\Graphics\IndexBuffer.cpp" />
+    <ClCompile Include="Src\Graphics\Material.cpp" />
     <ClCompile Include="Src\Graphics\Mesh.cpp" />
     <ClCompile Include="Src\Graphics\Renderer.cpp" />
     <ClCompile Include="Src\Graphics\Scene.cpp" />
     <ClCompile Include="Src\Graphics\Shader.cpp" />
+    <ClCompile Include="Src\Graphics\Texture.cpp" />
     <ClCompile Include="Src\Graphics\VertexArray.cpp" />
     <ClCompile Include="Src\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Src\Gui\imgui.cpp" />
@@ -160,17 +163,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sandbox\TestLayer.h" />
+    <ClInclude Include="Src\Core\AllocationMetrics.h" />
     <ClInclude Include="Src\Core\Application.h" />
     <ClInclude Include="Src\Core\Layer.h" />
     <ClInclude Include="Src\Core\Layerstack.h" />
     <ClInclude Include="Src\Core\Window.h" />
     <ClInclude Include="Src\Graphics\Camera.h" />
+    <ClInclude Include="Src\Graphics\Geometry.h" />
     <ClInclude Include="Src\Graphics\Graphics.h" />
     <ClInclude Include="Src\Graphics\IndexBuffer.h" />
+    <ClInclude Include="Src\Graphics\Material.h" />
     <ClInclude Include="Src\Graphics\Mesh.h" />
     <ClInclude Include="Src\Graphics\Renderer.h" />
     <ClInclude Include="Src\Graphics\Scene.h" />
     <ClInclude Include="Src\Graphics\Shader.h" />
+    <ClInclude Include="Src\Graphics\Texture.h" />
     <ClInclude Include="Src\Graphics\VertexArray.h" />
     <ClInclude Include="Src\Graphics\VertexBuffer.h" />
     <ClInclude Include="Src\Gui\gui.h" />
@@ -603,6 +610,13 @@
     <None Include="Src\Math\gtx\vector_angle.inl" />
     <None Include="Src\Math\gtx\vector_query.inl" />
     <None Include="Src\Math\gtx\wrap.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Src\Utilities\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Src\Assets\Textures\brick.jpg" />
+    <Image Include="Src\Assets\Textures\woodenBox.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
