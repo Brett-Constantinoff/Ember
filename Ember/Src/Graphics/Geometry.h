@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "../Math/glm.hpp"
+#include "../Math/gtc/constants.hpp"
 
 enum class Type
 {

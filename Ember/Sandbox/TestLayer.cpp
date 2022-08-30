@@ -39,6 +39,7 @@ void TestLayer::onAttach(Window* win)
 		".\\Src\\Assets\\Textures\\MountainSkybox\\back.jpg",
 	});
 	
+	
 	Geometry quadGeo(Type::QUAD);
 	Material quadMat = { ".\\Src\\Shaders\\basicShader.hlsl", nullptr, {0.56f ,0.23f, 0.85f} };
 	Mesh* quad = new Mesh(quadGeo, quadMat);
@@ -59,6 +60,19 @@ void TestLayer::onAttach(Window* win)
 	cube2->translate({ -2.0f, 0.0f, 0.0f });
 	cube2->scale({ 2.0f, 2.0f, 2.0f });
 	m_scene->addMesh(cube2);
+	
+	Geometry spherGeo = { Type::SPHERE };
+	Material sphereMat = { ".\\Src\\Shaders\\basicShader.hlsl", ".\\Src\\Assets\\Textures\\brick.jpg" };
+	Mesh* sphere = new Mesh(spherGeo, sphereMat);
+	sphere->translate({ -5.5f, 3.0f, 6.0f });
+	m_scene->addMesh(sphere);
+	
+
+	Geometry cylGeo = { Type::CYLINDER };
+	Material cylMat = { ".\\Src\\Shaders\\basicShader.hlsl", nullptr, {0.14f, 0.28f, 0.36f} };
+	Mesh* cyl = new Mesh(cylGeo, cylMat);
+	cyl->translate({ 1.5f, 0.0f, -3.5f });
+	m_scene->addMesh(cyl);
 }
 
 void TestLayer::onDetach()

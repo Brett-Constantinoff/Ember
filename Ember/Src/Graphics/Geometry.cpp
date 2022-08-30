@@ -97,11 +97,100 @@ Geometry::Geometry(Type type)
 	}
 	else if (type == Type::SPHERE)
 	{
-		//generate sphere geometry
+		int32_t n = 32;
+		int32_t m = 16;
+		float theta = 0.0f;
+		float thetaStep = glm::two_pi<float>() / n;
+		float phi = 0.0f;
+		float phiStep = glm::pi<float>() / m;
+
+		for (int32_t i = 0; i < m + 1; i++)
+		{
+			for (int32_t j = 0; j < n + 1; j++)
+			{
+				m_vertexPos.push_back(cos(theta)* sin(phi));
+				m_vertexPos.push_back(cos(phi));
+				m_vertexPos.push_back(sin(theta) * sin(phi));
+				theta += thetaStep;
+
+				float s = static_cast<float>(j) / static_cast<float>(n);
+				float t = static_cast<float>(i) / static_cast<float>(m);
+
+				m_uvs.push_back(s);
+				m_uvs.push_back(t);
+			}
+			phi += phiStep;
+			theta = 0;
+		}
+
+		for (int32_t i = 0; i < m_vertexPos.size() / 3 - n - 2; i++)
+		{
+			m_indices.push_back(i);
+			m_indices.push_back(i + n + 1);
+			m_indices.push_back(i + n + 2);
+
+			m_indices.push_back(i);
+			m_indices.push_back(i + n + 2);
+			m_indices.push_back(i + 1);
+		}
+
 	}
 	else if (type == Type::CYLINDER)
 	{
-		//generate cylinder geometry
+		int32_t n = 32;
+		float thetaStep = glm::two_pi<float>() / n;
+		float theta = 0.0f;
+
+		//top
+		m_vertexPos.push_back(0.0f);
+		m_vertexPos.push_back(1.0f);
+		m_vertexPos.push_back(0.0f);
+
+		for (int32_t i = 0; i < n + 2; i++)
+		{
+			float x = cos(theta);
+			float y = 1.0;
+			float z = sin(theta);
+
+			m_vertexPos.push_back(x);
+			m_vertexPos.push_back(-y);
+			m_vertexPos.push_back(z);
+
+			m_vertexPos.push_back(x);
+			m_vertexPos.push_back(y);
+			m_vertexPos.push_back(z);
+
+			theta += thetaStep;
+		}
+
+		//bottom
+		m_vertexPos.push_back(0.0f);
+		m_vertexPos.push_back(-1.0f);
+		m_vertexPos.push_back(0.0f);
+
+		//body
+		for (int32_t i = 3; i < m_vertexPos.size() / 3 - 1; i += 2)
+		{
+			m_indices.push_back(i);
+			m_indices.push_back(i + 1);
+			m_indices.push_back(i + 2);
+
+			m_indices.push_back(i + 1);
+			m_indices.push_back(i + 3);
+			m_indices.push_back(i + 2);
+		}
+
+		//circles
+		for (int32_t i = 3; i < m_vertexPos.size() / 3 - 1; i += 2)
+		{
+			m_indices.push_back(i + 2);
+			m_indices.push_back(2);
+			m_indices.push_back(i);
+
+			m_indices.push_back(i + 1);
+			m_indices.push_back(1);
+			m_indices.push_back(i + 3);
+		}
 	}
 }
 

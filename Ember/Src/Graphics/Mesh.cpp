@@ -9,7 +9,7 @@ Mesh::Mesh(Geometry geo, Material mat) :
 
 	if (m_geo.m_indices.size() > 0)
 	{
-		m_ibo = new IndexBuffer(m_geo.m_indices.size() * sizeof(uint32_t), sizeof(m_geo.m_indices), &m_geo.m_indices[0], GL_STATIC_DRAW);
+		m_ibo = new IndexBuffer(m_geo.m_indices.size() * sizeof(uint32_t), m_geo.m_indices.size(), &m_geo.m_indices[0], GL_STATIC_DRAW);
 	}
 
 	if (m_mat.m_texture != nullptr)
