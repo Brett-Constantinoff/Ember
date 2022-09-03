@@ -2,26 +2,24 @@
 #include <vector>
 #include "../Math/glm.hpp"
 
+struct MaterialProps
+{
+	const char* shader;
+	const char* m_texture;
+	glm::vec3 m_diff = { 1.0f, 1.0f, 1.0f };
+	glm::vec3 m_amb = { 1.0f, 0.5f, 0.31f };
+	glm::vec3 m_spec = { 0.5f, 0.5f, 0.5f };
+	float m_shine = 32.0f;
+};
+
 struct Material
 {
-	const char* m_shader;
-	const char* m_texture;
-	std::vector<const char*> m_skybox;
-	glm::vec3 m_diff;
-	glm::vec3 m_amb;
-	glm::vec3 m_spec;
-	float m_shine;
-
 	//nomral material
-	Material(
-		const char* shader,
-		const char* texture,
-		glm::vec3 diff = { 1.0f, 1.0f, 1.0f },
-		glm::vec3 m_amb = { 0.1f, 0.1f, 0.1f },
-		glm::vec3 spec = { 1.0f, 1.0f, 1.0f },
-		float shine = 5.0f
-	);
+	Material(MaterialProps props);
 
 	//skybox maertial
-	Material(const char* shader, std::vector<const char*> skybox);
+	Material(std::vector<const char*> skybox);
+
+	MaterialProps m_props;
+	std::vector<const char*> m_skybox;
 };

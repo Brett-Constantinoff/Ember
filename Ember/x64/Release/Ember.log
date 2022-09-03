@@ -1,12 +1,44 @@
 ﻿  main.cpp
-C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Core\AllocationMetrics.h(27,47): warning C4267: '+=': conversion from 'size_t' to 'int32_t', possible loss of data
-C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Core\AllocationMetrics.h(34,43): warning C4267: '+=': conversion from 'size_t' to 'int32_t', possible loss of data
+  TestLayer.cpp
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Sandbox\TestLayer.cpp(45,141): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Sandbox\TestLayer.cpp(53,138): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Application.cpp
+  Callbacks.cpp
+  Callbacks.h
+  Layer.cpp
+  Layerstack.cpp
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Core\Layerstack.cpp(36,27): warning C4267: 'return': conversion from 'size_t' to 'int8_t', possible loss of data
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Core\Layerstack.cpp(41,5): warning C4267: 'initializing': conversion from 'size_t' to 'int8_t', possible loss of data
+  Window.cpp
+  Camera.cpp
+  Geometry.cpp
+  IndexBuffer.cpp
+  Material.cpp
+  Mesh.cpp
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Graphics\Mesh.cpp(7,143): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Graphics\Mesh.cpp(12,150): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Graphics\Mesh.cpp(18,125): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\const\OneDrive\Desktop\Ember\Ember\Src\Graphics\Mesh.cpp(27,130): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+  Renderer.cpp
+  Scene.cpp
+  Shader.cpp
+  Texture.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
+  imgui.cpp
+  Compiling...
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  glm.cpp
 x64\Release\Callbacks.obj : warning LNK4042: object specified more than once; extras ignored
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  44 of 2049 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    27 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+  All 2256 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
 glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\const\OneDrive\Desktop\Ember\x64\Release\vc120.pdb'; linking object as if no debug info
   Ember.vcxproj -> C:\Users\const\OneDrive\Desktop\Ember\x64\Release\Ember.exe

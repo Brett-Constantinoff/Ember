@@ -11,7 +11,7 @@ struct AllocationMetrics
 
 	void currentUsage()
 	{
-		std::cout << "Total memory usage: " << m_totalAllocatedBytes - m_totalFreedBytes << "bytes\n";
+		std::cout << "Total memory usage: " << m_totalAllocatedBytes - m_totalFreedBytes << " bytes\n";
 		std::cout << "Total Allocations: " << m_totalAllocations << "\n";
 		std::cout << "Total Frees: " << m_totalFrees << "\n\n";
 	}

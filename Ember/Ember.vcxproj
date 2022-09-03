@@ -172,6 +172,8 @@
     <ClInclude Include="Src\Graphics\Geometry.h" />
     <ClInclude Include="Src\Graphics\Graphics.h" />
     <ClInclude Include="Src\Graphics\IndexBuffer.h" />
+    <ClInclude Include="Src\Graphics\Light.h" />
+    <ClInclude Include="Src\Graphics\LightCaster.h" />
     <ClInclude Include="Src\Graphics\Material.h" />
     <ClInclude Include="Src\Graphics\Mesh.h" />
     <ClInclude Include="Src\Graphics\Renderer.h" />

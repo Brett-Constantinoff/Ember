@@ -6,4 +6,5 @@
 #include "VertexArray.h"
 #include "Renderer.h"
 #include "Mesh.h"
+#include "LightCaster.h"
 #include "Scene.h"

@@ -2,14 +2,16 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <vector>
+#include <sstream>
+#include <string>
 #include "../Math/glm.hpp"
+#include "../Math/gtc/matrix_transform.hpp"
 #include "Scene.h"
 #include "../Core/Window.h"
 
 
 struct RenderSettings
 {
-	Window* m_win;
 	bool m_blend;
 	int32_t m_sFactorBlend = GL_SRC_ALPHA;
 	int32_t m_dFactorBlend = GL_ONE_MINUS_SRC_ALPHA;
@@ -26,12 +28,11 @@ public:
 	~Renderer();
 
 	void render(Scene* scene);
-	void enableSkybox();
 
 private:
 	void clear();
 
 private:
 	RenderSettings m_settings;
-	bool m_skybox = false;
+	Mesh* m_skyBox;
 };

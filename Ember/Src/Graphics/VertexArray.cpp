@@ -11,10 +11,11 @@ VertexArray::~VertexArray()
 	glDeleteVertexArrays(1, &m_id);
 }
 
-void VertexArray::enableAttrib(uint32_t index, uint32_t components, GLsizei stride, void* first, int type, int normalized)
+void VertexArray::enableAttrib(uint32_t components, GLsizei stride, void* first, int type, int normalized)
 {
-	glVertexAttribPointer(index, components, type, normalized, stride, first);
-	glEnableVertexAttribArray(index);
+	glVertexAttribPointer(m_index, components, type, normalized, stride, first);
+	glEnableVertexAttribArray(m_index);
+	m_index++;
 }
 
 void VertexArray::bind()

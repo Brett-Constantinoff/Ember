@@ -35,7 +35,7 @@ int main()
 #else
 int main()
 {
-	Ember* engine = new Ember("Ember")
+	Ember* engine = new Ember("Ember");
 	engine->pushLayer(new TestLayer());
 	engine->start();
 	delete engine;

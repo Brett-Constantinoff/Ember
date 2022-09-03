@@ -25,6 +25,11 @@ void Shader::use(void)
     glUseProgram(m_ID);
 }
 
+void Shader::disuse(void)
+{
+    glUseProgram(0);
+}
+
 uint32_t Shader::getId(void)
 {
     return m_ID;
@@ -93,43 +98,64 @@ shaderSource Shader::parseShader(const std::string& filePath)
     return { ss[0].str(), ss[1].str() };
 }
 
-int32_t Shader::checkUniform(const char* location)
+int32_t Shader::getUniform(const char* name)
 {
-    int32_t result = glGetUniformLocation(m_ID, location);
-    if (result == -1)
+    if (m_uniformCache.find(name) != m_uniformCache.end())
     {
-        std::cout << "ERROR SETTING UNIFORM : " << location << std::endl;
-        //exit(EXIT_FAILURE);
+        return m_uniformCache[name];
     }
-    return result;
+
+    int32_t location = glGetUniformLocation(m_ID, name);
+    if (location == -1)
+    {
+        std::cout << "ERROR FINDING UNIFORM :: " << name << std::endl;
+        return -1;
+    }
+    m_uniformCache[name] = location;
+    return location;
 }
 
-void Shader::setVec4(const char* location, glm::vec4 uniform)
+void Shader::setVec4(const char* name, glm::vec4 uniform)
 {
-    int32_t result = checkUniform(location);
-    glUniform4fv(result, 1, &uniform[0]);
+    int32_t location = getUniform(name);
+    if (location != -1)
+    {
+        glUniform4fv(location, 1, &uniform[0]);
+    }
 }
 
-void Shader::setVec3(const char* location, glm::vec3 uniform)
+void Shader::setVec3(const char* name, glm::vec3 uniform)
 {
-    int32_t result = checkUniform(location);
-    glUniform3fv(result, 1, &uniform[0]);
+    int32_t location = getUniform(name);
+    if (location != -1)
+    {
+        glUniform3fv(location, 1, &uniform[0]);
+    }
 }
 
-void Shader::setMat4(const char* location, glm::mat4 uniform)
+void Shader::setMat4(const char* name, glm::mat4 uniform)
 {
-    int32_t result = checkUniform(location);
-    glUniformMatrix4fv(result, 1, GL_FALSE, &uniform[0][0]);
+    int32_t location = getUniform(name);
+    if (location != -1)
+    {
+        glUniformMatrix4fv(location, 1, GL_FALSE, &uniform[0][0]);
+    }
 }
 
-void Shader::setInt(const char* location, int32_t uniform)
+void Shader::setInt(const char* name, int32_t uniform)
 {
-    int32_t result = checkUniform(location);
-    glUniform1i(result, uniform);
+    int32_t location = getUniform(name);
+    if (location != -1)
+    {
+        glUniform1i(location, uniform);
+    }
 }
 
-void Shader::setFloat(const char* location, float uniform)
+void Shader::setFloat(const char* name, float uniform)
 {
-    int32_t result = checkUniform(location);
-    glUniform1f(result, uniform);
+    int32_t location = getUniform(name);
+    if (location != -1)
+    {
+        glUniform1f(location, uniform);
+    }
 }
