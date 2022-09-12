@@ -1,0 +1,16 @@
+# engine
+Engine/bin
+Engine/bin-int
+
+#sandbox
+Sandbox/bin
+Sandbox/bin-int
+
+# Windows project files
+**/*.sln
+**/*.vcxproj
+**/*.vcxproj.user
+**/*.vcxproj.filters
+.vs/
+
+.vscode
