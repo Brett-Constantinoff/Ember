@@ -1,12 +1,15 @@
 # engine
 Engine/bin
 Engine/bin-int
+Engine/libs/bin
+Eninge/libs/bin-int
 
 #sandbox
 Sandbox/bin
 Sandbox/bin-int
 
 # Windows project files
+*.sln
 **/*.sln
 **/*.vcxproj
 **/*.vcxproj.user
