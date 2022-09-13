@@ -1,9 +1,11 @@
 #pragma once
 
-#include "Src/Core/Application.h"
-#include "Src/Core/Callbacks.h"
-#include "Src/Core/Layer.h"
-#include "Src/Core/LayerStack.h"
-#include "Src/Core/Window.h"
+#include "src/Core/Application.h"
+#include "src/Core/Callbacks.h"
+#include "src/Core/Layer.h"
+#include "src/Core/LayerStack.h"
+#include "src/Core/Window.h"
+
+#include "src/Renderer/VertexBuffer.h"
 
 #include <iostream>
