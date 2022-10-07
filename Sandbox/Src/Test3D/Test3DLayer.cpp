@@ -31,6 +31,5 @@ void Test3DLayer::onRender(void)
 
 void Test3DLayer::onImguiRender(void)
 {
-	//debug
-	ImGui::Text("FPS: %f", ImGui::GetIO().Framerate);
+
 }

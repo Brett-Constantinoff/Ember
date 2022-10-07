@@ -24,10 +24,9 @@ project "Engine"
 
     includedirs 
     {
-        "Engine/libs/glfw/include/", 
-        "Engine/libs/glm/", 
-        "Engine/libs/imgui/", 
-        "Engine/libs/imgui/examples" ,
+        "Engine/libs/windowCreation/include/", 
+        "Engine/libs/math/", 
+        "Engine/libs/myImgui/", 
         "Engine/libs/glad/include/"
     }
     
@@ -41,8 +40,8 @@ project "Engine"
     { 
         "GLFW", 
         "GLM", 
-        "ImGui" ,
-        "GLAD"
+        "GLAD",
+        "OpenGL32"
     }
 
     filter "system:windows"
@@ -50,11 +49,6 @@ project "Engine"
         { 
             "_WINDOWS" 
         }
-
-include "Engine/libs/glfwPremake5.lua"
-include "Engine/libs/glmPremake5.lua"
-include "Engine/libs/imguiPremake5.lua"
-include "Engine/libs/gladPremake5.lua"
 
 project "Sandbox"
     location "Sandbox"
@@ -68,10 +62,8 @@ project "Sandbox"
 
     includedirs
     {
-        "Engine/libs/glfw/include/", 
-        "Engine/libs/glm/", 
-        "Engine/libs/imgui/", 
-        "Engine/libs/imgui/examples" ,
+        "Engine/libs/windowCreation/include/", 
+        "Engine/libs/math/", 
         "Engine/libs/glad/include/",
         "Engine"
     }
@@ -83,5 +75,11 @@ project "Sandbox"
 
     links
     {
-        "Engine"
+        "Engine",
+        "OpenGL32"
     }
+
+include "Engine/libs/glfwPremake5.lua"
+include "Engine/libs/glmPremake5.lua"
+include "Engine/libs/gladPremake5.lua"
+    

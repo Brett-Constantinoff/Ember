@@ -4,6 +4,4 @@
 [submodule "Engine/libs/windowCreation"]
 	path = Engine/libs/windowCreation
 	url = git@github.com:glfw/glfw.git
-[submodule "Engine/libs/gui"]
-	path = Engine/libs/gui
-	url = git@github.com:ocornut/imgui.git
+

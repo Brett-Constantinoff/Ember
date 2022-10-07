@@ -22,20 +22,11 @@ Window::Window(const std::string& label, uint32_t width, uint32_t height) :
         std::cout << "Failed to initialize GLAD" << std::endl;
         exit(EXIT_FAILURE);
     }
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(m_winID, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
 }
 
 Window::~Window()
 {
     glfwDestroyWindow(m_winID);
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
 }
 
 GLFWwindow** Window::getContext()

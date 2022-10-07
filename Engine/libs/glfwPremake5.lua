@@ -39,7 +39,7 @@ project "GLFW"
 		files
 		{
 			"windowCreation/src/win32_init.c",
-			"glwindowCreation/src/win32_module.c",
+			"windowCreation/src/win32_module.c",
 			"windowCreation/src/win32_joystick.c",
 			"windowCreation/src/win32_monitor.c",
 			"windowCreation/src/win32_time.h",
