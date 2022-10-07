@@ -6,11 +6,11 @@ project "GLM"
 	targetdir "bin/%{cfg.buildcfg}"
 	objdir "bin-int/%{cfg.buildcfg}"
 
-	includedirs { "glm/" }
+	includedirs { "math/" }
 
 	files
 	{
-		"glm/glm/**"
+		"math/glm/**"
 	}
 
 	filter "system:windows"
