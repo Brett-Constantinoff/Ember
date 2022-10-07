@@ -6,3 +6,6 @@
 
  ## Notes
  Currently Ember is only being designed for the Windows OS, with support for other OS's coming later.
+ 
+ ### TO-DO
+ * Add ImGUI support
