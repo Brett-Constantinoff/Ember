@@ -1,9 +1,0 @@
-[submodule "Engine/libs/GLFW"]
-	path = Engine/libs/GLFW
-	url = git@github.com:glfw/glfw.git
-[submodule "Engine/libs/GLM"]
-	path = Engine/libs/GLM
-	url = git@github.com:g-truc/glm.git
-[submodule "Engine/libs/IMGUI"]
-	path = Engine/libs/IMGUI
-	url = git@github.com:ocornut/imgui.git

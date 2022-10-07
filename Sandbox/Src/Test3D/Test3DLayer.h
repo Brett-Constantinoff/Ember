@@ -15,5 +15,4 @@ public:
 
 private:
 	Window* m_win;
-	VertexBuffer* m_vb;
 };
