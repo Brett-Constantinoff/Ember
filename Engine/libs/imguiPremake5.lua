@@ -6,11 +6,11 @@ project "ImGui"
 	targetdir "bin/%{cfg.buildcfg}"
 	objdir "bin-int/%{cfg.buildcfg}"
 
-	includedirs { "imgui/", "glad/include", "glfw/include/" }
+	includedirs { "gui/", "glad/include", "windowCreation/include/" }
 
 	files
 	{
-		"imgui/*.cpp",
+		"gui/*.cpp",
 	}
 
 	defines 
