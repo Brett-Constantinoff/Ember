@@ -7,6 +7,9 @@ Window::Window(const std::string& label, uint32_t width, uint32_t height) :
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
     m_winID = glfwCreateWindow(m_width, m_height, m_label.c_str(), NULL, NULL);
     if (!m_winID)
