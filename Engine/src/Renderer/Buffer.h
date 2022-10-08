@@ -1,6 +1,7 @@
 #pragma once
-#include <glad/glad.h>
+#include "../../libs/glad/include/glad/glad.h"
 #include <stdint.h>
+#include <cstring>
 
 class Buffer
 {

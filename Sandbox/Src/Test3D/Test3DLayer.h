@@ -15,4 +15,7 @@ public:
 
 private:
 	Window* m_win;
+	Shader* m_shader;
+	VertexBuffer* m_vbo;
+	uint32_t vao;
 };

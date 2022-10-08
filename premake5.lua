@@ -106,6 +106,10 @@ project "Sandbox"
             "IOKit.framework",
             "CoreFoundation.framework"
         }
+        defines
+        {
+            "GL_SILENCE_DEPRECATION"
+        }
 
 include "Engine/libs/glfwPremake5.lua"
 include "Engine/libs/glmPremake5.lua"

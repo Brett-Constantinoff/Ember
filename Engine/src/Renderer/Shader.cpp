@@ -69,7 +69,7 @@ shaderSource Shader::parseShader(const std::string& filePath)
     if (!stream)
     {
         std::cout << "ERROR::CANNOT FIND FILE : " << filePath << std::endl;
-        //exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     std::string line; //string to hold each line from file
     std::stringstream ss[2];
