@@ -70,7 +70,8 @@ project "Sandbox"
 
     files
     {
-        "Sandbox/Src/**.cpp"
+        "Sandbox/Src/**.cpp",
+        "Sandbox/Src/**.h"
     }
 
     links
