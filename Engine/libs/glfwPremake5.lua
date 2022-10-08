@@ -58,7 +58,7 @@ project "GLFW"
 			"_CRT_SECURE_NO_WARNINGS"
 		}
 	
-	filter "system:not windows"
+	filter "system:macosx"
 		files
 		{
 			"windowCreation/src/cocoa_time.h",

@@ -1,6 +1,10 @@
 **.sln
 **.vcxproj
 **.vcxproj.filters
+**Makefile
+**.DS_Store
+**.a
+**.make
 Engine/bin
 Engine/bin-int
 Engine/libs/bin

@@ -41,13 +41,24 @@ project "Engine"
         "GLFW", 
         "GLM", 
         "GLAD",
-        "OpenGL32"
     }
 
     filter "system:windows"
         defines 
         { 
             "_WINDOWS" 
+        }
+        links
+        {
+            "OpengL32"
+        }
+    filter "system:macosx"
+        links
+        {
+            "OpenGL.framework",
+            "Cocoa.framework",
+            "IOKit.framework",
+            "CoreFoundation.framework",
         }
 
 project "Sandbox"
@@ -77,8 +88,24 @@ project "Sandbox"
     links
     {
         "Engine",
-        "OpenGL32"
+        "GLFW",
+        "GLAD",
+        "GLM"
     }
+    
+    filter "system:windows"
+        links
+        {
+            "OpenGL32"
+        }
+    filter "system:macosx"
+        links
+        {
+            "OpenGL.framework",
+            "Cocoa.framework",
+            "IOKit.framework",
+            "CoreFoundation.framework"
+        }
 
 include "Engine/libs/glfwPremake5.lua"
 include "Engine/libs/glmPremake5.lua"

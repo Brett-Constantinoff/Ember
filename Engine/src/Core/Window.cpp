@@ -18,7 +18,7 @@ Window::Window(const std::string& label, uint32_t width, uint32_t height) :
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(m_winID);
-    glfwSetFramebufferSizeCallback(m_winID, resize);
+    //glfwSetFramebufferSizeCallback(m_winID, resize);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
