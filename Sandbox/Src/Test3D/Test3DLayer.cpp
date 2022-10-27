@@ -93,10 +93,10 @@ void Test3DLayer::onUpdate(float dt)
     glClearColor(0.25f, 0.35f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    m_camera->move(m_win->getContext(), dt);
     m_proj = glm::perspective(glm::radians(45.0f), static_cast<float>(m_win->getWidth()) / static_cast<float>(m_win->getHeight()), 0.1f, 100.0f);
     m_cubeModel = glm::mat4(1.0f);
     m_cubeModel = glm::rotate(m_cubeModel, glm::sin(m_timer) * glm::two_pi<float>() * 0.5f, { 1.0f, 1.0f, 1.0f });
-
 
     m_shader->use();
     m_shader->setMat4("uProj", m_proj);
