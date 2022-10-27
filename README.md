@@ -9,7 +9,7 @@
  To build run ```bin/premake/macos/premake5 gmake```
  
  ### Linux 
- Currently untested on Linux so good luck, 🤷🏻‍♂️🤷🏻‍♂️🤷🏻‍♂️
+ Currently untested on Linux so, good luck 🤷🏻‍♂️🤷🏻‍♂️🤷🏻‍♂️
  
  ### TO-DO
  * Add ImGUI support
