@@ -1,11 +1,12 @@
 # Ember Engine
- The Ember engine is a work in progress 3D rendering engine using OpenGL. 
+ The Ember engine is a work in progress cross platform 3D rendering engine using the OpenGL sepcification. 
 
  ## Build
- To build run ```bin\premake\premake5 vs2022```
-
- ## Notes
- Currently Ember is only being designed for the Windows OS, with support for other OS's coming later.
+ ### Windows
+ To build run ```bin\premake\windows\premake5 vs2022```
+ 
+ ### MacOS and Linux
+ To build run ```bin/premake/macos/premake5 gmake```
  
  ### TO-DO
  * Add ImGUI support
