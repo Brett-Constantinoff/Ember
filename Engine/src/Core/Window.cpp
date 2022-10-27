@@ -15,6 +15,7 @@ Window::Window(const std::string& label, uint32_t width, uint32_t height) :
     if (!m_winID)
     {
         std::cout << "ERROR CREATING OPENGL WINDOW!" << std::endl;
+        std::cin.get();
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(m_winID);
@@ -23,6 +24,7 @@ Window::Window(const std::string& label, uint32_t width, uint32_t height) :
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cin.get();
         exit(EXIT_FAILURE);
     }
 }

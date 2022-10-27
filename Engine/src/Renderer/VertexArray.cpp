@@ -18,4 +18,5 @@ void VertexArray::setLayout(uint32_t numPerAttrib, uint32_t type, uint32_t norma
 {
     glVertexAttribPointer(m_layoutPos, numPerAttrib, type, normalized, stride, start);
     glEnableVertexAttribArray(m_layoutPos);
+    m_layoutPos++;
 }
