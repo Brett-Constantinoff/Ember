@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine.h"
-#define THREE_DIM
 
 class Test3DLayer : public Layer
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include "Layer.h"
+#include "ImguiLayer.h"
 #include "LayerStack.h"
 #include "Window.h"
 #include <string.h>
@@ -15,6 +16,8 @@ public:
 
 private:
     LayerStack* m_layerStack;
+    ImguiLayer* m_imguiLayer;
     Window* m_window;
+    const std::string m_label;
     float m_lastFrame = 0.0f;
 };
