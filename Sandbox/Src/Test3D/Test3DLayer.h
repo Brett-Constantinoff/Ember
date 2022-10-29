@@ -15,12 +15,11 @@ public:
 
 private:
 	Window* m_win;
-	Shader* m_shader;
-	Camera* m_camera;
-	VertexArray* m_vao;
-	VertexBuffer* m_vbo;
-	VertexBuffer* m_colorBuffer;
-	uint32_t vao;
+	Shader m_shader;
+	Camera m_camera;
+	VertexArray m_vao;
+	VertexBuffer m_vbo;
+	VertexBuffer m_colorBuffer;
 	glm::mat4 m_proj;
 	glm::mat4 m_cubeModel;
 	float m_timer;

@@ -34,9 +34,9 @@ Window::~Window()
     glfwDestroyWindow(m_winID);
 }
 
-GLFWwindow** Window::getContext()
+GLFWwindow* Window::getContext()
 {
-    return &m_winID;
+    return m_winID;
 }
 
 uint32_t Window::getWidth()

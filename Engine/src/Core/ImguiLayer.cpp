@@ -8,7 +8,7 @@ ImguiLayer::ImguiLayer(const char* name, Window* win) : Layer(name)
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(*win->getContext(), true);
+    ImGui_ImplGlfw_InitForOpenGL(win->getContext(), true);
     ImGui_ImplOpenGL3_Init("#version 150");
     std::cout << "Creating " << m_name << std::endl;
 }

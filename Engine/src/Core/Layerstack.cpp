@@ -10,7 +10,6 @@ LayerStack::~LayerStack()
     {
         std::cout << "Destroying " << layer->getName() << std::endl;
         layer->onDetach();
-        delete layer;
     }
     m_layers.clear();
 }
@@ -25,7 +24,7 @@ void LayerStack::push(Layer* layer, Window* win)
 void LayerStack::pop()
 {
     m_layers.back()->onDetach();
-    delete m_layers.back();
+    m_layers.pop_back();
 }
 
 bool LayerStack::isEmpty()

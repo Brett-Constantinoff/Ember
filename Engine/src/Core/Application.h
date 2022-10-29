@@ -15,9 +15,9 @@ public:
     void pushLayer(Layer* layer);
 
 private:
-    LayerStack* m_layerStack;
-    ImguiLayer* m_imguiLayer;
-    Window* m_window;
+    LayerStack m_layerStack;
+    std::unique_ptr<ImguiLayer> m_imguiLayer;
+    Window m_window;
     const std::string m_label;
-    float m_lastFrame = 0.0f;
+    float m_lastFrame;
 };
