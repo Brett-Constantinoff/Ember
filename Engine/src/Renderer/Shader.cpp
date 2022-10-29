@@ -37,13 +37,12 @@ uint32_t Shader::getId(void)
 
 uint32_t Shader::compileShader(const std::string& source, uint32_t type)
 {
-    const char* src = source.c_str(); //returns a pointer to source
+    const char* src = source.c_str();
 
-    uint32_t shadermID = glCreateShader(type); //generates a shader mID
-    glShaderSource(shadermID, 1, &src, nullptr); //fills source code for desired shader
-    glCompileShader(shadermID); //compiles shader
+    uint32_t shadermID = glCreateShader(type);
+    glShaderSource(shadermID, 1, &src, nullptr);
+    glCompileShader(shadermID);
 
-    //ensures succesful compilation
     int32_t success;
     GLchar infoLog[512];
     glGetShaderiv(shadermID, GL_COMPILE_STATUS, &success);
@@ -65,37 +64,34 @@ shaderSource Shader::parseShader(const std::string& filePath)
     };
 
     ShaderType type = ShaderType::NONE;
-    std::ifstream stream(filePath); //gets current input stream
+    std::ifstream stream(filePath);
     if (!stream)
     {
         std::cout << "ERROR::CANNOT FIND FILE : " << filePath << std::endl;
         std::cin.get();
         exit(EXIT_FAILURE);
     }
-    std::string line; //string to hold each line from file
+    std::string line;
     std::stringstream ss[2];
-
 
     while (getline(stream, line))
     {
-
         if (line.find("#shader") != std::string::npos)
-        { //finds "#shader" in file
+        { 
             if (line.find("vertexShader") != std::string::npos)
-            { //the current line holds "vertexShader" set type 
+            {
                 type = ShaderType::VERTEX;
             }
             else if (line.find("fragmentShader") != std::string::npos)
-            {//the current line holds "fragmentShader" set type 
+            {
                 type = ShaderType::FRAGMENT;
             }
         }
         else
         {
-            ss[(int32_t)type] << line << '\n'; //push the line into the given array based on the index
+            ss[(int32_t)type] << line << '\n';
         }
     }
-
     return { ss[0].str(), ss[1].str() };
 }
 

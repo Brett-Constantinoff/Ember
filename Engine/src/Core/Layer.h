@@ -13,6 +13,7 @@ public:
     virtual void onUpdate(float dt) {};
     virtual void onRender() {};
     virtual void onImguiRender() {};
+    const char* getName();
 
 protected:
     const char* m_name;

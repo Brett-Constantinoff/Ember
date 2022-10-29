@@ -8,14 +8,15 @@ LayerStack::~LayerStack()
 {
     for (Layer* layer : m_layers)
     {
+        std::cout << "Destroying " << layer->getName() << std::endl;
         layer->onDetach();
-        delete layer;
     }
     m_layers.clear();
 }
 
 void LayerStack::push(Layer* layer, Window* win)
 {
+    std::cout << "Creating " << layer->getName() << std::endl;
     layer->onAttach(win);
     m_layers.push_back(layer);
 }
@@ -23,7 +24,7 @@ void LayerStack::push(Layer* layer, Window* win)
 void LayerStack::pop()
 {
     m_layers.back()->onDetach();
-    delete m_layers.back();
+    m_layers.pop_back();
 }
 
 bool LayerStack::isEmpty()

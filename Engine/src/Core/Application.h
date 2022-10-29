@@ -1,5 +1,6 @@
 #pragma once
 #include "Layer.h"
+#include "ImguiLayer.h"
 #include "LayerStack.h"
 #include "Window.h"
 #include <string.h>
@@ -14,7 +15,9 @@ public:
     void pushLayer(Layer* layer);
 
 private:
-    LayerStack* m_layerStack;
-    Window* m_window;
-    float m_lastFrame = 0.0f;
+    LayerStack m_layerStack;
+    std::unique_ptr<ImguiLayer> m_imguiLayer;
+    Window m_window;
+    const std::string m_label;
+    float m_lastFrame;
 };

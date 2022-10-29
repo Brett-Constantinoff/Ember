@@ -1,12 +1,13 @@
 #include "Camera.h"
 
 Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up) :
-    m_position{ position }, m_front{ front }, m_up{ up }
+    m_position{ position }, m_front{ front }, m_up{ up }, m_view{ glm::mat4(1.0f )},
+    m_yaw{-90.0f}, m_pitch{0.0f}
 {
 
 };
 
-void Camera::move(GLFWwindow** win, float dt)
+void Camera::move(GLFWwindow* win, float dt)
 {
     m_front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
     m_front.y = sin(glm::radians(m_pitch));
@@ -15,35 +16,35 @@ void Camera::move(GLFWwindow** win, float dt)
 
     const float cameraSpeed = 3.0f * dt;
 
-    if (glfwGetKey(*win, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
     {
         m_position += cameraSpeed * m_front;
     }
-    if (glfwGetKey(*win, GLFW_KEY_S) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
     {
         m_position -= cameraSpeed * m_front;
     }
-    if (glfwGetKey(*win, GLFW_KEY_A) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
     {
         m_position -= glm::normalize(glm::cross(m_front, m_up)) * cameraSpeed;
     }
-    if (glfwGetKey(*win, GLFW_KEY_D) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS)
     {
         m_position += glm::normalize(glm::cross(m_front, m_up)) * cameraSpeed;
     }
-    if (glfwGetKey(*win, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
         m_yaw += 2.0f;
     }
-    if (glfwGetKey(*win, GLFW_KEY_LEFT) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         m_yaw -= 2.0f;
     }
-    if (glfwGetKey(*win, GLFW_KEY_UP) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS)
     {
         m_pitch += 2.0f;
     }
-    if (glfwGetKey(*win, GLFW_KEY_DOWN) == GLFW_PRESS)
+    if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         m_pitch -= 2.0f;
     }

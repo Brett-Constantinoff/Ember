@@ -33,7 +33,4 @@ private:
     shaderSource parseShader(const std::string& filePath);
     uint32_t compileShader(const std::string& source, uint32_t type);
     int32_t getUniform(const char* name);
-
-
-
 };

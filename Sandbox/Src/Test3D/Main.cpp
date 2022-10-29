@@ -2,9 +2,9 @@
 
 int main(int argc, char** argv)
 {
-	Test3DApp* app = new Test3DApp("3D Test Application");
-	app->pushLayer(new Test3DLayer("Test layer"));
-	app->start();
-	delete app;
+	Test3DApp app("3D Test Application");
+	Test3DLayer layer("Test 3D Layer");
+	app.pushLayer(&layer);
+	app.start();
 	return 0;
 }
