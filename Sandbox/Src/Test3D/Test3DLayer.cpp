@@ -16,7 +16,10 @@ void Test3DLayer::onAttach(Window* win)
 
 	m_win = win;
 
-    m_cube.reset(new Cube("SceneCube", SHADER_PATH "basicShader.hlsl"));
+    Material cubeMat{ {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.1f, 0.1f, 0.1f}, 5.0f, SHADER_PATH "basicShader.hlsl" };
+    m_cube = new Cube("SceneCube", cubeMat);
+
+    m_scene.addRenderable(m_cube);
 }
 
 void Test3DLayer::onDetach(void)
@@ -38,10 +41,12 @@ void Test3DLayer::onUpdate(float dt)
     model = glm::rotate(model, glm::sin(m_timer) * glm::two_pi<float>() * 0.5f, {1.0f, 1.0f, 1.0f});
     m_cube->setModel(model);
 
-    m_cube->getShader()->use();
-    m_cube->getShader()->setMat4("uProj", m_proj);
-    m_cube->getShader()->setMat4("uView", *m_camera.getView());
-    m_cube->getShader()->setMat4("uModel", *m_cube->getModel());
+    Material cubeMat = *m_cube->getMaterial();
+    cubeMat.m_shader.use();
+    cubeMat.m_shader.setVec3("uColor", cubeMat.m_diff);
+    cubeMat.m_shader.setMat4("uProj", m_proj);
+    cubeMat.m_shader.setMat4("uView", *m_camera.getView());
+    cubeMat.m_shader.setMat4("uModel", *m_cube->getModel());
     m_cube->getVao()->bind();
 }
 

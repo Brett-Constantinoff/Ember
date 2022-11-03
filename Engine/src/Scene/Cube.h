@@ -4,9 +4,6 @@
 class Cube : public SceneObject
 {
 public:
-	Cube(const char* name, const char* shader);
+	Cube(const char* name, Material material);
 	~Cube();
-
-private:
-	VertexBuffer m_colorBuffer;
 };

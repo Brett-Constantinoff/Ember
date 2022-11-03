@@ -15,8 +15,9 @@ public:
 
 private:
 	Window* m_win;
+	Scene m_scene;
 	Camera m_camera;
-	std::unique_ptr<Cube> m_cube;
+	Cube* m_cube;
 	glm::mat4 m_proj;
 	float m_timer;
 };

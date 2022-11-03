@@ -10,6 +10,7 @@ LayerStack::~LayerStack()
     {
         std::cout << "Destroying " << layer->getName() << std::endl;
         layer->onDetach();
+        delete layer;
     }
     m_layers.clear();
 }

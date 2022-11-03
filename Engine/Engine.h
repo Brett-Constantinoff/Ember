@@ -23,9 +23,11 @@
 #include "src/Renderer/VertexBuffer.h"
 #include "src/Renderer/Shader.h"
 #include "src/Renderer/Camera.h"
+#include "src/Renderer/Material.h"
 
 #include "src/Scene/SceneObject.h"
 #include "src/Scene/Cube.h"
+#include "src/Scene/Scene.h"
 
 #include <iostream>
 #include <stdint.h>

@@ -1,7 +1,7 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject(const char* name, const char* shader) :
-	m_name{ name }, m_shader{shader}, m_vbo{GL_ARRAY_BUFFER}, m_vao{}, m_model{glm::mat4(1.0f)}
+SceneObject::SceneObject(const char* name, Material material) :
+	m_name{ name }, m_mat{ material }, m_vbo{ GL_ARRAY_BUFFER }, m_vao{}, m_model{ glm::mat4(1.0f) }
 {
 }
 
@@ -9,9 +9,9 @@ SceneObject::~SceneObject()
 {
 }
 
-Shader* SceneObject::getShader()
+Material* SceneObject::getMaterial()
 {
-	return &m_shader;
+	return &m_mat;
 }
 
 VertexArray* SceneObject::getVao()
