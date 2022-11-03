@@ -4,7 +4,7 @@
 class Cube : public SceneObject
 {
 public:
-	Cube(std::string& name, std::string& shader);
+	Cube(const char* name, const char* shader);
 	~Cube();
 
 private:

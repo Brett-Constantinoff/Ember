@@ -1,7 +1,6 @@
-#pragma once
 #include "SceneObject.h"
 
-SceneObject::SceneObject(std::string& name, std::string& shader) :
+SceneObject::SceneObject(const char* name, const char* shader) :
 	m_name{ name }, m_shader{shader}, m_vbo{GL_ARRAY_BUFFER}, m_vao{}, m_model{glm::mat4(1.0f)}
 {
 }

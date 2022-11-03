@@ -1,4 +1,5 @@
 #pragma once
+#include "../../libs/math/glm/glm.hpp"
 #include "../Renderer/VertexArray.h"
 #include "../Renderer/VertexBuffer.h"
 #include "../Renderer/Shader.h"
@@ -7,7 +8,7 @@
 class SceneObject
 {
 public:
-	SceneObject(std::string& name, std::string& shader);
+	SceneObject(const char* name, const char* shader);
 	~SceneObject();
 
 	Shader* getShader();
@@ -17,7 +18,7 @@ public:
 	void setModel(glm::mat4& model);
 
 protected:
-	std::string m_name;
+	const char* m_name;
 	glm::mat4 m_model;
 	Shader m_shader;
 	VertexBuffer m_vbo;

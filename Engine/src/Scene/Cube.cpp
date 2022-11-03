@@ -1,7 +1,6 @@
-#pragma once
 #include "Cube.h"
 
-Cube::Cube(std::string& name, std::string& shader) :
+Cube::Cube(const char* name, const char* shader) :
 	SceneObject(name, shader), m_colorBuffer{GL_ARRAY_BUFFER}
 {
     m_vao.bind();
