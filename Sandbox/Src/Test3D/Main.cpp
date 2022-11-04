@@ -1,27 +1,28 @@
 #include "Test3DApp.h"
 
-#if DEBUG
+#if DEBUG && defined(_WIN32)
 struct AllocationMetrics
 {
-	size_t m_totalAllocated = 0;
-	size_t m_totalFreed = 0;
+	uint32_t m_allocations = 0;
+	uint32_t m_frees = 0;
 
-	size_t currentUsage()
+	void report()
 	{
-		return m_totalAllocated - m_totalFreed;
+		std::cout << "Allocations: " << m_allocations << std::endl;
+		std::cout << "Frees: " << m_frees << std::endl;
 	}
 };
 static AllocationMetrics s_metrics;
 
 void* operator new(size_t size)
 {
-	s_metrics.m_totalAllocated += size;
+	s_metrics.m_allocations++;
 	return malloc(size);
 }
 
-void operator delete(void* memory, size_t size)
+void operator delete(void* memory)
 {
-	s_metrics.m_totalFreed += size;
+	s_metrics.m_frees++;
 	free(memory);
 }
 
@@ -31,11 +32,11 @@ int main(int argc, char** argv)
 	app->pushLayer(new Test3DLayer("Test 3D Layer"));
 	app->start();
 	delete app;
-	std::cout << "Total memory leaked: " << s_metrics.currentUsage() << std::endl;
+	s_metrics.report();
 	return 0;
 }
 
-#else
+#elif DEBUG && __APPLE__
 int main(int argc, char** argv)
 {
 	Test3DApp* app = new Test3DApp("3D Test Application");
