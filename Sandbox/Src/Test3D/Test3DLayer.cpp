@@ -4,10 +4,13 @@ Test3DLayer::Test3DLayer(const char* name) :
     Layer(name), m_camera{ { 0.0f, 0.0f, 5.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f, 0.0f } },
     m_cube{nullptr}, m_win{nullptr}, m_proj{glm::mat4(1.0f)}, m_timer{0.0f}
 {
+    std::vector<const char*> files = {};
+    m_cubeMap = new TextureCubeMap(GL_TEXTURE_CUBE_MAP, files);
 }
 
 Test3DLayer::~Test3DLayer()
 {
+    delete m_cubeMap;
 }
 
 void Test3DLayer::onAttach(Window* win)

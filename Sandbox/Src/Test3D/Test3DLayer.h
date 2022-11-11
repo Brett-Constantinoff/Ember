@@ -20,4 +20,5 @@ private:
 	Cube* m_cube;
 	glm::mat4 m_proj;
 	float m_timer;
+	TextureCubeMap* m_cubeMap;
 };

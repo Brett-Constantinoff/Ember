@@ -24,6 +24,8 @@
 #include "src/Renderer/Shader.h"
 #include "src/Renderer/Camera.h"
 #include "src/Renderer/Material.h"
+#include "src/Renderer/Texture.h"
+#include "src/Renderer/TextureCubeMap.h"
 
 #include "src/Scene/SceneObject.h"
 #include "src/Scene/Cube.h"
