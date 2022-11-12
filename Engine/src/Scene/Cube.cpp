@@ -1,6 +1,6 @@
 #include "Cube.h"
 
-Cube::Cube(const char* name, Material material) :
+Cube::Cube(const char* name, const Material& material) :
 	SceneObject(name, material)
 {
     m_vao.bind();

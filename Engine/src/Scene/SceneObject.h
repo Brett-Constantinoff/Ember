@@ -9,7 +9,7 @@
 class SceneObject
 {
 public:
-	SceneObject(const char* name, const Material);
+	SceneObject(const char* name, const Material& material);
 	~SceneObject();
 
 	Material* getMaterial();

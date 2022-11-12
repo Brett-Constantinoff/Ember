@@ -49,6 +49,11 @@ uint32_t Window::getHeight()
     return m_height;
 }
 
+glm::mat4 Window::getPerspective()
+{
+    return glm::perspective(glm::radians(m_fov), static_cast<float>(m_width) / static_cast<float>(m_height), m_near, m_far);
+}
+
 bool Window::isOpen()
 {
     bool result = !glfwWindowShouldClose(m_winID);

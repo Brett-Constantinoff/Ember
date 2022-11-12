@@ -4,8 +4,10 @@
 
 #if defined(_WIN32) && defined(THREE_DIM)
 #define SHADER_PATH ".\\.\\Src\\Test3D\\Assets\\Hlsl\\"
+#define SKYBOX_PATH ".\\.\\Src\\Test3D\\Assets\\Textures\\Sky\\"
 #else
 #define SHADER_PATH "../../Src/Test3D/Assets/Hlsl/"
+#define SKYBOX_PATH "../../Src/Test3D/Assets/Textures/Sky/"
 #endif
 
 #include "../../libs/imgui/imgui.h"

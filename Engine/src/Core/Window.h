@@ -1,6 +1,9 @@
 #pragma once
 #include "../../libs/windowCreation/include/GLFW/glfw3.h"
 #include "../../libs/glad/include/glad/glad.h"
+#include "../../libs/math/glm/glm.hpp"
+#include "../../libs/math/glm/gtc/matrix_transform.hpp"
+#include "../../libs/math/glm/gtc/type_ptr.hpp"
 #include <iostream>
 #include <string>
 
@@ -14,6 +17,7 @@ public:
     GLFWwindow* getContext();
     uint32_t getWidth();
     uint32_t getHeight();
+    glm::mat4 getPerspective();
     void update();
     bool isOpen();
 
@@ -22,4 +26,7 @@ private:
     const std::string& m_label;
     uint32_t m_width;
     uint32_t m_height;
+    float m_fov = 45.0f;
+    float m_near = 0.1f;
+    float m_far = 500.0f;
 };

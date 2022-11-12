@@ -16,9 +16,4 @@ public:
 private:
 	Window* m_win;
 	Scene m_scene;
-	Camera m_camera;
-	Cube* m_cube;
-	glm::mat4 m_proj;
-	float m_timer;
-	TextureCubeMap* m_cubeMap;
 };

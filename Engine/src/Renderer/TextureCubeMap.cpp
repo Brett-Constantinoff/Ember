@@ -3,7 +3,6 @@
 TextureCubeMap::TextureCubeMap(uint32_t type, std::vector<const char*>& files) :
 	Texture{ type }, m_files{ files }
 {
-	load();
 }
 
 TextureCubeMap::~TextureCubeMap()
@@ -20,13 +19,15 @@ void TextureCubeMap::load()
     for (const char* file : m_files) 
     {
         uint8_t* fileData = stbi_load(file, &width, &height, &channels, 0);
-        if (fileData) {
+        if (fileData) 
+        {
             GLenum format = 0;
             if (channels == 1) 
             {
                 format = GL_RED;
             }
-            else if (channels == 3) {
+            else if (channels == 3) 
+            {
 
                 format = GL_RGB;
             }
@@ -41,11 +42,11 @@ void TextureCubeMap::load()
             std::cout << "File failed to load: " << file << std::endl;
         }
         stbi_image_free(fileData);
+        i++;
     }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    unbind();
+    glTexParameteri(m_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(m_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(m_type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(m_type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(m_type, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }

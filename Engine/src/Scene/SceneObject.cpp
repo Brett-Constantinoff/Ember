@@ -1,6 +1,6 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject(const char* name, Material material) :
+SceneObject::SceneObject(const char* name, const Material& material) :
 	m_name{ name }, m_mat{ material }, m_vbo{ GL_ARRAY_BUFFER }, m_vao{}, m_model{ glm::mat4(1.0f) }
 {
 }
