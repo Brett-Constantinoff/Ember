@@ -1,7 +1,7 @@
 #include "Cube.h"
 
-Cube::Cube(const char* name, const Material& material) :
-	SceneObject(name, material)
+Cube::Cube(const char* name, const Material& material, const Transformation& transformation) :
+    SceneObject{ name, material, transformation }
 {
     m_vao.bind();
 

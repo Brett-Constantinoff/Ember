@@ -4,19 +4,20 @@
 #include "../Renderer/VertexBuffer.h"
 #include "../Renderer/Shader.h"
 #include "../Renderer/Material.h"
+#include "../Renderer/Transformation.h"
 #include <string>
 
 class SceneObject
 {
 public:
+	SceneObject(const char* name, const Material& material, const Transformation& transformation);
 	SceneObject(const char* name, const Material& material);
 	~SceneObject();
 
 	Material* getMaterial();
+	Transformation* getTransform();
 	VertexBuffer* getVbo();
 	VertexArray* getVao();
-	glm::mat4* getModel();
-	void setModel(glm::mat4& model);
 
 protected:
 	const char* m_name;
@@ -24,4 +25,5 @@ protected:
 	VertexBuffer m_vbo;
 	VertexArray m_vao;
 	Material m_mat;
+	Transformation m_trans;
 };

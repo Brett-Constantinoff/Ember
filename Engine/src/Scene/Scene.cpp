@@ -37,14 +37,8 @@ void Scene::addSkyBox(SkyBox* skybox)
 	m_skybox = skybox;
 }
 
-std::vector<SceneObject*>* Scene::getRenderables()
-{
-	return &m_renderables;
-}
-
 void Scene::update(float dt)
 {
-	m_timer += dt;
 	m_camera->move(m_win->getContext(), dt);
 	m_proj = m_win->getPerspective();
 	m_view = *m_camera->getView();
@@ -57,16 +51,18 @@ void Scene::render()
 
 	for (auto renderable : m_renderables)
 	{
+		Transformation trans = *renderable->getTransform();
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::sin(m_timer) * glm::two_pi<float>() * 0.5f, { 1.0f, 1.0f, 1.0f });
-		renderable->setModel(model);
+		model = glm::translate(model, trans.m_translation);
+		model *= trans.m_rotation;
+		model = glm::scale(model, trans.m_scale);
 
 		Material mat = *renderable->getMaterial();
 		mat.m_shader.use();
 		mat.m_shader.setVec3("uColor", mat.m_diff);
 		mat.m_shader.setMat4("uProj", m_proj);
 		mat.m_shader.setMat4("uView", m_view);
-		mat.m_shader.setMat4("uModel", *renderable->getModel());
+		mat.m_shader.setMat4("uModel", model);
 
 		renderable->getVao()->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);

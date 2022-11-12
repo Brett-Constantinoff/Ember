@@ -15,7 +15,6 @@ public:
 	void addCamera(Camera* camera);
 	void addContext(Window* win);
 	void addSkyBox(SkyBox* skybox);
-	std::vector<SceneObject*>* getRenderables();
 	void update(float dt);
 	void render();
 	
@@ -26,5 +25,4 @@ private:
 	SkyBox* m_skybox = nullptr;
 	glm::mat4 m_proj{};
 	glm::mat4 m_view{};
-	float m_timer = 0.0f;
 };

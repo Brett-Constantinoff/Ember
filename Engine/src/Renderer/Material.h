@@ -9,6 +9,9 @@ public:
 		m_diff{ diff }, m_amb{ amb }, m_spec{ spec }, m_shine{ shine }, m_shader{ shader }
 	{
 	}
+	~Material()
+	{
+	}
 
 public:
 	glm::vec3 m_diff;

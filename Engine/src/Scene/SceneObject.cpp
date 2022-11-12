@@ -1,7 +1,12 @@
 #include "SceneObject.h"
 
+SceneObject::SceneObject(const char* name, const Material& material, const Transformation& transformation) :
+	m_name{ name }, m_mat{ material }, m_trans{ transformation }, m_vbo {GL_ARRAY_BUFFER}, m_vao{}
+{
+}
+
 SceneObject::SceneObject(const char* name, const Material& material) :
-	m_name{ name }, m_mat{ material }, m_vbo{ GL_ARRAY_BUFFER }, m_vao{}, m_model{ glm::mat4(1.0f) }
+	m_name{ name }, m_mat{ material }, m_vbo{ GL_ARRAY_BUFFER }, m_vao{}
 {
 }
 
@@ -14,6 +19,11 @@ Material* SceneObject::getMaterial()
 	return &m_mat;
 }
 
+Transformation* SceneObject::getTransform()
+{
+	return &m_trans;
+}
+
 VertexArray* SceneObject::getVao()
 {
 	return &m_vao;
@@ -22,14 +32,4 @@ VertexArray* SceneObject::getVao()
 VertexBuffer* SceneObject::getVbo()
 {
 	return &m_vbo;
-}
-
-glm::mat4* SceneObject::getModel()
-{
-	return &m_model;
-}
-
-void SceneObject::setModel(glm::mat4& model)
-{
-	m_model = model;
 }
