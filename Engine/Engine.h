@@ -32,7 +32,10 @@
 
 #include "src/Scene/SceneObject.h"
 #include "src/Scene/Cube.h"
+#include "src/Scene/Quad.h"
 #include "src/Scene/Scene.h"
+#include "src/Scene/SkyBox.h"
+#include "src/Scene/DirectionalLight.h"
 
 #include <iostream>
 #include <stdint.h>

@@ -13,21 +13,29 @@ void Test3DLayer::onAttach(Window* win)
 {
 	m_win = win;
 
-    Material cubeMat{ {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.1f, 0.1f, 0.1f}, 5.0f, SHADER_PATH "basicShader.hlsl" };
-    Transformation cubeTransform{ {-5.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
-    m_scene.addRenderable(new Cube("SceneCube0", cubeMat, cubeTransform));
+    Material cubeMat0{ {1.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 5.0f, SHADER_PATH "directionalLighting.hlsl", true};
+    Transformation cubeTransform0{ {-5.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
+    m_scene.addRenderable(new Cube("SceneCube0", cubeMat0, cubeTransform0));
 
-    cubeMat.m_diff = { 0.0f, 0.0f, 1.0f };
-    cubeTransform.m_translation = { 5.0f, 0.0f, 0.0f };
-    m_scene.addRenderable(new Cube("SceneCube1", cubeMat, cubeTransform));
+    Material cubeMat1{ {0.0f, 0.0f, 1.0f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 10.0f, SHADER_PATH "directionalLighting.hlsl", true };
+    Transformation cubeTransform1{ {5.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
+    m_scene.addRenderable(new Cube("SceneCube1", cubeMat1, cubeTransform1));
 
-    cubeMat.m_diff = { 0.5f, 0.0f, 0.5f };
-    cubeTransform.m_translation = { 0.0f, 5.0f, 0.0f };
-    m_scene.addRenderable(new Cube("SceneCube2", cubeMat, cubeTransform));
+    Material cubeMat2{ {0.0f, 1.0f, 0.0f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 15.0f, SHADER_PATH "flatShading.hlsl", false };
+    Transformation cubeTransform2{ {0.0f, 5.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
+    m_scene.addRenderable(new Cube("SceneCube2", cubeMat2, cubeTransform2));
 
-    cubeMat.m_diff = { 0.5f, 0.5f, 0.0f };
-    cubeTransform.m_translation = { 0.0f, -5.0f, 0.0f };
-    m_scene.addRenderable(new Cube("SceneCube2", cubeMat, cubeTransform));
+    Material cubeMat3{ {1.0f, 0.0f, 0.5f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 20.0f, SHADER_PATH "flatShading.hlsl", false };
+    Transformation cubeTransform3{ {0.0f, -5.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
+    m_scene.addRenderable(new Cube("SceneCube3", cubeMat3, cubeTransform3));
+
+    Material quadMat{ {0.25f, 0.25f, 0.25f}, {0.25f, 0.25f, 0.25f}, {0.1f, 0.1f, 0.1f}, 5.0f, SHADER_PATH "directionalLighting.hlsl", true };
+    Transformation quadTransform{ {0.0f, -7.5f, 0.0f}, {50.0f, 50.0f, 50.0f}, glm::mat4(1.0f) };
+    Quad* quad = new Quad("SceneFloor", quadMat, quadTransform);
+    glm::vec3 rotAxis = { 1.0f, 0.0f, 0.0f };
+    m_scene.addRenderable(quad);
+
+    m_scene.addDirLight(new DirectionalLight{ {-0.2f, -1.0f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.2f, 0.2f, 0.2f}, {1.0f, 1.0f, 1.0f} });
 
     std::vector<const char*> skyboxFiles = {
         SKYBOX_PATH "right.jpg",
@@ -37,7 +45,7 @@ void Test3DLayer::onAttach(Window* win)
         SKYBOX_PATH "front.jpg",
         SKYBOX_PATH "back.jpg",
     };
-    Material skyboxMat{ {}, {}, {}, 0.0f, SHADER_PATH "skyboxShader.hlsl" };
+    Material skyboxMat{ {}, {}, {}, 0.0f, SHADER_PATH "skyboxShader.hlsl", false };
     m_scene.addSkyBox(new SkyBox("skybox", skyboxMat, skyboxFiles));
     m_scene.addCamera(new Camera({ 0.0f, 0.0f, 15.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f, 0.0f }));
     m_scene.addContext(m_win);

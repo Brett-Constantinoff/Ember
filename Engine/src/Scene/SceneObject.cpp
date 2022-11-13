@@ -33,3 +33,8 @@ VertexBuffer* SceneObject::getVbo()
 {
 	return &m_vbo;
 }
+
+void SceneObject::rotate(float angle, glm::vec3& axis)
+{
+	m_trans.m_rotation = glm::rotate(m_trans.m_rotation, glm::radians(angle), axis);
+}

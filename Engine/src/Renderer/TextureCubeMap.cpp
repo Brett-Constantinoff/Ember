@@ -12,13 +12,11 @@ TextureCubeMap::~TextureCubeMap()
 void TextureCubeMap::load()
 {
 	bind();
-    int32_t width;
-    int32_t height;
     int32_t channels;
     int32_t i = 0;
     for (const char* file : m_files) 
     {
-        uint8_t* fileData = stbi_load(file, &width, &height, &channels, 0);
+        uint8_t* fileData = stbi_load(file, &m_width, &m_height, &channels, 0);
         if (fileData) 
         {
             GLenum format = 0;
@@ -35,7 +33,7 @@ void TextureCubeMap::load()
             {
                 format = GL_RGBA;
             }
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, fileData);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, fileData);
         }
         else 
         {

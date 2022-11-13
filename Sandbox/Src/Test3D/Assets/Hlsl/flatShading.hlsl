@@ -17,10 +17,10 @@ void main()
 #shader fragmentShader
 #version 330 core
 
-uniform vec3 uColor;
+uniform vec3 uDiff;
 out vec4 oFragColor;
 
 void main()
 {
-	oFragColor = vec4(uColor, 1.0);
+	oFragColor = vec4(uDiff, 1.0);
 }

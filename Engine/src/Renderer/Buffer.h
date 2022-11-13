@@ -6,13 +6,14 @@
 class Buffer
 {
 public:
-	Buffer(uint32_t bufferType);
-	~Buffer();
+	Buffer(uint32_t type);
+	virtual ~Buffer(){};
 
 	virtual void bind() {};
 	virtual void unBind() {};
+	virtual void generate() {};
 
 protected:
-	uint32_t m_bufferId;
-	uint32_t m_bufferType;
+	uint32_t m_id;
+	uint32_t m_type;
 };

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../../libs/math/glm/glm.hpp"
 
 struct Transformation
@@ -15,7 +14,7 @@ public:
 	}
 
 public:
-	glm::vec3 m_translation;
-	glm::vec3 m_scale;
-	glm::mat4 m_rotation;
+	glm::vec3 m_translation{};
+	glm::vec3 m_scale{};
+	glm::mat4 m_rotation{};
 };

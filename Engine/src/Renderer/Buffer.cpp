@@ -1,12 +1,6 @@
 #include "Buffer.h"
 
 Buffer::Buffer(uint32_t type) :
-	m_bufferType{type}
+	m_type{ type }
 {
-	glGenBuffers(1, &m_bufferId);
-}
-
-Buffer::~Buffer()
-{
-	glDeleteBuffers(1, &m_bufferId);
 }

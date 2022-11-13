@@ -45,4 +45,14 @@ int main(int argc, char** argv)
 	delete app;
 	return 0;
 }
+
+#else
+int main(int argc, char** argv)
+{
+	Test3DApp* app = new Test3DApp("3D Test Application");
+	app->pushLayer(new Test3DLayer("Test 3D Layer"));
+	app->start();
+	delete app;
+	return 0;
+}
 #endif
