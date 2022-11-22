@@ -23,6 +23,7 @@ namespace Ember
 			void addContext(Core::Window* win);
 			void addSkyBox(SkyBox* skybox);
 			void addDirLight(DirectionalLight* light);
+			std::vector<SceneObject*> getRenderables();
 			void update(float dt);
 			void render();
 

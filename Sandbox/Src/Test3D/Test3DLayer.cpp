@@ -58,6 +58,9 @@ void Test3DLayer::onDetach(void)
 
 void Test3DLayer::onUpdate(float dt)
 {
+    std::vector<Ember::Scene::SceneObject*> renderables = m_scene.getRenderables();
+    Ember::Scene::SceneObject* cube = renderables[0];
+    cube->rotate(90.0f * dt, glm::vec3{ 1.0f, 1.0f, 1.0f });
     m_scene.update(dt);
 }
 

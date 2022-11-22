@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Scene3D.h"
 
 namespace Ember
 {
@@ -56,6 +56,11 @@ namespace Ember
 		void Scene3D::addDirLight(DirectionalLight* light)
 		{
 			m_dirLight = light;
+		}
+
+		std::vector<SceneObject*> Scene3D::getRenderables()
+		{
+			return m_renderables;
 		}
 
 		void Scene3D::update(float dt)

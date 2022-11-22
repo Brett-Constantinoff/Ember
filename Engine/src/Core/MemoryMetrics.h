@@ -1,27 +1,16 @@
 #pragma once
-#include <stdlib.h>
-#include <iostream>
+#include <stdint.h>
 
-struct AllocationMetrics
+namespace Ember
 {
-	uint32_t m_allocations = 0;
-	uint32_t m_frees = 0;
-
-	void report()
+	namespace Core
 	{
-		std::cout << "Leaks present: " << m_allocations - m_frees << std::endl;
+		struct MemoryMetrics
+		{
+			uint32_t m_allocations = 0;
+			uint32_t m_frees = 0;
+			size_t m_memUsage = 0;
+		};
+		static MemoryMetrics s_metrics;
 	}
-};
-static AllocationMetrics s_metrics;
-
-void* operator new(size_t size)
-{
-	s_metrics.m_allocations++;
-	return malloc(size);
-}
-
-void operator delete(void* memory)
-{
-	s_metrics.m_frees++;
-	free(memory);
 }
