@@ -1,50 +1,56 @@
 #include "LayerStack.h"
 
-LayerStack::LayerStack()
+namespace Ember
 {
-}
-
-LayerStack::~LayerStack()
-{
-    for (Layer* layer : m_layers)
+    namespace Core
     {
-        std::cout << "Destroying " << layer->getName() << std::endl;
-        layer->onDetach();
-        delete layer;
-    }
-    m_layers.clear();
-}
+        LayerStack::LayerStack()
+        {
+        }
 
-void LayerStack::push(Layer* layer, Window* win)
-{
-    std::cout << "Creating " << layer->getName() << std::endl;
-    layer->onAttach(win);
-    m_layers.push_back(layer);
-}
+        LayerStack::~LayerStack()
+        {
+            for (Layer* layer : m_layers)
+            {
+                std::cout << "Destroying " << layer->getName() << std::endl;
+                layer->onDetach();
+                delete layer;
+            }
+            m_layers.clear();
+        }
 
-void LayerStack::pop()
-{
-    m_layers.back()->onDetach();
-    m_layers.pop_back();
-}
+        void LayerStack::push(Layer* layer, Window* win)
+        {
+            std::cout << "Creating " << layer->getName() << std::endl;
+            layer->onAttach(win);
+            m_layers.push_back(layer);
+        }
 
-bool LayerStack::isEmpty()
-{
-    return m_layers.size() == 0;
-}
+        void LayerStack::pop()
+        {
+            m_layers.back()->onDetach();
+            m_layers.pop_back();
+        }
 
-int8_t LayerStack::size()
-{
-    return m_layers.size();
-}
+        bool LayerStack::isEmpty()
+        {
+            return m_layers.size() == 0;
+        }
 
-void LayerStack::updateLayers(float dt)
-{
-    for (int8_t i = m_layers.size() - 1; i >= 0; i--)
-    {
-        Layer* layer = m_layers[i];
-        layer->onUpdate(dt);
-        layer->onRender();
-        layer->onImguiRender();
+        int8_t LayerStack::size()
+        {
+            return m_layers.size();
+        }
+
+        void LayerStack::updateLayers(float dt)
+        {
+            for (int8_t i = m_layers.size() - 1; i >= 0; i--)
+            {
+                Layer* layer = m_layers[i];
+                layer->onUpdate(dt);
+                layer->onRender();
+                layer->onImguiRender();
+            }
+        }
     }
 }

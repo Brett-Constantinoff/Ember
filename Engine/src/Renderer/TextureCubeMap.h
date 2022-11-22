@@ -1,17 +1,23 @@
 #pragma once
-#include "Texture.h"
-#include "../../libs/stb/stb_image.h"
 #include <iostream>
 #include <vector>
+#include "Texture.h"
+#include "../../libs/stb/stb_image.h"
 
-class TextureCubeMap : public Texture
+namespace Ember
 {
-public:
-	TextureCubeMap(uint32_t m_type, std::vector<const char*>& files);
-	~TextureCubeMap();
+	namespace Renderer
+	{
+		class TextureCubeMap : public Texture
+		{
+		public:
+			TextureCubeMap(uint32_t m_type, std::vector<const char*>& files);
+			~TextureCubeMap();
 
-	virtual void load();
+			virtual void load();
 
-private:
-	std::vector<const char*> m_files;
-};
+		private:
+			std::vector<const char*> m_files;
+		};
+	}
+}

@@ -1,8 +1,14 @@
 #include "SceneObject.h"
 
-class Quad : public SceneObject
+namespace Ember
 {
-public:
-	Quad(const char* name, Material& material, Transformation& transform);
-	~Quad();
-};
+	namespace Scene
+	{
+		class Quad : public SceneObject
+		{
+		public:
+			Quad(const char* name, Renderer::Material& material, Renderer::Transformation& transform);
+			~Quad();
+		};
+	}
+}

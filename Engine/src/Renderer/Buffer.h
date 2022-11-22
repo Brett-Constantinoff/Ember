@@ -3,17 +3,23 @@
 #include <stdint.h>
 #include <cstring>
 
-class Buffer
+namespace Ember
 {
-public:
-	Buffer(uint32_t type);
-	virtual ~Buffer(){};
+	namespace Renderer
+	{
+		class Buffer
+		{
+		public:
+			Buffer(uint32_t type);
+			virtual ~Buffer() {};
 
-	virtual void bind() {};
-	virtual void unBind() {};
-	virtual void generate() {};
+			virtual void bind() {};
+			virtual void unBind() {};
+			virtual void generate() {};
 
-protected:
-	uint32_t m_id;
-	uint32_t m_type;
-};
+		protected:
+			uint32_t m_id;
+			uint32_t m_type;
+		};
+	}
+}

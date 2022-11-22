@@ -1,16 +1,22 @@
 #pragma once
-#include "SceneObject.h"
+#include <vector>
 #include "../Renderer/Material.h"
 #include "../Renderer/TextureCubeMap.h"
-#include <vector>
+#include "SceneObject.h"
 
-class SkyBox : public SceneObject
+namespace Ember
 {
-public:
-	SkyBox(const char* name, const Material& material, std::vector<const char*>& files);
-	~SkyBox();
-	TextureCubeMap* getCubeMap();
+	namespace Scene
+	{
+		class SkyBox : public SceneObject
+		{
+		public:
+			SkyBox(const char* name, const Renderer::Material& material, std::vector<const char*>& files);
+			~SkyBox();
+			Renderer::TextureCubeMap* getCubeMap();
 
-private:
-	TextureCubeMap m_texture;
-};
+		private:
+			Renderer::TextureCubeMap m_texture;
+		};
+	}
+}

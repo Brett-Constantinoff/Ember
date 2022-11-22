@@ -1,9 +1,15 @@
 #pragma once
 #include "SceneObject.h"
 
-class Cube : public SceneObject
+namespace Ember
 {
-public:
-	Cube(const char* name, const Material& material, const Transformation& transformation);
-	~Cube();
-};
+	namespace Scene
+	{
+		class Cube : public SceneObject
+		{
+		public:
+			Cube(const char* name, const Renderer::Material & material, const Renderer::Transformation& transformation);
+			~Cube();
+		};
+	}
+}

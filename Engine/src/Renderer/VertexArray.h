@@ -1,17 +1,23 @@
 #pragma once
-#include "../../libs/glad/include/glad/glad.h"
-#include <stdint.h>
 #include <cstring>
+#include <stdint.h>
+#include "../../libs/glad/include/glad/glad.h"
 
-class VertexArray
+namespace Ember
 {
-public:
-    VertexArray();
-    virtual void bind();
-    virtual void unBind();
-    void setLayout(uint32_t numPerAttrib, uint32_t type, uint32_t normalized, GLsizei stride, void* start);
+    namespace Renderer
+    {
+        class VertexArray
+        {
+        public:
+            VertexArray();
+            virtual void bind();
+            virtual void unBind();
+            void setLayout(uint32_t numPerAttrib, uint32_t type, uint32_t normalized, GLsizei stride, void* start);
 
-private:
-    uint32_t m_id;
-    uint32_t m_layoutPos;
-};
+        private:
+            uint32_t m_id;
+            uint32_t m_layoutPos;
+        };
+    }
+}

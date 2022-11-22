@@ -1,20 +1,26 @@
 #pragma once
-#include "Window.h"
 #include <string>
+#include "Window.h"
 
-class Layer
+namespace Ember
 {
-public:
-    Layer(const char* name = "Layer");
-    virtual ~Layer() = default;
+    namespace Core
+    {
+        class Layer
+        {
+        public:
+            Layer(const char* name = "Layer");
+            virtual ~Layer() = default;
 
-    virtual void onAttach(Window* win) {};
-    virtual void onDetach() {};
-    virtual void onUpdate(float dt) {};
-    virtual void onRender() {};
-    virtual void onImguiRender() {};
-    const char* getName();
+            virtual void onAttach(Window* win) {};
+            virtual void onDetach() {};
+            virtual void onUpdate(float dt) {};
+            virtual void onRender() {};
+            virtual void onImguiRender() {};
+            const char* getName();
 
-protected:
-    const char* m_name;
-};
+        protected:
+            const char* m_name;
+        };
+    }
+}
