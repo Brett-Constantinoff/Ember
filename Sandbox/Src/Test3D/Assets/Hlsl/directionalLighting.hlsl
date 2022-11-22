@@ -14,6 +14,7 @@ void main()
 {
     oNormal = mat3(transpose(inverse(uModel))) * aNormal;
     gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
+    oFragPos = aPos;
 }
 
 /*-------------------------------------------------------------------------------*/
