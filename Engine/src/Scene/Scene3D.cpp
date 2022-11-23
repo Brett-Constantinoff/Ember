@@ -5,18 +5,14 @@ namespace Ember
 	namespace Scene
 	{
 		Scene3D::Scene3D() :
-			m_camera{ nullptr }, m_skybox{ nullptr }, m_dirLight{ nullptr },
-			m_win{ nullptr }, m_proj{ glm::mat4(1.0f) }, m_view{ glm::mat4(1.0f) },
-			m_shadowFbo{ GL_FRAMEBUFFER }, m_shadowMap{ nullptr }
+			m_camera{ nullptr },		   m_skybox{ nullptr },				m_dirLight{ nullptr },
+			m_win{ nullptr },			   m_proj{ glm::mat4(1.0f) },		m_view{ glm::mat4(1.0f) },
+			m_lightMat{ glm::mat4(1.0f) }, m_shadowFbo {GL_FRAMEBUFFER},	m_shadowMap{ nullptr }, 
+			m_depthShader{ nullptr }
 		{
 			glEnable(GL_DEPTH_TEST);
-			m_shadowMap = new Renderer::Texture2D(GL_TEXTURE_2D, 1024, 1024);
+			m_shadowMap = new Renderer::Texture2D(GL_TEXTURE_2D, 2048, 2048);
 			m_shadowFbo.attachDepthTex(m_shadowMap);
-
-			if (m_shadowFbo.notComplete())
-			{
-				std::cout << "ERROR::SHADOW FRAMEBUFFER INCOMPELTE\n";
-			}
 		}
 
 		Scene3D::~Scene3D()
@@ -31,6 +27,7 @@ namespace Ember
 			delete m_skybox;
 			delete m_dirLight;
 			delete m_shadowMap;
+			delete m_depthShader;
 		}
 
 		void Scene3D::addRenderable(SceneObject* obj)
@@ -58,6 +55,11 @@ namespace Ember
 			m_dirLight = light;
 		}
 
+		void Scene3D::addDepthShader(Renderer::Shader* depth)
+		{
+			m_depthShader = depth;
+		}
+
 		std::vector<SceneObject*> Scene3D::getRenderables()
 		{
 			return m_renderables;
@@ -73,61 +75,91 @@ namespace Ember
 		void Scene3D::render()
 		{
 			glClearColor(0.25f, 0.35f, 0.65f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			renderShadows();
+			renderScene();
+		}
+
+		void Scene3D::renderShadows()
+		{
 			// render directional shadows
+			float near = 1.0f;
+			float far = 7.5f;
+			glm::mat4 lightProj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near, far);
+			glm::mat4 lightView = glm::lookAt(m_dirLight->m_dir, glm::vec3{ 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+			m_lightMat = lightProj * lightView;
+
+
+			m_depthShader->use();
+			m_depthShader->setMat4("uLightMat", m_lightMat);
+
 			m_win->setViewPort(m_shadowMap->getWidth(), m_shadowMap->getHeight());
 			m_shadowFbo.bind();
 			glClear(GL_DEPTH_BUFFER_BIT);
-			renderScene();
+			
+			for (auto obj : m_renderables)
+			{
+				Renderer::Transformation trans = *obj->getTransform();
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, trans.m_translation);
+				model *= trans.m_rotation;
+				model = glm::scale(model, trans.m_scale);
+				m_depthShader->setMat4("uModel", model);
+
+				obj->getVao()->bind();
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+				obj->getVao()->unBind();
+			}
+			//renderSkybox();
 			m_shadowFbo.unbind();
-		
-			// render scene normally
-			m_win->setViewPort();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			renderScene();
 		}
 
 		void Scene3D::renderScene()
 		{
-			for (auto renderable : m_renderables)
+			m_win->setViewPort();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			for (auto obj : m_renderables)
 			{
-				renderObj(renderable);
+				Renderer::Transformation trans = *obj->getTransform();
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, trans.m_translation);
+				model *= trans.m_rotation;
+				model = glm::scale(model, trans.m_scale);
+
+				Renderer::Material mat = *obj->getMaterial();
+				mat.m_shader.use();
+				
+				mat.m_shader.setVec3("uDiff", mat.m_diff);
+				mat.m_shader.setMat4("uProj", m_proj);
+				mat.m_shader.setMat4("uView", m_view);
+				mat.m_shader.setMat4("uModel", model);
+				mat.m_shader.setMat4("uLightMat", m_lightMat);
+				mat.m_shader.setVec3("uLightPos", m_dirLight->m_dir);
+				mat.m_shader.setInt("uShadowMap", 0);
+
+				if (mat.m_lit)
+				{
+					mat.m_shader.setVec3("uAmb", mat.m_amb);
+					mat.m_shader.setVec3("uSpec", mat.m_spec);
+					mat.m_shader.setFloat("uShine", mat.m_shine);
+
+					mat.m_shader.setVec3("uDirLight.m_dir", m_dirLight->m_dir);
+					mat.m_shader.setVec3("uDirLight.m_diff", m_dirLight->m_diff);
+					mat.m_shader.setVec3("uDirLight.m_amb", m_dirLight->m_amb);
+					mat.m_shader.setVec3("uDirLight.m_spec", m_dirLight->m_spec);
+
+					mat.m_shader.setVec3("uViewPos", *m_camera->getPos());
+				}
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(m_shadowMap->getType(), m_shadowMap->getId());
+
+				obj->getVao()->bind();
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+				obj->getVao()->unBind();
 			}
 			renderSkybox();
-		}
-
-		void Scene3D::renderObj(SceneObject* obj)
-		{
-			Renderer::Transformation trans = *obj->getTransform();
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, trans.m_translation);
-			model *= trans.m_rotation;
-			model = glm::scale(model, trans.m_scale);
-
-			Renderer::Material mat = *obj->getMaterial();
-			mat.m_shader.use();
-			mat.m_shader.setVec3("uDiff", mat.m_diff);
-			mat.m_shader.setMat4("uProj", m_proj);
-			mat.m_shader.setMat4("uView", m_view);
-			mat.m_shader.setMat4("uModel", model);
-
-			if (mat.m_lit)
-			{
-				mat.m_shader.setVec3("uAmb", mat.m_amb);
-				mat.m_shader.setVec3("uSpec", mat.m_spec);
-				mat.m_shader.setFloat("uShine", mat.m_shine);
-
-				mat.m_shader.setVec3("uDirLight.m_dir", m_dirLight->m_dir);
-				mat.m_shader.setVec3("uDirLight.m_diff", m_dirLight->m_diff);
-				mat.m_shader.setVec3("uDirLight.m_amb", m_dirLight->m_amb);
-				mat.m_shader.setVec3("uDirLight.m_spec", m_dirLight->m_spec);
-
-				mat.m_shader.setVec3("uViewPos", *m_camera->getPos());
-			}
-
-			obj->getVao()->bind();
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-			obj->getVao()->unBind();
 		}
 
 		void Scene3D::renderSkybox()

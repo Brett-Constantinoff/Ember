@@ -23,13 +23,14 @@ namespace Ember
 			void addContext(Core::Window* win);
 			void addSkyBox(SkyBox* skybox);
 			void addDirLight(DirectionalLight* light);
+			void addDepthShader(Renderer::Shader* depth);
 			std::vector<SceneObject*> getRenderables();
 			void update(float dt);
 			void render();
 
 		private:
+			void renderShadows();
 			void renderScene();
-			void renderObj(SceneObject* obj);
 			void renderSkybox();
 
 		private:
@@ -40,8 +41,10 @@ namespace Ember
 			DirectionalLight* m_dirLight;
 			Renderer::Framebuffer m_shadowFbo;
 			Renderer::Texture2D* m_shadowMap;
+			Renderer::Shader* m_depthShader;
 			glm::mat4 m_proj;
 			glm::mat4 m_view;
+			glm::mat4 m_lightMat;
 		};
 	}
 }

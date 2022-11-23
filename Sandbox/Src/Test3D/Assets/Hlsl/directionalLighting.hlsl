@@ -9,6 +9,7 @@ out vec3 oNormal;
 uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProj;
+uniform mat4 uLightMat;
 
 void main()
 {
