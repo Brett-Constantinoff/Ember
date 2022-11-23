@@ -68,5 +68,21 @@ namespace Ember
             glfwSwapBuffers(m_winID);
             glfwPollEvents();
         }
+
+        void Window::setViewPort(int32_t width, int32_t height)
+        {
+            glViewport(0, 0, width, height);
+        }
+
+        void Window::setViewPort()
+        {
+            int32_t width;
+            int32_t height;
+
+            glfwGetFramebufferSize(m_winID, &width, &height);
+            glViewport(0, 0, width, height);
+        }
     }
 }
+
+

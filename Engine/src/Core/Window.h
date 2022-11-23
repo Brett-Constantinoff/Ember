@@ -23,6 +23,8 @@ namespace Ember
             glm::mat4 getPerspective();
             void update();
             bool isOpen();
+            void setViewPort(int32_t width, int32_t height);
+            void setViewPort();
 
         private:
             GLFWwindow* m_winID;

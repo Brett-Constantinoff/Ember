@@ -73,17 +73,16 @@ namespace Ember
 		void Scene3D::render()
 		{
 			glClearColor(0.25f, 0.35f, 0.65f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// render directional shadows
-			glViewport(0, 0, m_shadowMap->getWidth(), m_shadowMap->getHeight());
+			m_win->setViewPort(m_shadowMap->getWidth(), m_shadowMap->getHeight());
 			m_shadowFbo.bind();
 			glClear(GL_DEPTH_BUFFER_BIT);
 			renderScene();
 			m_shadowFbo.unbind();
-
+		
 			// render scene normally
-			glViewport(0, 0, m_win->getWidth(), m_win->getHeight());
+			m_win->setViewPort();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			renderScene();
 		}
