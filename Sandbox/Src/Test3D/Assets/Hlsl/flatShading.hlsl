@@ -16,7 +16,7 @@ out vec3 oFragPos;
 void main()
 {
 	oFragPos = vec3(uModel * vec4(aPos, 1.0));
-	oNormal = transpose(inverse(mat3(uModel)))* aNormal;
+	oNormal = transpose(inverse(mat3(uModel))) * aNormal;
 	oFragToLight = uLightMat * vec4(oFragPos, 1.0);
 	gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 }
@@ -33,6 +33,7 @@ in vec3 oFragPos;
 uniform sampler2D uShadowMap;
 uniform vec3 uDiff;
 uniform vec3 uLightPos;
+
 out vec4 oFragColor;
 
 float calcShadow(vec4 fragToLight)
@@ -41,10 +42,10 @@ float calcShadow(vec4 fragToLight)
 	proj = proj * 0.5 + 0.5;
 	float closest = texture(uShadowMap, proj.xy).r;
 	float curr = proj.z;
-	
-	vec3 normal = normalize(oNormal);
-	vec3 lightDir = normalize(uLightPos - oFragPos);
-	float bias = max(0.05 * (1.0 - dot(oNormal, lightDir)), 0.005);
+
+    vec3 normal = normalize(oNormal);
+    vec3 lightDir = normalize(uLightPos - oFragPos);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
 
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(uShadowMap, 0);
@@ -68,6 +69,5 @@ float calcShadow(vec4 fragToLight)
 
 void main()
 {
-	//float shadow = calcShadow(oFragToLight);
-	oFragColor = vec4(uDiff * (1.0 - calcShadow(oFragToLight)), 1.0);
+	oFragColor = vec4(((1.0 - calcShadow(oFragToLight)) * uDiff), 1.0);
 }

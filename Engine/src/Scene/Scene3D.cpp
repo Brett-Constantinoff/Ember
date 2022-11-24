@@ -11,8 +11,9 @@ namespace Ember
 			m_depthShader{ nullptr }
 		{
 			glEnable(GL_DEPTH_TEST);
-			m_shadowMap = new Renderer::Texture2D(GL_TEXTURE_2D, 2048, 2048);
+			m_shadowMap = new Renderer::Texture2D(GL_TEXTURE_2D, 7200, 7200);
 			m_shadowFbo.attachDepthTex(m_shadowMap);
+
 		}
 
 		Scene3D::~Scene3D()
@@ -84,12 +85,9 @@ namespace Ember
 		void Scene3D::renderShadows()
 		{
 			// render directional shadows
-			float near = 1.0f;
-			float far = 7.5f;
-			glm::mat4 lightProj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near, far);
+			glm::mat4 lightProj = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 500.0f);
 			glm::mat4 lightView = glm::lookAt(m_dirLight->m_dir, glm::vec3{ 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 			m_lightMat = lightProj * lightView;
-
 
 			m_depthShader->use();
 			m_depthShader->setMat4("uLightMat", m_lightMat);
@@ -111,15 +109,13 @@ namespace Ember
 				glDrawArrays(GL_TRIANGLES, 0, 36);
 				obj->getVao()->unBind();
 			}
-			//renderSkybox();
-			m_shadowFbo.unbind();
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 
 		void Scene3D::renderScene()
 		{
-			m_win->setViewPort();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+			m_win->setViewPort();
 			for (auto obj : m_renderables)
 			{
 				Renderer::Transformation trans = *obj->getTransform();
@@ -136,9 +132,7 @@ namespace Ember
 				mat.m_shader.setMat4("uView", m_view);
 				mat.m_shader.setMat4("uModel", model);
 				mat.m_shader.setMat4("uLightMat", m_lightMat);
-				mat.m_shader.setVec3("uLightPos", m_dirLight->m_dir);
-				mat.m_shader.setInt("uShadowMap", 0);
-
+				
 				if (mat.m_lit)
 				{
 					mat.m_shader.setVec3("uAmb", mat.m_amb);
@@ -152,12 +146,18 @@ namespace Ember
 
 					mat.m_shader.setVec3("uViewPos", *m_camera->getPos());
 				}
+				else
+				{
+					mat.m_shader.setVec3("uLightPos", m_dirLight->m_dir);
+				}
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(m_shadowMap->getType(), m_shadowMap->getId());
+				m_shadowMap->bind();
 
 				obj->getVao()->bind();
 				glDrawArrays(GL_TRIANGLES, 0, 36);
 				obj->getVao()->unBind();
+
+				m_shadowMap->unbind();
 			}
 			renderSkybox();
 		}
