@@ -14,6 +14,6 @@ public:
 	virtual void onImguiRender();
 
 private:
-	Ember::Core::Window * m_win;
+	Ember::Core::Window* m_win;
 	Ember::Scene::Scene3D m_scene;
 };

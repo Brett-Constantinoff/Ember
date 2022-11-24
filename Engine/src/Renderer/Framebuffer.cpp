@@ -35,9 +35,13 @@ namespace Ember
 			m_depthTex = depthTex;
 			m_depthTex->loadDepth();
 			bind();
-			glFramebufferTexture2D(m_type, GL_DEPTH_ATTACHMENT, depthTex->getType(), depthTex->getId(), 0);
+			glFramebufferTexture2D(m_type, GL_DEPTH_ATTACHMENT, m_depthTex->getType(), m_depthTex->getId(), 0);
 			glDrawBuffer(GL_NONE);
 			glReadBuffer(GL_NONE);
+			if (notComplete())
+			{
+				std::cout << "ERROR::SHADOW FRAMEBUFFER INCOMPELTE\n";
+			}
 			unbind();
 		}
 
