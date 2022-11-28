@@ -11,7 +11,7 @@ namespace Ember
 			m_depthShader{ nullptr }
 		{
 			glEnable(GL_DEPTH_TEST);
-			m_shadowMap = new Renderer::Texture2D(GL_TEXTURE_2D, 7200, 7200);
+			m_shadowMap = new Renderer::Texture2D(GL_TEXTURE_2D, 5000, 5000);
 			m_shadowFbo.attachDepthTex(m_shadowMap);
 
 		}
@@ -85,7 +85,7 @@ namespace Ember
 		void Scene3D::renderShadows()
 		{
 			// render directional shadows
-			glm::mat4 lightProj = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 500.0f);
+			glm::mat4 lightProj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 500.0f);
 			glm::mat4 lightView = glm::lookAt(m_dirLight->m_dir, glm::vec3{ 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 			m_lightMat = lightProj * lightView;
 

@@ -14,23 +14,15 @@ void Test3DLayer::onAttach(Ember::Core::Window* win)
 	m_win = win;
 
     Ember::Renderer::Material cubeMat0{ {1.0f, 0.0f, 0.0f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 5.0f, SHADER_PATH "directionalLighting.hlsl", true};
-    Ember::Renderer::Transformation cubeTransform0{ {5.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
+    Ember::Renderer::Transformation cubeTransform0{ {2.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
     m_scene.addRenderable(new Ember::Scene::Cube("SceneCube0", cubeMat0, cubeTransform0));
-
-    Ember::Renderer::Material cubeMat1{ {0.0f, 0.0f, 1.0f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 10.0f, SHADER_PATH "directionalLighting.hlsl", true };
-    Ember::Renderer::Transformation cubeTransform1{ {-10.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
-    m_scene.addRenderable(new Ember::Scene::Cube("SceneCube1", cubeMat1, cubeTransform1));
 
     Ember::Renderer::Material cubeMat2{ {0.0f, 1.0f, 0.0f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 15.0f, SHADER_PATH "flatShading.hlsl", false };
     Ember::Renderer::Transformation cubeTransform2{ {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
     m_scene.addRenderable(new Ember::Scene::Cube("SceneCube2", cubeMat2, cubeTransform2));
 
-    Ember::Renderer::Material cubeMat3{ {1.0f, 0.0f, 0.5f}, {0.5f, 0.5f, 0.5f}, {0.1f, 0.1f, 0.1f}, 20.0f, SHADER_PATH "flatShading.hlsl", false };
-    Ember::Renderer::Transformation cubeTransform3{ {-5.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, glm::mat4(1.0f) };
-    m_scene.addRenderable(new Ember::Scene::Cube("SceneCube3", cubeMat3, cubeTransform3));
-
     Ember::Renderer::Material quadMat{ {0.25f, 0.25f, 0.25f}, {0.25f, 0.25f, 0.25f}, {0.1f, 0.1f, 0.1f}, 5.0f, SHADER_PATH "flatShading.hlsl", false };
-    Ember::Renderer::Transformation quadTransform{ {0.0f, -7.5f, 0.0f}, {100.0f, 100.0f, 100.0f}, glm::mat4(1.0f) };
+    Ember::Renderer::Transformation quadTransform{ {0.0f, -7.5f, 0.0f}, {20.0f, 20.0f, 20.0f}, glm::mat4(1.0f) };
     Ember::Scene::Quad* quad = new Ember::Scene::Quad("SceneFloor", quadMat, quadTransform);
     m_scene.addRenderable(quad);
 
@@ -62,6 +54,10 @@ void Test3DLayer::onUpdate(float dt)
     Ember::Scene::SceneObject* cube = renderables[0];
     glm::vec3 rotation = {1.0f, 1.0f, 1.0f};
     cube->rotate(90.0f * dt, rotation);
+
+    cube = renderables[1];
+    rotation = {1.0f, 1.0f, 1.0f};
+    cube->rotate(-90.0f * dt, rotation);
     m_scene.update(dt);
 }
 
