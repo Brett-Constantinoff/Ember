@@ -47,7 +47,7 @@ uniform sampler2D uShadowMap;
 
 out vec4 oFragColor;
 
-float calcShadow(vec4 fragToLight)
+float calcShadow(vec4 fragToLight, vec3 lightDir)
 {
     vec3 proj = fragToLight.xyz / fragToLight.w;
     proj = proj * 0.5 + 0.5;
@@ -55,8 +55,9 @@ float calcShadow(vec4 fragToLight)
     float curr = proj.z;
 
     vec3 normal = normalize(oNormal);
-    vec3 lightDir = normalize(uDirLight.m_dir - oFragPos);
-    float bias = max(0.05 * (1.0 - dot(normal, uDirLight.m_dir)), 0.005);
+    //vec3 lightDir = normalize(uDirLight.m_dir - oFragPos);
+    //vec3 lightDir = normalize(-uDirLight.m_dir);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
 
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(uShadowMap, 0);
@@ -94,7 +95,7 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), uShine);
     vec3 specular = uDirLight.m_spec * spec * uSpec;
 
-    float shadow = calcShadow(oFragToLight);
+    float shadow = calcShadow(oFragToLight, lightDir);
     vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
     oFragColor = vec4(result, 1.0);
 }
