@@ -2,42 +2,24 @@
 
 #define THREE_DIM
 
-#if defined(_WIN32) && defined(THREE_DIM)
-#define SHADER_PATH ".\\.\\Src\\Test3D\\Assets\\Hlsl\\"
-#define SKYBOX_PATH ".\\.\\Src\\Test3D\\Assets\\Textures\\Sky\\"
+#ifdef _DEBUG && defined(_WIN32)
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#define EMBER_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 #else
-#define SHADER_PATH "../../Src/Test3D/Assets/Hlsl/"
-#define SKYBOX_PATH "../../Src/Test3D/Assets/Textures/Sky/"
+#define EMBER_NEW new
 #endif
 
-#include "../../libs/imgui/imgui.h"
-#include "../../libs/imgui/imgui_impl_glfw.h"
-#include "../../libs/imgui/imgui_impl_opengl3.h"
-#include "../../libs/math/glm/glm.hpp"
+#if defined(_WIN32) && defined(THREE_DIM)
+#define SHADER_PATH ".\\.\\Src\\Test3D\\Assets\\Hlsl\\"
+#endif
 
-#include "src/Core/Application.h"
-#include "src/Core/Layer.h"
-#include "src/Core/LayerStack.h"
-#include "src/Core/Window.h"
-#include "src/Core/MemoryMetrics.h"
+#include "src/core/Glm.h"
+#include "src/core/Application.h"
+#include "src/core/Window.h"
 
-#include "src/Renderer/VertexArray.h"
-#include "src/Renderer/Buffer.h"
-#include "src/Renderer/VertexBuffer.h"
-#include "src/Renderer/Shader.h"
-#include "src/Renderer/Camera.h"
-#include "src/Renderer/Material.h"
-#include "src/Renderer/Transformation.h"
-#include "src/Renderer/Texture.h"
-#include "src/Renderer/TextureCubeMap.h"
+#include "src/renderer/Renderer.h"
+#include "src/renderer/Shader.h"
 
-#include "src/Scene/SceneObject.h"
-#include "src/Scene/Cube.h"
-#include "src/Scene/Quad.h"
-#include "src/Scene/Scene3D.h"
-#include "src/Scene/SkyBox.h"
-#include "src/Scene/DirectionalLight.h"
-
-#include <iostream>
-#include <stdint.h>
-#include <memory>
+#include "src/scene/Camera.h"

@@ -1,36 +1,22 @@
-#include "Test3DApp.h"
+#include "Application3D.h"
 
-#if DEBUG && defined(_WIN32)
-void* operator new(size_t size)
-{
-	Ember::Core::s_metrics.m_allocations++;
-	Ember::Core::s_metrics.m_memUsage += size;
-	return malloc(size);
-}
-
-void operator delete(void* memory, size_t size)
-{
-	Ember::Core::s_metrics.m_frees++;
-	free(memory);
-}
 int main(int argc, char** argv)
 {
-	Test3DApp* app = new Test3DApp("3D Test Application");
-	app->pushLayer(new Test3DLayer("Test 3D Layer"));
-	app->start();
-	delete app;
-	std::cout << "Memory leaks present: " << Ember::Core::s_metrics.m_allocations - Ember::Core::s_metrics.m_frees << std::endl;
-	std::cout << "Total memory used: " << Ember::Core::s_metrics.m_memUsage / 1000000 << " Mbytes" << std::endl;
-	return 0;
-}
+	try
+	{
+		Ember::Core::ApplicationCreateInfo createInfo;
+		createInfo.m_label = "Application 3D";
+		Application3D app{ createInfo };
 
-#else
-int main(int argc, char** argv)
-{
-	Test3DApp* app = new Test3DApp("3D Test Application");
-	app->pushLayer(new Test3DLayer("Test 3D Layer"));
-	app->start();
-	delete app;
-	return 0;
-}
+		app.run();	
+	}
+	catch(const std::runtime_error& e)
+	{
+		std::cout << e.what() << "\n";
+	}
+
+#if defined(_WIN32)
+	_CrtDumpMemoryLeaks();
 #endif
+	return 0;
+}
