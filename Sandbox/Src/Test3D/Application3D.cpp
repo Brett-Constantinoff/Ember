@@ -9,11 +9,11 @@ Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInf
 Application3D::~Application3D()
 {
 	// cleanup memory used by the application
-	delete m_window;
-	delete m_renderer;
-	delete m_camera;
-	delete m_shader;
-	delete m_scene;
+	EMBER_DELETE m_window;
+	EMBER_DELETE m_renderer;
+	EMBER_DELETE m_camera;
+	EMBER_DELETE m_shader;
+	EMBER_DELETE m_scene;
 }
 
 void Application3D::run()
