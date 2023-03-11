@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine.h>
+#include "ImguiGui.h"
 
 class Application3D : public Ember::Core::Application
 {
@@ -22,6 +23,7 @@ private:
 	double m_lastFrame;
 	Ember::Core::Window* m_window;
 	Ember::Scene::Scene* m_scene;
+	ImguiGui* m_gui;
 	Ember::Renderer::Renderer* m_renderer;
 	Ember::Scene::Camera* m_camera;
 	Ember::Renderer::Shader* m_shader;
