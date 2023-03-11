@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <functional>
 
 namespace Ember::Core
 {
@@ -33,6 +34,9 @@ namespace Ember::Core
         bool isOpen();
         void setViewPort(int32_t width, int32_t height);
         void setViewPort();
+
+    private:
+        static void resizeOpenGLApi(GLFWwindow* window, int width, int height);
 
     private:
         GLFWwindow* m_winID;

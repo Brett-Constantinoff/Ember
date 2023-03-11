@@ -20,7 +20,7 @@ namespace Ember::Scene
         m_createInfo.m_front.z = sin(glm::radians(m_createInfo.m_yaw)) * cos(glm::radians(m_createInfo.m_pitch));
         m_createInfo.m_front = glm::normalize(m_createInfo.m_front);
 
-        const float cameraSpeed = 3.0f * dt;
+        const float cameraSpeed = 2.0f * dt;
         GLFWwindow* win = *window;
 
         if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
@@ -36,16 +36,22 @@ namespace Ember::Scene
             m_createInfo.m_pos += glm::normalize(glm::cross(m_createInfo.m_front, m_createInfo.m_up)) * cameraSpeed;
         
         if (glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_PRESS)
-            m_createInfo.m_yaw += 2.0f;
+            m_createInfo.m_yaw += 1.0f;
         
         if (glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_PRESS)
-            m_createInfo.m_yaw -= 2.0f;
+            m_createInfo.m_yaw -= 1.0f;
         
         if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS)
-            m_createInfo.m_pitch += 2.0f;
+            m_createInfo.m_pitch += 1.0f;
         
         if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS)
-            m_createInfo.m_pitch -= 2.0f;
+            m_createInfo.m_pitch -= 1.0f;
+
+        // clamp pitch
+        if (m_createInfo.m_pitch > 89.0f)
+            m_createInfo.m_pitch = 89.0f;
+        if (m_createInfo.m_pitch < -89.0f)
+            m_createInfo.m_pitch = -89.0f;
     }
 
     glm::mat4& Camera::getView()

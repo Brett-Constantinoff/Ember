@@ -3,7 +3,7 @@
 namespace Ember::Scene
 {
 	Scene::Scene(const SceneCreateInfo& createInfo) :
-		m_createInfo{createInfo}, m_vao{0}
+		m_createInfo{ createInfo }, m_vao{ 0 }, m_objetcsRendered{ 0 }
 	{
 		createCube();
 	}
@@ -65,11 +65,18 @@ namespace Ember::Scene
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
+
+		++m_objetcsRendered;
 	}
 
 	uint32_t Scene::getCube() const
 	{
 		return m_vao;
+	}
+
+	int32_t Scene::getRenderCount() const
+	{
+		return m_objetcsRendered;
 	}
 
 	Ember::Scene::Camera* Scene::getCamera() const

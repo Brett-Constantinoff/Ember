@@ -21,6 +21,7 @@ namespace Ember::Scene
 
 		void createCube();
 		uint32_t getCube() const;
+		int32_t getRenderCount() const;
 		Ember::Scene::Camera* getCamera() const;
 		Ember::Renderer::Shader* getShader() const;
 
@@ -28,5 +29,6 @@ namespace Ember::Scene
 		SceneCreateInfo m_createInfo;
 		uint32_t m_vao;
 		uint32_t m_vbo;
+		int32_t m_objetcsRendered;
 	};
 }

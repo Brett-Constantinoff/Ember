@@ -1,6 +1,6 @@
 #pragma once
 #include "../core/Window.h"
-#include "../core/ImGui.h"
+#include "../core//Gui.h"
 #include "../scene/Scene.h"
 
 #include <string>
@@ -14,7 +14,8 @@ namespace Ember::Renderer
 		std::string m_api{};
 		Ember::Core::Window* m_window{};
 		Ember::Scene::Scene* m_scene{};
-		bool m_imguiEnabled{};
+		bool m_guiEnabled{};
+		Ember::Core::Gui* m_gui{};
 	};
 
 	class Renderer
@@ -25,12 +26,11 @@ namespace Ember::Renderer
 
 		void update(float dt);
 		void render();
-		
-	private:
-		void initImgui();
-		void updateImgui();
-		void renderImgui();
 
+	private:
+		void updateGui();
+		void renderGui();
+		
 	private:
 		const RendererCreateInfo m_createInfo;
 

@@ -22,6 +22,9 @@ namespace Ember::Core
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
             throw::std::runtime_error{ "ERROR::CANNOT INITIALIZE GLEW!" };
+
+        if (m_createInfo.m_api.compare("API_OPENGL") == 0)
+            glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
     }
 
     Window::~Window()
@@ -73,6 +76,11 @@ namespace Ember::Core
         int32_t height;
 
         glfwGetFramebufferSize(m_winID, &width, &height);
+        glViewport(0, 0, width, height);
+    }
+
+    void Window::resizeOpenGLApi(GLFWwindow* window, int width, int height)
+    {
         glViewport(0, 0, width, height);
     }
 }
