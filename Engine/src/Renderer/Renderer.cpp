@@ -5,7 +5,7 @@ namespace Ember::Renderer
 	Renderer::Renderer(const RendererCreateInfo& createInfo) :
 		m_createInfo{ createInfo }
 	{
-
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	Renderer::~Renderer()
@@ -13,32 +13,43 @@ namespace Ember::Renderer
 
 	}
 
-	void Renderer::update(float dt)
+	void Renderer::update(double dt)
 	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(m_createInfo.m_backgroundCol[0], m_createInfo.m_backgroundCol[1], m_createInfo.m_backgroundCol[2], m_createInfo.m_backgroundCol[3]);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-		view = m_createInfo.m_scene->getCamera()->getView();
-		projection = m_createInfo.m_window->getPerspective();
-		m_createInfo.m_scene->getShader()->use();
-
-		m_createInfo.m_scene->getShader()->setMat4("model", model);
-		m_createInfo.m_scene->getShader()->setMat4("projection", projection);
-		m_createInfo.m_scene->getShader()->setMat4("view", view);
-
+		updateGui();
 		m_createInfo.m_scene->getCamera()->move(m_createInfo.m_window->getContext(), dt);
-
-		
 	}
 
 	void Renderer::render()
 	{
-		updateGui();
-		glBindVertexArray(m_createInfo.m_scene->getCube());
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		auto objects = m_createInfo.m_scene->getEntities();
+		for (const auto& e : objects)
+		{
+			// only render the physical objetcs in the scene
+			if (e->getType() == Ember::Scene::EntityType::RENDERABLE)
+			{
+				// get uniforms
+				glm::mat4 model{ 1.0f };
+				glm::mat4 proj{ m_createInfo.m_window->getPerspective() };
+				glm::mat4 view{ m_createInfo.m_scene->getCamera()->getView() };
+
+				// update the uniforms
+				Shader* sceneShader{ m_createInfo.m_scene->getShader() };
+				sceneShader->use();
+				sceneShader->setMat4("model", model);
+				sceneShader->setMat4("projection", proj);
+				sceneShader->setMat4("view", view);
+				sceneShader->setVec3("uViewPos", m_createInfo.m_scene->getCamera()->getPos());
+
+				// render the object
+				Ember::Scene::RenderData data{ e->getRenderData() };
+				glBindVertexArray(data.m_vao);
+				glDrawElements(GL_TRIANGLES, data.m_indices.size(), GL_UNSIGNED_INT, 0);
+			}
+		}
+
+		// render our gui
 		renderGui();
 	}
 

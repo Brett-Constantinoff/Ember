@@ -13,7 +13,7 @@ namespace Ember::Scene
 
     }
 
-    void Camera::move(GLFWwindow** window, float dt)
+    void Camera::move(GLFWwindow** window, double dt)
     {
         m_createInfo.m_front.x = cos(glm::radians(m_createInfo.m_yaw)) * cos(glm::radians(m_createInfo.m_pitch));
         m_createInfo.m_front.y = sin(glm::radians(m_createInfo.m_pitch));

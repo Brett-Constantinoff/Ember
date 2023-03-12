@@ -2,6 +2,7 @@
 #include "../core/Window.h"
 #include "../core//Gui.h"
 #include "../scene/Scene.h"
+#include "../scene/Entity.h"
 
 #include <string>
 #include <memory>
@@ -12,6 +13,7 @@ namespace Ember::Renderer
 	struct RendererCreateInfo
 	{
 		std::string m_api{};
+		glm::vec4 m_backgroundCol{};
 		Ember::Core::Window* m_window{};
 		Ember::Scene::Scene* m_scene{};
 		bool m_guiEnabled{};
@@ -24,7 +26,7 @@ namespace Ember::Renderer
 		Renderer(const RendererCreateInfo& createInfo);
 		~Renderer();
 
-		void update(float dt);
+		void update(double dt);
 		void render();
 
 	private:

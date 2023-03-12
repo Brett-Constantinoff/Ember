@@ -77,7 +77,13 @@ void ImguiGui::createFpsCounter()
 	ImGui::Text("Fps: %0.1f", ImGui::GetIO().Framerate);
 
 	// display rendered objects
-	ImGui::Text("Objects renderer: %d ",m_createInfo.m_scene->getRenderCount());
+	ImGui::Text("Objects renderer: %d ",m_createInfo.m_scene->getEntityCount());
+
+	// display vertex count
+	ImGui::Text("Total Vertices: %d ", m_createInfo.m_scene->getVertexCount());
+
+	// display polygon count
+	ImGui::Text("Total Polygons: %d ", m_createInfo.m_scene->getPolygonCount());
 
 	// end this component
 	ImGui::End();
@@ -95,7 +101,7 @@ void ImguiGui::createSceneWindow()
 	ImVec2 windowSize{ ImGui::GetWindowSize() };
 
 	// fix the size
-	ImGui::SetNextWindowSize(ImVec2(250, m_createInfo.m_window->getHeight()));
+	ImGui::SetNextWindowSize(ImVec2(250, (int)m_createInfo.m_window->getHeight()));
 
 	// give it a title and make non-resizable and non-collapseable
 	ImGui::Begin("Scene Details", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);

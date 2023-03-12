@@ -84,7 +84,7 @@ void Application3D::createScene()
 	m_camera = EMBER_NEW Ember::Scene::Camera(cameraCreateInfo);				
 
 	// create scene shader
-	m_shader = EMBER_NEW Ember::Renderer::Shader(SHADER_PATH "flatShading.hlsl");
+	m_shader = EMBER_NEW Ember::Renderer::Shader(SHADER_PATH "basicShading.hlsl");
 
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 
@@ -109,7 +109,10 @@ void Application3D::createRenderer()
 	rendererCreateInfo.m_api = "API_OPENGL";		
 
 	// do we want a GUI
-	rendererCreateInfo.m_guiEnabled = true;			
+	rendererCreateInfo.m_guiEnabled = true;
+
+	// set a background color
+	rendererCreateInfo.m_backgroundCol = { 0.2f, 0.3f, 0.3f, 1.0f };
 
 	//create a gui for our renderer to render
 	Ember::Core::GuiCreateInfo guiCreateInfo{};
@@ -134,12 +137,23 @@ void Application3D::createRenderer()
 	m_renderer = EMBER_NEW Ember::Renderer::Renderer(rendererCreateInfo);		
 }
 
+void Application3D::addSceneObjects()
+{
+	// add a sphere to the scene
+	Ember::Scene::EntityCreateInfo createInfo{};
+	createInfo.m_name = "Cube";
+	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
+	createInfo.m_objFile = OBJ_PATH "Ball_Thing.obj";
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+}
+
 void Application3D::onStart()
 {
 	// initial app creation
 	createWindow();																
 	createScene();																
-	createRenderer();															
+	createRenderer();		
+	addSceneObjects();
 }
 
 void Application3D::onUpdate(double dt)

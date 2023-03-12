@@ -3,80 +3,45 @@
 namespace Ember::Scene
 {
 	Scene::Scene(const SceneCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_vao{ 0 }, m_objetcsRendered{ 0 }
+		m_createInfo{ createInfo }, m_sceneEntities{}
 	{
-		createCube();
 	}
 
 	Scene::~Scene()
 	{
-		glDeleteBuffers(1, &m_vbo);
-		glDeleteVertexArrays(1, &m_vao);
 	}
 
-	void Scene::createCube()
+
+	void Scene::addEntity(Entity* e)
 	{
-		float vertices[] = {
-	   -0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-	   -0.5f,  0.5f, -0.5f,
-	   -0.5f, -0.5f, -0.5f,
-	   -0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-	   -0.5f, -0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f, -0.5f,
-	   -0.5f, -0.5f, -0.5f,
-	   -0.5f, -0.5f, -0.5f,
-	   -0.5f, -0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-	   -0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-	   -0.5f, -0.5f,  0.5f,
-	   -0.5f, -0.5f, -0.5f,
-	   -0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f, -0.5f,
-		};
-
-		glGenVertexArrays(1, &m_vao);
-		glGenBuffers(1, &m_vbo);
-
-		glBindVertexArray(m_vbo);
-
-		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		++m_objetcsRendered;
+		m_sceneEntities.emplace_back(e);
 	}
 
-	uint32_t Scene::getCube() const
+	std::vector<std::shared_ptr<Entity>> Scene::getEntities()
 	{
-		return m_vao;
+		return m_sceneEntities;
 	}
 
-	int32_t Scene::getRenderCount() const
+	int32_t Scene::getVertexCount()
 	{
-		return m_objetcsRendered;
+		int32_t count{};
+		for (const auto& e : m_sceneEntities)
+			count += e->getRenderData().m_vertexPositions.size();
+		return count;
+	}
+
+	int32_t Scene::getPolygonCount()
+	{
+		int32_t count{};
+		for (const auto& e : m_sceneEntities)
+			count += (e->getRenderData().m_indices.size() / 3);
+		return count;
+	}
+
+
+	int32_t Scene::getEntityCount() const
+	{
+		return m_sceneEntities.size();
 	}
 
 	Ember::Scene::Camera* Scene::getCamera() const
@@ -84,7 +49,7 @@ namespace Ember::Scene
 		return m_createInfo.m_camera;
 	}
 
-	Ember::Renderer::Shader*Scene::getShader() const
+	Ember::Renderer::Shader* Scene::getShader() const
 	{
 		return m_createInfo.m_shader;
 	}

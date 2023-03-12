@@ -1,6 +1,8 @@
 #pragma once
 #include "../renderer/Shader.h"
+#include "../core/Memory.h"
 #include "Camera.h"
+#include "Entity.h"
 #include <stdint.h>
 #include <memory>
 
@@ -19,16 +21,17 @@ namespace Ember::Scene
 		Scene(const SceneCreateInfo& createInfo);
 		~Scene();
 
-		void createCube();
-		uint32_t getCube() const;
-		int32_t getRenderCount() const;
+		void addEntity(Entity* e);
+		std::vector<std::shared_ptr<Entity>> getEntities();
+		int32_t getVertexCount();
+		int32_t getPolygonCount();
+
+		int32_t getEntityCount() const;
 		Ember::Scene::Camera* getCamera() const;
 		Ember::Renderer::Shader* getShader() const;
 
 	private:
 		SceneCreateInfo m_createInfo;
-		uint32_t m_vao;
-		uint32_t m_vbo;
-		int32_t m_objetcsRendered;
+		std::vector<std::shared_ptr<Entity>> m_sceneEntities;
 	};
 }

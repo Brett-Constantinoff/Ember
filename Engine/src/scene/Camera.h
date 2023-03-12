@@ -19,7 +19,7 @@ namespace Ember::Scene
         Camera(const CameraCreateInfo& createInfo);
         ~Camera();
 
-        void move(GLFWwindow** window, float dt);
+        void move(GLFWwindow** window, double dt);
         glm::mat4& getView();
         glm::vec3& getPos();
 

@@ -14,6 +14,7 @@ private:
 	void createWindow();
 	void createScene();
 	void createRenderer();
+	void addSceneObjects();
 
 	virtual void onStart();
 	virtual void onUpdate(double dt);

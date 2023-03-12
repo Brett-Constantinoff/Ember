@@ -2,20 +2,12 @@
 
 #define THREE_DIM
 
-#ifdef _DEBUG && defined(_WIN32)
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-#define EMBER_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-#define EMBER_DELETE delete
-#else
-#define EMBER_NEW new
-#define EMBER_DELETE delete
-#endif
-
 #if defined(_WIN32) && defined(THREE_DIM)
 #define SHADER_PATH ".\\.\\Src\\Test3D\\Assets\\Hlsl\\"
+#define OBJ_PATH ".\\.\\Src\\Test3D\\Assets\\objFiles\\"
 #endif
+
+#include "libs/objLoader/tiny_obj_loader.h"
 
 #include "src/core/Glm.h"
 #include "src/core/Application.h"
@@ -24,9 +16,12 @@
 #include "src/core/ImGui.h"
 #include "src/core/OpenGL.h"
 #include "src/core/Glm.h"
+#include "src/core/Memory.h"
 
 #include "src/renderer/Renderer.h"
 #include "src/renderer/Shader.h"
 
 #include "src/scene/Camera.h"
+#include "src/scene/Scene.h"
+#include "src//scene/Entity.h"
 
