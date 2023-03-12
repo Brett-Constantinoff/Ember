@@ -6,8 +6,4 @@ namespace Ember::Core
 		m_createInfo{createInfo}
 	{
 	}
-
-	Gui::~Gui()
-	{
-	}
 }

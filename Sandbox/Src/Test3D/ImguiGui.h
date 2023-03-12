@@ -5,7 +5,7 @@ class ImguiGui : public Ember::Core::Gui
 {
 public:
 	ImguiGui(const Ember::Core::GuiCreateInfo& createInfo);
-	~ImguiGui();
+	virtual ~ImguiGui();
 
 	virtual void update();
 	virtual void render();

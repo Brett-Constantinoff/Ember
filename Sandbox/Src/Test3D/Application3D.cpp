@@ -139,7 +139,7 @@ void Application3D::createRenderer()
 
 void Application3D::addSceneObjects()
 {
-	// add a sphere to the scene
+	// add a entity to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
 	createInfo.m_name = "Cube";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;

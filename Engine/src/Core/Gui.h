@@ -14,7 +14,7 @@ namespace Ember::Core
 	{
 	public:
 		Gui(const GuiCreateInfo& createInfo);
-		~Gui();
+		virtual ~Gui() {};
 
 		virtual void update() {};
 		virtual void render() {};
