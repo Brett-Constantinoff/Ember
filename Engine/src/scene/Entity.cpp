@@ -59,7 +59,7 @@ namespace Ember::Scene
 			}
 		}
 
-		// normalize data into 0 - 1 range
+		// normalize data into -1 - 1 range
 		normalizeVertexData();
 	}
 
@@ -91,12 +91,20 @@ namespace Ember::Scene
 				maxZ = m_renderData.m_vertexPositions[i + 2];
 		}
 
+		// calculate scale
+		float rangeX = maxX - minX;
+		float rangeY = maxY - minY;
+		float rangeZ = maxZ - minZ;
+		float scaleX = 2.0f / rangeX;
+		float scaleY = 2.0f / rangeY;
+		float scaleZ = 2.0f / rangeZ;
+
 		// normalize
 		for (int32_t i = 0; i < m_renderData.m_vertexPositions.size(); i += 3)
 		{
-			m_renderData.m_vertexPositions[i] = (m_renderData.m_vertexPositions[i] - minX) / (maxX - minX);
-			m_renderData.m_vertexPositions[i + 1] = (m_renderData.m_vertexPositions[i + 1] - minY) / (maxY - minY);
-			m_renderData.m_vertexPositions[i + 2] = (m_renderData.m_vertexPositions[i + 2] - minZ) / (maxZ - minZ);
+			m_renderData.m_vertexPositions[i] = (m_renderData.m_vertexPositions[i] - minX) * scaleX;
+			m_renderData.m_vertexPositions[i + 1] = (m_renderData.m_vertexPositions[i + 1] - minY) * scaleY;
+			m_renderData.m_vertexPositions[i + 2] = (m_renderData.m_vertexPositions[i + 2] - minZ) * scaleZ;
 		}
 	}
 
