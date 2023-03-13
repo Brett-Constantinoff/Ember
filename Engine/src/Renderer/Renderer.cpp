@@ -29,11 +29,19 @@ namespace Ember::Renderer
 			// only render the physical objetcs in the scene
 			if (e->getType() == Ember::Scene::EntityType::RENDERABLE)
 			{
-				// get uniforms
+				// update transforms
+				Ember::Scene::TransformData transforms{ e->getMesh().getTransformData()};
 				glm::mat4 model{ 1.0f };
 				glm::mat4 proj{ m_createInfo.m_window->getPerspective() };
 				glm::mat4 view{ m_createInfo.m_scene->getCamera()->getView() };
 
+				model = glm::translate(model, transforms.m_translation) *
+					glm::translate(model, transforms.m_centroid) *
+					transforms.m_rotate *
+					glm::translate(model, -transforms.m_centroid) *
+					glm::scale(model, transforms.m_scale);
+
+					
 				// update the uniforms
 				Shader* sceneShader{ m_createInfo.m_scene->getShader() };
 				sceneShader->use();
@@ -41,9 +49,9 @@ namespace Ember::Renderer
 				sceneShader->setMat4("projection", proj);
 				sceneShader->setMat4("view", view);
 				sceneShader->setVec3("uViewPos", m_createInfo.m_scene->getCamera()->getPos());
-
+				Ember::Scene::RenderData data{ e->getMesh().getRenderData() };
+				
 				// render the object
-				Ember::Scene::RenderData data{ e->getRenderData() };
 				glBindVertexArray(data.m_vao);
 				glDrawElements(GL_TRIANGLES, data.m_indices.size(), GL_UNSIGNED_INT, 0);
 			}

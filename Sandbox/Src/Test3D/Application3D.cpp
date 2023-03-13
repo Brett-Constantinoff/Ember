@@ -143,7 +143,8 @@ void Application3D::addSceneObjects()
 	Ember::Scene::EntityCreateInfo createInfo{};
 	createInfo.m_name = "Cube";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	createInfo.m_objFile = OBJ_PATH "Ball_Thing.obj";
+	createInfo.m_objFile = OBJ_PATH "sponza.obj";
+	createInfo.m_mtlFile = "";
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
@@ -158,6 +159,10 @@ void Application3D::onStart()
 
 void Application3D::onUpdate(double dt)
 {
+	// rotate our scene object
+	//auto e{ m_scene->getEntities()[0] };
+	//e->rotateFixedY(45.0f * dt);
+
 	// update things in our scene
 	m_renderer->update(dt);
 }

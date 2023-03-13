@@ -5,6 +5,7 @@
 #if defined(_WIN32) && defined(THREE_DIM)
 #define SHADER_PATH ".\\.\\Src\\Test3D\\Assets\\Hlsl\\"
 #define OBJ_PATH ".\\.\\Src\\Test3D\\Assets\\objFiles\\"
+#define TEXTURE_PATH ".\\.\\Src\\Test3D\\Assets\\textures\\"
 #endif
 
 #include "libs/objLoader/tiny_obj_loader.h"
