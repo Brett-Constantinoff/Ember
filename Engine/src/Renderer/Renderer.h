@@ -37,6 +37,6 @@ namespace Ember::Renderer
 		const RendererCreateInfo m_createInfo;
 		glm::mat4 m_perspective;
 		glm::mat4 m_view;
-
+		bool m_wireFrameEnabled;
 	};
 }

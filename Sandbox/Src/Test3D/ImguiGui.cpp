@@ -83,7 +83,7 @@ void ImguiGui::createFpsCounter()
 	ImGui::Text("Total Vertices: %d ", m_createInfo.m_scene->getVertexCount());
 
 	// display polygon count
-	ImGui::Text("Total Vertices: %d ", m_createInfo.m_scene->getPolygonCount());
+	ImGui::Text("Total Trianlges: %d ", m_createInfo.m_scene->getPolygonCount());
 
 	// end this component
 	ImGui::End();
@@ -116,6 +116,9 @@ void ImguiGui::createSceneWindow()
 	// display camera front
 	auto cameraFront = m_createInfo.m_scene->getCamera()->getFront();
 	ImGui::Text("Camera Front: %.2fx %.2fy %.2fz ", cameraFront[0], cameraFront[1], cameraFront[2]);
+
+	// display wireframe checkbox
+	ImGui::Checkbox("Enable Wireframe", &m_createInfo.m_scene->getWireFrame());
 
 	// end this component
 	ImGui::End();

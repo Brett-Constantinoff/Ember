@@ -3,7 +3,7 @@
 namespace Ember::Renderer
 {
 	Renderer::Renderer(const RendererCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_perspective{}, m_view{}
+		m_createInfo{ createInfo }, m_perspective{}, m_view{}, m_wireFrameEnabled{false}
 	{
 		glEnable(GL_DEPTH_TEST);
 	}
@@ -31,6 +31,25 @@ namespace Ember::Renderer
 		m_view = m_createInfo.m_scene->getCamera()->getView();
 
 		m_createInfo.m_scene->getCamera()->move(dt);
+
+		// check for wireframe
+		if (m_createInfo.m_scene->getWireFrame())
+		{
+			if (!m_wireFrameEnabled)
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				m_wireFrameEnabled = true;
+			}
+		}
+		else
+		{
+			if (m_wireFrameEnabled)
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				m_wireFrameEnabled = false;
+			}
+		}
+
 	}
 
 	void Renderer::render()

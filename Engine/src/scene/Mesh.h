@@ -59,7 +59,6 @@ namespace Ember::Scene
 
 	private:
 		void initRenderData();
-		void normalizeVertexData();
 
 	private:
 		RenderData m_renderData;

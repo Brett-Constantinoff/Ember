@@ -28,9 +28,11 @@ namespace Ember::Scene
 		int32_t getEntityCount() const;
 		Ember::Scene::Camera* getCamera() const;
 		Ember::Renderer::Shader* getShader() const;
+		bool& getWireFrame();
 
 	private:
 		SceneCreateInfo m_createInfo;
 		std::vector<std::shared_ptr<Entity>> m_sceneEntities;
+		bool m_wireframe;
 	};
 }

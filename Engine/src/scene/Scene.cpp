@@ -3,7 +3,7 @@
 namespace Ember::Scene
 {
 	Scene::Scene(const SceneCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_sceneEntities{}
+		m_createInfo{ createInfo }, m_sceneEntities{}, m_wireframe{ false }
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace Ember::Scene
 		int32_t count{};
 		for (const auto& e : m_sceneEntities)
 			for (const auto& mesh : e->getMeshes())
-				count += mesh->getRenderData().m_vertexPositions.size();
+				count += (mesh->getRenderData().m_vertexPositions.size()) / 3;
 		return count;
 	}
 
@@ -36,7 +36,7 @@ namespace Ember::Scene
 		int32_t count{};
 		for (const auto& e : m_sceneEntities)
 			for (const auto& mesh : e->getMeshes())
-				count += (mesh->getRenderData().m_vertexPositions.size()) / 3;
+				count += (mesh->getRenderData().m_vertexPositions.size()) / 9;
 		return count;
 	}
 
@@ -54,5 +54,10 @@ namespace Ember::Scene
 	Ember::Renderer::Shader* Scene::getShader() const
 	{
 		return m_createInfo.m_shader;
+	}
+
+	bool& Scene::getWireFrame()
+	{
+		return m_wireframe;
 	}
 }
