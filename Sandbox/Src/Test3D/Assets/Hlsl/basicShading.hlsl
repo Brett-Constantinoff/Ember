@@ -25,19 +25,20 @@ in vec3 oNorm;
 in vec3 oFragPos;
 
 uniform vec3 uViewPos;
+uniform vec3 uDiffuse;
 
 out vec4 oFragColor;
 
 void main()
 {
-    vec3 lightPos = vec3(0, 10, 0);
+    vec3 lightPos = vec3(0, 50, 0);
     vec3 lightCol = vec3(0.91, 0.88, 0.79);
 
     vec3 ambient = 0.1 * lightCol;
 
     vec3 lightDir = normalize(lightPos - oFragPos);
     float diff = max(dot(oNorm, lightDir), 0.0);
-    vec3 diffuse = diff * lightCol;
+    vec3 diffuse = diff * lightCol * uDiffuse;
 
     vec3 viewDir = normalize(uViewPos - oFragPos);
     vec3 norm = normalize(oNorm);
@@ -46,6 +47,6 @@ void main()
     float spec = pow(max(dot(viewDir, reflect), 0.0), 32);
     vec3 specular = 0.5 * spec * lightCol;
 
-    vec3 result = (ambient + diffuse + specular) * norm;
+    vec3 result = (ambient + diffuse + specular);
     oFragColor = vec4(result, 1.0f);
 }

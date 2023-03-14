@@ -7,6 +7,20 @@
 
 namespace Ember::Scene
 {
+	struct Material
+	{
+		glm::vec3 m_ambient{};
+		glm::vec3 m_diffuse{};
+		glm::vec3 m_specular{};
+
+		float m_shine{};
+
+		std::string m_diffuseTexture{};
+		std::string m_specularTexture{};
+		std::string m_normalTexture{};
+		std::string m_emissiveTexture{};
+	};
+
 	struct RenderData
 	{
 		std::vector<float> m_vertexPositions{};
@@ -14,13 +28,10 @@ namespace Ember::Scene
 		std::vector<float> m_normals{};
 		std::vector<float> m_uvCoords{};
 
-		glm::vec3 m_ambient{};
-		glm::vec3 m_diffuse{};
-		glm::vec3 m_specular{};
-		float m_shine{};
+		Material m_material{};
 
 		// this contatins things created by opengl
-		std::vector<uint32_t> resources;
+		std::vector<uint32_t> m_resources;
 
 		uint32_t m_vbo{};
 		uint32_t m_ibo{};
@@ -40,19 +51,17 @@ namespace Ember::Scene
 	class Mesh
 	{
 	public:
-		Mesh(const std::string& objFile);
+		Mesh(const RenderData& renderData);
 		~Mesh();
 
 		RenderData& getRenderData();
 		TransformData& getTransformData();
 
 	private:
-		void loadFromObj();
 		void initRenderData();
 		void normalizeVertexData();
 
 	private:
-		std::string m_objFile;
 		RenderData m_renderData;
 		TransformData m_transformData;
 	};

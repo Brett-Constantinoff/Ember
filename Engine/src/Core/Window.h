@@ -31,6 +31,7 @@ namespace Ember::Core
         void setViewPort();
 
     private:
+        void processInput();
         static void resizeOpenGLApi(GLFWwindow* window, int width, int height);
 
     private:

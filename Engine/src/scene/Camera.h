@@ -28,6 +28,7 @@ namespace Ember::Scene
     static float yOffset{};
     static float zoom{};
     static bool firstMoved{ true };
+    static bool firstZoom{ true };
  
 
     class Camera

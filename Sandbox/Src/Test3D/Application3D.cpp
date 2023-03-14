@@ -151,10 +151,10 @@ void Application3D::addSceneObjects()
 {
 	// add a entity to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
-	createInfo.m_name = "Tower";
+	createInfo.m_name = "ant";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	createInfo.m_objFile = OBJ_PATH "objTower.obj";
-	createInfo.m_mtlFile = "";
+	createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
+	createInfo.m_mtlFile = OBJ_PATH "tree/";
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 

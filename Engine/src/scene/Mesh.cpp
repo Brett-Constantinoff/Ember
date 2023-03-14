@@ -3,19 +3,15 @@
 
 namespace Ember::Scene
 {
-	Mesh::Mesh(const std::string& objFile) :
-		m_objFile{ objFile }, m_renderData{}
+	Mesh::Mesh(const RenderData& renderData) :
+		 m_renderData{renderData}
 	{
-		if (!objFile.empty())
-		{
-			loadFromObj();
-			initRenderData();
-		}
+		initRenderData();
 	}
 
 	Mesh::~Mesh()
 	{
-		for (const auto& resource : m_renderData.resources)
+		for (const auto& resource : m_renderData.m_resources)
 			glDeleteBuffers(1, &resource);
 		glDeleteVertexArrays(1, &m_renderData.m_vao);
 	}
@@ -34,15 +30,15 @@ namespace Ember::Scene
 	{
 		// positions
 		glGenBuffers(1, &m_renderData.m_vbo);
-		m_renderData.resources.push_back(m_renderData.m_vbo);
+		m_renderData.m_resources.push_back(m_renderData.m_vbo);
 
 		// normals
 		glGenBuffers(1, &m_renderData.m_nbo);
-		m_renderData.resources.push_back(m_renderData.m_nbo);
+		m_renderData.m_resources.push_back(m_renderData.m_nbo);
 
 		// indices
 		glGenBuffers(1, &m_renderData.m_ibo);
-		m_renderData.resources.push_back(m_renderData.m_ibo);
+		m_renderData.m_resources.push_back(m_renderData.m_ibo);
 
 		// vertex array
 		glGenVertexArrays(1, &m_renderData.m_vao);
@@ -69,53 +65,6 @@ namespace Ember::Scene
 		glEnableVertexAttribArray(1);
 
 		glBindVertexArray(0);
-	}
-
-	void Mesh::loadFromObj()
-	{
-		tinyobj::attrib_t attrib;
-		std::vector<tinyobj::shape_t> shapes;
-		std::vector<tinyobj::material_t> materials;
-
-		std::string warn{};
-		std::string err{};
-		bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, m_objFile.c_str(), NULL, true);
-		if (!err.empty() || !ret)
-			throw std::runtime_error{ "ERROR::CANNOT PARSE OBJ FILE " + m_objFile + ":" + err };
-
-		// get vertex data
-		m_renderData.m_vertexPositions = attrib.vertices;
-
-		// get normals
-		m_renderData.m_normals = attrib.normals;
-
-		// get uv coords
-		m_renderData.m_uvCoords = attrib.texcoords;
-
-		// get indices
-		for (const auto& s : shapes)
-		{
-			for (std::size_t f = 0; f < s.mesh.indices.size() / 3; f++)
-			{
-				m_renderData.m_indices.push_back(s.mesh.indices[3 * f + 0].vertex_index);
-				m_renderData.m_indices.push_back(s.mesh.indices[3 * f + 1].vertex_index);
-				m_renderData.m_indices.push_back(s.mesh.indices[3 * f + 2].vertex_index);
-			}
-		}
-
-		// normalize data into -1 - 1 range
-		normalizeVertexData();
-
-		// set default material colour
-		m_renderData.m_ambient = glm::vec3{ 0.2f };
-		m_renderData.m_diffuse = glm::vec3{ 0.8f };
-		m_renderData.m_specular = glm::vec3{ 1.0f };
-
-		// get materials
-		if (!materials.empty())
-		{
-			std::cout << materials[0].name << std::endl;
-		}
 	}
 
 	void Mesh::normalizeVertexData()
@@ -151,9 +100,9 @@ namespace Ember::Scene
 				maxZ = m_renderData.m_vertexPositions[i + 2];
 
 			// add to sum
-			sumX = m_renderData.m_vertexPositions[i];
-			sumY = m_renderData.m_vertexPositions[i + 1];
-			sumZ = m_renderData.m_vertexPositions[i + 2];
+			sumX += m_renderData.m_vertexPositions[i];
+			sumY += m_renderData.m_vertexPositions[i + 1];
+			sumZ += m_renderData.m_vertexPositions[i + 2];
 		}
 
 		// calculate centroid
@@ -175,5 +124,5 @@ namespace Ember::Scene
 			m_renderData.m_vertexPositions[i + 1] = (m_renderData.m_vertexPositions[i + 1] - minY) * scaleY;
 			m_renderData.m_vertexPositions[i + 2] = (m_renderData.m_vertexPositions[i + 2] - minZ) * scaleZ;
 		}
-	}	
+	}
 }

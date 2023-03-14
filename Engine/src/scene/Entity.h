@@ -7,6 +7,8 @@
 #include <vector>
 #include <stdexcept>
 #include <memory>
+#include <filesystem>
+#include <fstream>
 
 namespace Ember::Scene
 {
@@ -25,8 +27,6 @@ namespace Ember::Scene
 		std::string m_name{};
 		std::string m_objFile{};
 		std::string m_mtlFile{};
-		std::vector<std::string> m_diffuseTextures{};
-		std::vector<std::string> m_normalTextures{};
 	};
 
 	class Entity
@@ -36,11 +36,19 @@ namespace Ember::Scene
 		~Entity();
 
 		EntityType& getType();
-		Mesh& getMesh();
-		void rotateFixedY(float angle);
+		std::vector<std::shared_ptr<Mesh>> getMeshes();
+
+	private:
+		void createMeshes();
+		void normalize(tinyobj::attrib_t& attrib);
+		void createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
+			const tinyobj::attrib_t& attrib);
+		void createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
+			const tinyobj::attrib_t& attrib);
 
 	private:
 		EntityCreateInfo m_createInfo;
-		Mesh m_mesh;
+		std::vector<std::shared_ptr<Mesh>> m_meshes;
+		glm::vec3 m_centroid;
 	};
 }

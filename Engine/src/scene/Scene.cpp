@@ -26,7 +26,8 @@ namespace Ember::Scene
 	{
 		int32_t count{};
 		for (const auto& e : m_sceneEntities)
-			count += e->getMesh().getRenderData().m_vertexPositions.size();
+			for (const auto& mesh : e->getMeshes())
+				count += mesh->getRenderData().m_vertexPositions.size();
 		return count;
 	}
 
@@ -34,7 +35,8 @@ namespace Ember::Scene
 	{
 		int32_t count{};
 		for (const auto& e : m_sceneEntities)
-			count += (e->getMesh().getRenderData().m_indices.size() / 3);
+			for (const auto& mesh : e->getMeshes())
+				count += (mesh->getRenderData().m_vertexPositions.size()) / 3;
 		return count;
 	}
 

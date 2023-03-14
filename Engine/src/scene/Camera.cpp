@@ -11,6 +11,7 @@ namespace Ember::Scene
         glfwSetCursorPosCallback(m_createInfo.m_winContext, mouseCallBack);
 
         // set a scroll call back so we can zoom the camera
+        zoom = m_createInfo.m_zoom;
         glfwSetScrollCallback(m_createInfo.m_winContext, scrollCallBack);
 
         // enable this to hide the mouse
@@ -115,12 +116,6 @@ namespace Ember::Scene
     void Camera::processZoom()
     {
         m_createInfo.m_zoom = zoom;
-
-        // clamp zoom
-        if (m_createInfo.m_zoom < 1.0f)
-            m_createInfo.m_zoom = 1.0f;
-        if (m_createInfo.m_zoom > 45.0f)
-            m_createInfo.m_zoom = 45.0f;
     }
 
     void Camera::mouseCallBack(GLFWwindow* window, double xpos, double ypos)

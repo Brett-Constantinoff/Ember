@@ -35,35 +35,39 @@ namespace Ember::Renderer
 
 	void Renderer::render()
 	{
-		auto objects = m_createInfo.m_scene->getEntities();
-		for (const auto& e : objects)
+		auto& objects = m_createInfo.m_scene->getEntities();
+		for (const auto& entity : objects)
 		{
 			// only render the physical objetcs in the scene
-			if (e->getType() == Ember::Scene::EntityType::RENDERABLE)
+			if (entity->getType() == Ember::Scene::EntityType::RENDERABLE)
 			{
-				// update transforms
-				Ember::Scene::TransformData transforms{ e->getMesh().getTransformData()};
-				glm::mat4 model{ 1.0f };
+				for (const auto& mesh : entity->getMeshes())
+				{
+					// update transforms
+					Ember::Scene::TransformData transforms{ mesh->getTransformData() };
+					glm::mat4 model{ 1.0f };
 
-				model = glm::translate(model, transforms.m_translation) *
-					glm::translate(model, transforms.m_centroid) *
-					transforms.m_rotate *
-					glm::translate(model, -transforms.m_centroid) *
-					glm::scale(model, transforms.m_scale);
+					model = glm::translate(model, transforms.m_translation) *
+						glm::translate(model, transforms.m_centroid) *
+						transforms.m_rotate *
+						glm::translate(model, -transforms.m_centroid) *
+						glm::scale(model, transforms.m_scale);
 
-					
-				// update the uniforms
-				Shader* sceneShader{ m_createInfo.m_scene->getShader() };
-				sceneShader->use();
-				sceneShader->setMat4("model", model);
-				sceneShader->setMat4("projection", m_perspective);
-				sceneShader->setMat4("view", m_view);
-				sceneShader->setVec3("uViewPos", m_createInfo.m_scene->getCamera()->getPos());
-				Ember::Scene::RenderData data{ e->getMesh().getRenderData() };
-				
-				// render the object
-				glBindVertexArray(data.m_vao);
-				glDrawElements(GL_TRIANGLES, data.m_indices.size(), GL_UNSIGNED_INT, 0);
+
+					// update the uniforms
+					Shader* sceneShader{ m_createInfo.m_scene->getShader() };
+					sceneShader->use();
+					sceneShader->setMat4("model", model);
+					sceneShader->setMat4("projection", m_perspective);
+					sceneShader->setMat4("view", m_view);
+					sceneShader->setVec3("uViewPos", m_createInfo.m_scene->getCamera()->getPos());
+					sceneShader->setVec3("uDiffuse", mesh->getRenderData().m_material.m_diffuse);
+					Ember::Scene::RenderData data{ mesh->getRenderData() };
+
+					// render the object
+					glBindVertexArray(data.m_vao);
+					glDrawArrays(GL_TRIANGLES, 0, data.m_vertexPositions.size() / 3);
+				}
 			}
 		}
 
