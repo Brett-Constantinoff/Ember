@@ -22,7 +22,8 @@
 
 ## Progress
 * ~~Load Obj Files~~
-https://1drv.ms/i/s!Ag6HQiJ8N22whsFAuviiIgdmikd19w?e=6Rjsvc
+![Capture](https://user-images.githubusercontent.com/77081808/225159901-6c393698-6e36-41f7-b072-52e6a802ab82.PNG)
+
 
 
  ## Memory Reporting
