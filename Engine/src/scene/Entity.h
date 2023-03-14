@@ -36,7 +36,10 @@ namespace Ember::Scene
 		~Entity();
 
 		EntityType& getType();
+		glm::vec3& getCentroid();
 		std::vector<std::shared_ptr<Mesh>> getMeshes();
+
+		void rotate(float angle, const glm::vec3& axis);
 
 	private:
 		void createMeshes();

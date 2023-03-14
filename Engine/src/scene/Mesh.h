@@ -42,7 +42,6 @@ namespace Ember::Scene
 	struct TransformData
 	{
 		glm::mat4 m_rotate{1.0f};
-		glm::vec3 m_centroid{};
 		glm::vec3 m_translation{0.0f};
 		glm::vec3 m_scale{1.0f};
 		float m_angle{};

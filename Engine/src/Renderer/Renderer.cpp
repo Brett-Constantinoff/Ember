@@ -68,11 +68,10 @@ namespace Ember::Renderer
 					glm::mat4 model{ 1.0f };
 
 					model = glm::translate(model, transforms.m_translation) *
-						glm::translate(model, transforms.m_centroid) *
+						glm::translate(model, entity->getCentroid()) * 
 						transforms.m_rotate *
-						glm::translate(model, -transforms.m_centroid) *
+						glm::translate(model, -entity->getCentroid()) *
 						glm::scale(model, transforms.m_scale);
-
 
 					// update the uniforms
 					Shader* sceneShader{ m_createInfo.m_scene->getShader() };

@@ -20,9 +20,20 @@ namespace Ember::Scene
 		return m_createInfo.m_type;
 	}
 
+	glm::vec3& Entity::getCentroid()
+	{
+		return m_centroid;
+	}
+
 	std::vector<std::shared_ptr<Mesh>> Entity::getMeshes()
 	{
 		return m_meshes;
+	}
+
+	void Entity::rotate(float angle, const glm::vec3& axis)
+	{
+		for (const auto& mesh : m_meshes)
+			mesh->getTransformData().m_rotate = glm::rotate(mesh->getTransformData().m_rotate, glm::radians(angle), axis);
 	}
 
 	void Entity::normalize(tinyobj::attrib_t& attrib)
