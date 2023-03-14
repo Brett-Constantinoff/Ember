@@ -151,7 +151,7 @@ void Application3D::addSceneObjects()
 {
 	// add a entity to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
-	createInfo.m_name = "Cube";
+	createInfo.m_name = "Tower";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 	createInfo.m_objFile = OBJ_PATH "objTower.obj";
 	createInfo.m_mtlFile = "";
@@ -169,10 +169,6 @@ void Application3D::onStart()
 
 void Application3D::onUpdate(float dt)
 {
-	// rotate our scene object
-	//auto e{ m_scene->getEntities()[0] };
-	//e->rotateFixedY(45.0f * dt);
-
 	// update things in our scene
 	m_renderer->update(dt);
 }
