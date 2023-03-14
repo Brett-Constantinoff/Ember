@@ -13,10 +13,6 @@ namespace Ember::Core
         std::string m_label{};
         int32_t m_width{};
         int32_t m_height{};
-        float m_fov{};
-        float m_near{};
-        float m_far{};
-
         std::string m_api{};
     };
 
@@ -29,7 +25,6 @@ namespace Ember::Core
         GLFWwindow** getContext();
         int32_t getWidth();
         int32_t getHeight();
-        glm::mat4& getPerspective();
         void update();
         bool isOpen();
         void setViewPort(int32_t width, int32_t height);
@@ -41,6 +36,5 @@ namespace Ember::Core
     private:
         GLFWwindow* m_winID;
         WindowCreateInfo m_createInfo;
-        glm::mat4 m_perspective;
     };
 }

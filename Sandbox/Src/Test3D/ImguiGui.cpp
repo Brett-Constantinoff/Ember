@@ -83,7 +83,7 @@ void ImguiGui::createFpsCounter()
 	ImGui::Text("Total Vertices: %d ", m_createInfo.m_scene->getVertexCount());
 
 	// display polygon count
-	ImGui::Text("Total Polygons: %d ", m_createInfo.m_scene->getPolygonCount());
+	ImGui::Text("Total Vertices: %d ", m_createInfo.m_scene->getPolygonCount());
 
 	// end this component
 	ImGui::End();
@@ -108,6 +108,14 @@ void ImguiGui::createSceneWindow()
 
 	// display title
 	ImGui::TextColored(ImVec4{ 0.678F, 0.847F, 0.902f, 1.0f }, "Scene Details: ");
+
+	// display camera location
+	auto cameraPos = m_createInfo.m_scene->getCamera()->getPos();
+	ImGui::Text("Camera Position: %.2fx %.2fy %.2fz ", cameraPos[0], cameraPos[1], cameraPos[2]);
+
+	// display camera front
+	auto cameraFront = m_createInfo.m_scene->getCamera()->getFront();
+	ImGui::Text("Camera Front: %.2fx %.2fy %.2fz ", cameraFront[0], cameraFront[1], cameraFront[2]);
 
 	// end this component
 	ImGui::End();

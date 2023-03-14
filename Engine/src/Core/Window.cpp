@@ -3,7 +3,7 @@
 namespace Ember::Core
 {
     Window::Window(const WindowCreateInfo& createInfo) :
-        m_createInfo{createInfo}, m_perspective{glm::mat4{1.0f}}
+        m_createInfo{createInfo}
     {
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -46,12 +46,6 @@ namespace Ember::Core
     int32_t Window::getHeight()
     {
         return m_createInfo.m_height;
-    }
-
-    glm::mat4& Window::getPerspective()
-    {
-        m_perspective = glm::perspective(glm::radians(m_createInfo.m_fov), static_cast<float>(m_createInfo.m_width) / static_cast<float>(m_createInfo.m_height), m_createInfo.m_near, m_createInfo.m_far);
-        return m_perspective;
     }
 
     bool Window::isOpen()

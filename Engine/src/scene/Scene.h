@@ -12,7 +12,6 @@ namespace Ember::Scene
 	{
 		Ember::Scene::Camera* m_camera{};
 		Ember::Renderer::Shader* m_shader{};
-		GLFWwindow* m_windowContext{};
 	};
 
 	class Scene

@@ -17,11 +17,11 @@ private:
 	void addSceneObjects();
 
 	virtual void onStart();
-	virtual void onUpdate(double dt);
+	virtual void onUpdate(float dt);
 	virtual void onRender();
 
 private:
-	double m_lastFrame;
+	float m_lastFrame;
 	Ember::Core::Window* m_window;
 	Ember::Scene::Scene* m_scene;
 	ImguiGui* m_gui;

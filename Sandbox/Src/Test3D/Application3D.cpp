@@ -25,8 +25,8 @@ void Application3D::run()
 	// main application loop
 	while (m_window->isOpen())
 	{
-		double currFrame = glfwGetTime();										
-		double dt = currFrame - m_lastFrame;									
+		float currFrame = glfwGetTime();
+		float dt = currFrame - m_lastFrame;
 		m_lastFrame = currFrame;												
 
 		onUpdate(dt);															
@@ -52,11 +52,6 @@ void Application3D::createWindow()
 	// give our app a name
 	windowCreateInfo.m_label = "Application 3D";
 
-	// these next 3 are for perspective viwing
-	windowCreateInfo.m_fov = 90.0f;												
-	windowCreateInfo.m_near = 0.1f;												
-	windowCreateInfo.m_far = 100.0f;		
-
 	// create our new window
 	m_window = EMBER_NEW Ember::Core::Window(windowCreateInfo);					
 }
@@ -65,20 +60,38 @@ void Application3D::createScene()
 {
 	Ember::Scene::CameraCreateInfo cameraCreateInfo{};
 
+	// pass a pointer to our window to the camera to be able to move
+	cameraCreateInfo.m_winContext = *m_window->getContext();
+
 	// where is the camera located
-	cameraCreateInfo.m_pos = { 0.0f, 0.0f, 5.0f };	
+	cameraCreateInfo.m_pos = { 1.0f, 1.0f, 10.0f };	
 
 	// which was is forward
-	cameraCreateInfo.m_front = { 0.0f, 0.0f, -1.0f };	
+	cameraCreateInfo.m_front = { -0.50f, -0.90f, 0.0f };	
 
 	// which way is up
-	cameraCreateInfo.m_up = { 0.0f, 1.0f, 0.0f };	
+	cameraCreateInfo.m_worldUp = { 0.0f, 1.0f, 0.0f };	
 
 	// rotate about y-axis
 	cameraCreateInfo.m_yaw = -90.0f;			
 
 	// rotate about x-axis
 	cameraCreateInfo.m_pitch = 0.0f;		
+
+	// how fast is the camera
+	cameraCreateInfo.m_speed = 7.5f;
+
+	// how far can we zoom
+	cameraCreateInfo.m_zoom = 45.0f;
+
+	// how sensitive is the camera
+	cameraCreateInfo.m_sensitivity = 0.25f;
+
+	// what is the near clipping plane
+	cameraCreateInfo.m_near = 0.1f;
+
+	// what is the far clipping plane
+	cameraCreateInfo.m_far = 100.0f;
 
 	// create camera
 	m_camera = EMBER_NEW Ember::Scene::Camera(cameraCreateInfo);				
@@ -93,9 +106,6 @@ void Application3D::createScene()
 
 	// give our scene a shader
 	sceneCreateInfo.m_shader = m_shader;	
-
-	// pass a pointer to our window
-	sceneCreateInfo.m_windowContext = *m_window->getContext();	
 
 	// create scene
 	m_scene = EMBER_NEW Ember::Scene::Scene(sceneCreateInfo);					
@@ -143,7 +153,7 @@ void Application3D::addSceneObjects()
 	Ember::Scene::EntityCreateInfo createInfo{};
 	createInfo.m_name = "Cube";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	createInfo.m_objFile = OBJ_PATH "sponza.obj";
+	createInfo.m_objFile = OBJ_PATH "objTower.obj";
 	createInfo.m_mtlFile = "";
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
@@ -157,7 +167,7 @@ void Application3D::onStart()
 	addSceneObjects();
 }
 
-void Application3D::onUpdate(double dt)
+void Application3D::onUpdate(float dt)
 {
 	// rotate our scene object
 	//auto e{ m_scene->getEntities()[0] };

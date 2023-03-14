@@ -26,7 +26,7 @@ namespace Ember::Renderer
 		Renderer(const RendererCreateInfo& createInfo);
 		~Renderer();
 
-		void update(double dt);
+		void update(float dt);
 		void render();
 
 	private:
@@ -35,6 +35,8 @@ namespace Ember::Renderer
 		
 	private:
 		const RendererCreateInfo m_createInfo;
+		glm::mat4 m_perspective;
+		glm::mat4 m_view;
 
 	};
 }
