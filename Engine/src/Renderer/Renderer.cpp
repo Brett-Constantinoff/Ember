@@ -33,6 +33,7 @@ namespace Ember::Renderer
 		m_createInfo.m_scene->getCamera()->move(dt);
 
 		// check for wireframe
+		// only want to make these calls once hence the inner if's
 		if (m_createInfo.m_scene->getWireFrame())
 		{
 			if (!m_wireFrameEnabled)

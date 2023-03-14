@@ -79,6 +79,9 @@ void ImguiGui::createFpsCounter()
 	// display rendered objects
 	ImGui::Text("Objects renderer: %d ",m_createInfo.m_scene->getEntityCount());
 
+	// display rendered meshes
+	ImGui::Text("Meshes renderer: %d ", m_createInfo.m_scene->getMeshCount());
+
 	// display vertex count
 	ImGui::Text("Total Vertices: %d ", m_createInfo.m_scene->getVertexCount());
 

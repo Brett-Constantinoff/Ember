@@ -22,6 +22,7 @@ namespace Ember::Scene
 
 		void addEntity(Entity* e);
 		std::vector<std::shared_ptr<Entity>> getEntities();
+		int32_t getMeshCount();
 		int32_t getVertexCount();
 		int32_t getPolygonCount();
 

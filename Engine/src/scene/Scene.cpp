@@ -22,6 +22,14 @@ namespace Ember::Scene
 		return m_sceneEntities;
 	}
 
+	int32_t Scene::getMeshCount()
+	{
+		int32_t meshCount{ 0 };
+		for (const auto& e : m_sceneEntities)
+			meshCount += e->getMeshes().size();
+		return meshCount;
+	}
+
 	int32_t Scene::getVertexCount()
 	{
 		int32_t count{};
