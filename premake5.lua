@@ -29,7 +29,8 @@ project "Engine"
         "Engine/libs/myImgui/", 
         "Engine/libs/glad/include/",
         "Enigne/libs/imgui/",
-        "Engine/libs/stb/"
+        "Engine/libs/stb/",
+        "Engine/libs/objLoader/"
     }
     
     files 
@@ -44,7 +45,8 @@ project "Engine"
         "GLM", 
         "GLAD",
         "IMGUI",
-        "STB"
+        "STB",
+        "TINY_OBJ"
     }
 
     filter "system:windows"
@@ -82,6 +84,7 @@ project "Sandbox"
         "Engine/libs/glad/include/",
         "Engine/libs/imgui/",
         "Engine/libs/stb/",
+        "Engine/libs/objLoader",
         "Engine"
     }
 
@@ -98,7 +101,8 @@ project "Sandbox"
         "GLAD",
         "GLM",
         "IMGUI",
-        "STB"
+        "STB",
+        "TINY_OBJ"
     }
     
     filter "system:windows"
@@ -124,4 +128,5 @@ include "Engine/libs/glmPremake5.lua"
 include "Engine/libs/gladPremake5.lua"
 include "Engine/libs/imguiPremake5.lua"
 include "Engine/libs/stbPremake5.lua"
+include "Engine/libs/tinyObjPremake5.lua"
     

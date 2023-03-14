@@ -1,87 +1,81 @@
 #include "Window.h"
 
-namespace Ember
+namespace Ember::Core
 {
-    namespace Core
+    Window::Window(const WindowCreateInfo& createInfo) :
+        m_createInfo{createInfo}
     {
-        Window::Window(const std::string& label, uint32_t width, uint32_t height) :
-            m_label{ label }, m_width{ width }, m_height{ height }
-        {
-            glfwInit();
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            #ifdef __APPLE__
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            #endif
+        glfwInit();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        #ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        #endif
 
-            m_winID = glfwCreateWindow(m_width, m_height, m_label.c_str(), NULL, NULL);
-            if (!m_winID)
-            {
-                std::cout << "ERROR CREATING OPENGL WINDOW!" << std::endl;
-                std::cin.get();
-                exit(EXIT_FAILURE);
-            }
-            glfwMakeContextCurrent(m_winID);
-            //glfwSetFramebufferSizeCallback(m_winID, resize);
+        m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
 
-            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-            {
-                std::cout << "Failed to initialize GLAD" << std::endl;
-                std::cin.get();
-                exit(EXIT_FAILURE);
-            }
-        }
+        if (!m_winID)
+            throw::std::runtime_error{ "ERROR::CANNOT CREATE GLFW WINDOW CONTEXT!" };
 
-        Window::~Window()
-        {
-            glfwDestroyWindow(m_winID);
-        }
+        glfwMakeContextCurrent(m_winID);
 
-        GLFWwindow* Window::getContext()
-        {
-            return m_winID;
-        }
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+            throw::std::runtime_error{ "ERROR::CANNOT INITIALIZE GLEW!" };
 
-        uint32_t Window::getWidth()
-        {
-            return m_width;
-        }
+        if (m_createInfo.m_api.compare("API_OPENGL") == 0)
+            glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
+    }
 
-        uint32_t Window::getHeight()
-        {
-            return m_height;
-        }
+    Window::~Window()
+    {
+        glfwDestroyWindow(m_winID);
+        glfwTerminate();
+    }
 
-        glm::mat4 Window::getPerspective()
-        {
-            return glm::perspective(glm::radians(m_fov), static_cast<float>(m_width) / static_cast<float>(m_height), m_near, m_far);
-        }
+    GLFWwindow** Window::getContext()
+    {
+        return &m_winID;
+    }
 
-        bool Window::isOpen()
-        {
-            return !glfwWindowShouldClose(m_winID);
-        }
+    int32_t Window::getWidth()
+    {
+        return m_createInfo.m_width;
+    }
 
-        void Window::update()
-        {
-            glfwSwapBuffers(m_winID);
-            glfwPollEvents();
-        }
+    int32_t Window::getHeight()
+    {
+        return m_createInfo.m_height;
+    }
 
-        void Window::setViewPort(int32_t width, int32_t height)
-        {
-            glViewport(0, 0, width, height);
-        }
+    bool Window::isOpen()
+    {
+        return !glfwWindowShouldClose(m_winID);
+    }
 
-        void Window::setViewPort()
-        {
-            int32_t width;
-            int32_t height;
+    void Window::update()
+    {
+        glfwSwapBuffers(m_winID);
+        glfwPollEvents();
+    }
 
-            glfwGetFramebufferSize(m_winID, &width, &height);
-            glViewport(0, 0, width, height);
-        }
+    void Window::setViewPort(int32_t width, int32_t height)
+    {
+        glViewport(0, 0, width, height);
+    }
+
+    void Window::setViewPort()
+    {
+        int32_t width;
+        int32_t height;
+
+        glfwGetFramebufferSize(m_winID, &width, &height);
+        glViewport(0, 0, width, height);
+    }
+
+    void Window::resizeOpenGLApi(GLFWwindow* window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
     }
 }
 

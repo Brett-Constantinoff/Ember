@@ -1,29 +1,29 @@
 #pragma once
-#include "Layer.h"
-#include "ImguiLayer.h"
-#include "LayerStack.h"
 #include "Window.h"
 #include <string.h>
 
-namespace Ember
+namespace Ember::Core
 {
-    namespace Core
-    {
-        class Application
-        {
-        public:
-            Application(const std::string& label = "Application", uint32_t width = 1280, uint32_t height = 720);
-            virtual ~Application() = 0;
+	// for now this is all this need, may add more in the future
+	struct ApplicationCreateInfo
+	{
+		std::string m_label{};
+	};
 
-            void start();
-            void pushLayer(Layer* layer);
+	class Application
+	{
+	public:
+		Application(const ApplicationCreateInfo& createInfo);
+		~Application();
 
-        private:
-            LayerStack m_layerStack;
-            std::unique_ptr<ImguiLayer> m_imguiLayer;
-            Window m_window;
-            const std::string m_label;
-            float m_lastFrame;
-        };
-    }
+		virtual void run() {};
+
+	private:
+		virtual void onStart() {};
+		virtual void onUpdate(float dt) {};
+		virtual void onRender() {};
+
+	private:
+		const ApplicationCreateInfo m_createInfo;
+	};
 }
