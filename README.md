@@ -25,6 +25,13 @@
 ![Capture](https://user-images.githubusercontent.com/77081808/225159901-6c393698-6e36-41f7-b072-52e6a802ab82.PNG)
 
 
+## Third Party Libraries
+* GLFW - handles window creation
+* Glad - contains all OpenGL function declarations
+* GLM - a great math library for graphics programming
+* STB - a lightweight header only image loading library
+* IMGUI - a gui library that integrates very well with OpenGL projects
+* TinyOBJ - a lightweight header only library for loading and rendering .obj files
 
  ## Memory Reporting
  To ensure no memory leaks are present, I use memory reporting which tracks dynamic heap memory allocation.
