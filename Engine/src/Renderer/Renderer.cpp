@@ -55,7 +55,7 @@ namespace Ember::Renderer
 
 	void Renderer::render()
 	{
-		auto& objects = m_createInfo.m_scene->getEntities();
+		std::vector<std::shared_ptr<Ember::Scene::Entity>> objects = m_createInfo.m_scene->getEntities();
 		for (const auto& entity : objects)
 		{
 			// only render the physical objetcs in the scene

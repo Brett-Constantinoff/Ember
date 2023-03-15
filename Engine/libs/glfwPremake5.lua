@@ -78,7 +78,6 @@ project "GLFW"
 		defines
 		{
 			"_GLFW_COCOA",
-			"_GL_SILENCE_DEPRECATION"
 		}
 
 	filter "configurations:Debug"

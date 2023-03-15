@@ -5,6 +5,8 @@ workspace "Ember"
 
     filter "configurations:Debug"
         defines { "DEBUG", "DEBUG_SHADER" }
+        buildoptions { "-Wno-nonportable-include-path"}
+        buildoptions { "-Wdeprecated-declarations"}
         symbols "On"
 
     filter "configurations:Release"
@@ -66,6 +68,7 @@ project "Engine"
             "IOKit.framework",
             "CoreFoundation.framework",
         }
+    
 
 project "Sandbox"
     location "Sandbox"
@@ -118,10 +121,7 @@ project "Sandbox"
             "IOKit.framework",
             "CoreFoundation.framework"
         }
-        defines
-        {
-            "GL_SILENCE_DEPRECATION"
-        }
+    
 
 include "Engine/libs/glfwPremake5.lua"
 include "Engine/libs/glmPremake5.lua"

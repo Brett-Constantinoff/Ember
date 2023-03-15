@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef _DEBUG && defined(_WIN32)
+#if defined(_DEBUG) && defined(_WIN32)
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
