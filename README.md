@@ -8,7 +8,7 @@
  ### Windows
  To build run ```bin\premake\windows\premake5 vs2022```
  
- ### MacOS
+ ### MacOS (Pre M1)
  To build run ```./bin/premake/macos/premake5 gmake```
  This will generate a Makefile which you can use to compile the code using the command
  ```Make``` in the root of the repository
