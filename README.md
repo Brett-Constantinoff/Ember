@@ -1,29 +1,33 @@
 # Ember Engine
- The Ember engine is a work in progress cross platform 3D rendering engine using the OpenGL sepcification. 
+ The Ember engine is a work in progress 3D rendering engine targeted for the Windows operating system using the OpenGL specification. 
+
+ # Platforms
+ This project was built with the thought of cross compatability in mind, meaning it would succesfully build and run 
+ on windows, macos and linux. However, due to my limited time to work on this project and the fact that most of my 
+ development lands on the windows platform, Ive decided to shit my focus to the windows platform. 
+
+ This shift will allow me to focus more on adding the features I want to add without worrying about cross 
+ platform specifications. This isnt to say that this project will stay on windows forever and in the future Im
+ making it a goal to fully incorporate cross platform capabilities.
 
  ## Build
  First clone the repository using:
  ```git clone --recursive git@github.com:Brett-Constantinoff/Ember.git```
  
- ### Windows
  To build run ```bin\premake\windows\premake5 vs2022```
- 
- ### MacOS (Pre M1)
- To build run ```./bin/premake/macos/premake5 gmake```
- This will generate a Makefile which you can use to compile the code using the command
- ```Make``` in the root of the repository
- 
- ### Linux 
- Currently untested on Linux.
+
+ This will generate a visual studio solution file in the root 
+ directory which you can then use the build the poject
 
 ## TO-DO
 * ~~Load Obj files~~
 * Create fully working GUI
 * Dynamic shadow mapping
-* textured objects
+* Textured objects
 * Enhanced lighting
 * Skyboxes
 * PBR
+* Add cross platform support
 
 ## Progress
 * ~~Load Obj Files~~
@@ -37,12 +41,3 @@
 * STB - a lightweight header only image loading library
 * IMGUI - a gui library that integrates very well with OpenGL projects
 * TinyOBJ - a lightweight header only library for loading and rendering .obj files
-
- ## Memory Reporting
- To ensure no memory leaks are present, I use memory reporting which tracks dynamic heap memory allocation.
- On Windows this is done for you, on MacOS this method does not work (since it is a visual studio feature). However, to test for
- memory leaks run ```leaks --atExit -- ./Sandbox``` in the directory with the executable to detect memory leak 
- information.
-
- If youre compiling on windows and not using Visual Studio the memory reporting will likely result in errors, so i recommend using 
- Visual Studio for best results.

@@ -22,10 +22,10 @@ private:
 
 private:
 	float m_lastFrame;
-	Ember::Core::Window* m_window;
-	Ember::Scene::Scene* m_scene;
-	ImguiGui* m_gui;
-	Ember::Renderer::Renderer* m_renderer;
-	Ember::Scene::Camera* m_camera;
-	Ember::Renderer::Shader* m_shader;
+	std::shared_ptr<Ember::Core::Window> m_window;
+	std::shared_ptr<Ember::Scene::Scene> m_scene;
+	std::shared_ptr<ImguiGui> m_gui;
+	std::shared_ptr<Ember::Renderer::Renderer> m_renderer;
+	std::shared_ptr<Ember::Scene::Camera> m_camera;
+	std::shared_ptr<Ember::Renderer::Shader> m_shader;
 };

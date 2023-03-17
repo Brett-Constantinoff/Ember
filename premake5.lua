@@ -5,8 +5,6 @@ workspace "Ember"
 
     filter "configurations:Debug"
         defines { "DEBUG", "DEBUG_SHADER" }
-        buildoptions { "-Wno-nonportable-include-path"}
-        buildoptions { "-Wdeprecated-declarations"}
         symbols "On"
 
     filter "configurations:Release"
@@ -60,15 +58,6 @@ project "Engine"
         {
             "OpengL32"
         }
-    filter "system:macosx"
-        links
-        {
-            "OpenGL.framework",
-            "Cocoa.framework",
-            "IOKit.framework",
-            "CoreFoundation.framework",
-        }
-    
 
 project "Sandbox"
     location "Sandbox"
@@ -112,14 +101,6 @@ project "Sandbox"
         links
         {
             "OpenGL32"
-        }
-    filter "system:macosx"
-        links
-        {
-            "OpenGL.framework",
-            "Cocoa.framework",
-            "IOKit.framework",
-            "CoreFoundation.framework"
         }
     
 

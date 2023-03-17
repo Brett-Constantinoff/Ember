@@ -14,10 +14,10 @@ namespace Ember::Renderer
 	{
 		std::string m_api{};
 		glm::vec4 m_backgroundCol{};
-		Ember::Core::Window* m_window{};
-		Ember::Scene::Scene* m_scene{};
+		std::shared_ptr<Core::Window> m_window{};
+		std::shared_ptr<Scene::Scene> m_scene{};
 		bool m_guiEnabled{};
-		Ember::Core::Gui* m_gui{};
+		std::shared_ptr<Core::Gui> m_gui{};
 	};
 
 	class Renderer

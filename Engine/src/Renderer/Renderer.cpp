@@ -74,7 +74,7 @@ namespace Ember::Renderer
 						glm::scale(model, transforms.m_scale);
 
 					// update the uniforms
-					Shader* sceneShader{ m_createInfo.m_scene->getShader() };
+					auto sceneShader{ m_createInfo.m_scene->getShader() };
 					sceneShader->use();
 					sceneShader->setMat4("model", model);
 					sceneShader->setMat4("projection", m_perspective);

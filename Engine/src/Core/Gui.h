@@ -6,8 +6,8 @@ namespace Ember::Core
 {
 	struct GuiCreateInfo
 	{
-		Window* m_window;
-		Ember::Scene::Scene* m_scene;
+		std::shared_ptr<Window> m_window;
+		std::shared_ptr<Scene::Scene> m_scene;
 	};
 
 	class Gui

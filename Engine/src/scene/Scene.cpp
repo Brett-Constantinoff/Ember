@@ -54,12 +54,12 @@ namespace Ember::Scene
 		return m_sceneEntities.size();
 	}
 
-	Ember::Scene::Camera* Scene::getCamera() const
+	std::shared_ptr<Camera> Scene::getCamera() const
 	{
 		return m_createInfo.m_camera;
 	}
 
-	Ember::Renderer::Shader* Scene::getShader() const
+	std::shared_ptr<Renderer::Shader> Scene::getShader() const
 	{
 		return m_createInfo.m_shader;
 	}

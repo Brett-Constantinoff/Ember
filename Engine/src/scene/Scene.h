@@ -10,8 +10,8 @@ namespace Ember::Scene
 {
 	struct SceneCreateInfo
 	{
-		Ember::Scene::Camera* m_camera{};
-		Ember::Renderer::Shader* m_shader{};
+		std::shared_ptr<Camera> m_camera{};
+		std::shared_ptr<Renderer::Shader> m_shader{};
 	};
 
 	class Scene
@@ -27,8 +27,8 @@ namespace Ember::Scene
 		int32_t getPolygonCount();
 
 		int32_t getEntityCount() const;
-		Ember::Scene::Camera* getCamera() const;
-		Ember::Renderer::Shader* getShader() const;
+		std::shared_ptr<Camera> getCamera() const;
+		std::shared_ptr<Renderer::Shader> getShader() const;
 		bool& getWireFrame();
 
 	private:

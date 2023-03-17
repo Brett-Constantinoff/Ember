@@ -8,13 +8,7 @@ Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInf
 
 Application3D::~Application3D()
 {
-	// cleanup memory used by the application
-	EMBER_DELETE m_window;
-	EMBER_DELETE m_renderer;
-	EMBER_DELETE m_camera;
-	EMBER_DELETE m_shader;
-	EMBER_DELETE m_scene;
-	EMBER_DELETE m_gui;
+
 }
 
 void Application3D::run()
@@ -53,7 +47,7 @@ void Application3D::createWindow()
 	windowCreateInfo.m_label = "Application 3D";
 
 	// create our new window
-	m_window = EMBER_NEW Ember::Core::Window(windowCreateInfo);					
+	m_window = std::make_shared<Ember::Core::Window>(windowCreateInfo);
 }
 
 void Application3D::createScene()
@@ -94,10 +88,10 @@ void Application3D::createScene()
 	cameraCreateInfo.m_far = 100.0f;
 
 	// create camera
-	m_camera = EMBER_NEW Ember::Scene::Camera(cameraCreateInfo);				
+	m_camera = std::make_shared<Ember::Scene::Camera>(cameraCreateInfo);
 
 	// create scene shader
-	m_shader = EMBER_NEW Ember::Renderer::Shader(SHADER_PATH "basicShading.hlsl");
+	m_shader = std::make_shared<Ember::Renderer::Shader>(SHADER_PATH "basicShading.hlsl");
 
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 
@@ -108,7 +102,7 @@ void Application3D::createScene()
 	sceneCreateInfo.m_shader = m_shader;	
 
 	// create scene
-	m_scene = EMBER_NEW Ember::Scene::Scene(sceneCreateInfo);					
+	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
 }
 
 void Application3D::createRenderer()
@@ -132,7 +126,7 @@ void Application3D::createRenderer()
 
 	// pass our scene to the gui to be able to manipulate it
 	guiCreateInfo.m_scene = m_scene;
-	m_gui = EMBER_NEW ImguiGui(guiCreateInfo);
+	m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
 
 	// add the gui to our renderer
 	rendererCreateInfo.m_gui = m_gui;
@@ -144,7 +138,7 @@ void Application3D::createRenderer()
 	rendererCreateInfo.m_window = m_window;		
 
 	// create our renderer
-	m_renderer = EMBER_NEW Ember::Renderer::Renderer(rendererCreateInfo);		
+	m_renderer = std::make_shared<Ember::Renderer::Renderer>(rendererCreateInfo);
 }
 
 void Application3D::addSceneObjects()
