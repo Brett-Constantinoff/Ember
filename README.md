@@ -2,6 +2,9 @@
  The Ember engine is a work in progress cross platform 3D rendering engine using the OpenGL sepcification. 
 
  ## Build
+ First clone the repository using:
+ ```git clone --recursive git@github.com:Brett-Constantinoff/Ember.git```
+ 
  ### Windows
  To build run ```bin\premake\windows\premake5 vs2022```
  
