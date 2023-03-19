@@ -18,6 +18,9 @@
 
  This will generate a visual studio solution file in the root 
  directory which you can then use the build the poject
+ 
+ ## How To Use
+ To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel.
 
 ## TO-DO
 * ~~Load Obj files~~
