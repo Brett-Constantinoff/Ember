@@ -25,7 +25,7 @@
 * Dynamic shadow mapping
 * Textured objects
 * Enhanced lighting
-* Skyboxes
+* ~~Skyboxes~~
 * PBR
 * Add cross platform support
 
