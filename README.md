@@ -22,6 +22,17 @@
  ## How To Use
  To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel.
 
+## Abstraction
+Almost every object in Ember needs to be initialized with some creation information (much like the Vulkan specification), this allows for the creation
+of objects to be much more verbose which increases the freedom the user has to customize their experience howver they like. In practice this looks like the following:
+```c++
+CreateInfoStruct createInfo{};
+
+// setup the information stored inside the create info
+
+newEmberObject = std::make_shared<EmberObject>(createInfo);
+```
+
 ## TO-DO
 * ~~Load Obj files~~
 * Create fully working GUI
