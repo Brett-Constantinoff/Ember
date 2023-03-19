@@ -24,7 +24,7 @@
 
 ## Abstraction
 Almost every object in Ember needs to be initialized with some creation information (much like the Vulkan specification), this allows for the creation
-of objects to be much more verbose which increases the freedom the user has to customize their experience howver they like. In practice this looks like the following:
+of objects to be much more verbose which increases the freedom the user has to customize their experience however they like. In practice this looks like the following:
 ```cpp
 CreateInfoStruct createInfo{};
 
