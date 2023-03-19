@@ -16,17 +16,21 @@ namespace Ember::Scene
 	{
 		NO_TYPE,
 		RENDERABLE,
+		SKYBOX,
 		DIRECTIONAL_LIGHT,
-		POINT_LIGHT
+		POINT_LIGHT,
 	};
 	
-
 	struct EntityCreateInfo
 	{
 		EntityType m_type{ EntityType::NO_TYPE };
 		std::string m_name{};
 		std::string m_objFile{};
 		std::string m_mtlFile{};
+
+		glm::vec3 m_position{};
+		glm::mat4 m_rotation{1.0f};
+		glm::vec3 m_scale{ 1.0f };
 	};
 
 	class Entity
@@ -48,6 +52,7 @@ namespace Ember::Scene
 			const tinyobj::attrib_t& attrib);
 		void createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
 			const tinyobj::attrib_t& attrib);
+		void createSkyboxMesh(const tinyobj::attrib_t& attrib);
 
 	private:
 		EntityCreateInfo m_createInfo;

@@ -9,6 +9,14 @@ namespace Ember::Scene
 		m_createInfo{ createInfo }, m_meshes{}, m_centroid{}
 	{
 		createMeshes();
+
+		// setup intial transforms
+		for (auto& mesh : m_meshes)
+		{
+			mesh->getTransformData().m_translation = m_createInfo.m_position;
+			mesh->getTransformData().m_rotate = m_createInfo.m_rotation;
+			mesh->getTransformData().m_scale = m_createInfo.m_scale;
+		}
 	}
 
 	Entity::~Entity()
@@ -109,16 +117,21 @@ namespace Ember::Scene
 			throw std::runtime_error{ "OBJ ERROR {" + m_createInfo.m_mtlFile + "} :: " + err };
 
 		// normalize the data first
-		normalize(attrib);
+		if (m_createInfo.m_type == EntityType::RENDERABLE)
+		{
+			normalize(attrib);
+			// if the obj file has materials, we create a separate mesh per material
+			if (materials.size() > 0)
+				createWithMaterials(materials, shapes, attrib);
 
-		// if the obj file has materials, we create a separate mesh per material
-		if (materials.size() > 0)
-			createWithMaterials(materials, shapes, attrib);
-
-		// otherwise we just create one mesh with default material colors
-		else
-			createWithoutMaterials(materials, shapes, attrib);
-
+			// otherwise we just create one mesh with default material colors
+			else
+				createWithoutMaterials(materials, shapes, attrib);
+		}
+			
+		// create skybox
+		if (m_createInfo.m_type == EntityType::SKYBOX)
+			createSkyboxMesh(attrib);
 	}
 
 	void Entity::createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
@@ -210,6 +223,15 @@ namespace Ember::Scene
 				startIndex += numFaceVertices;
 			}
 		}
+		m_meshes.emplace_back(new Mesh(renderData));
+	}
+
+	void Entity::createSkyboxMesh(const tinyobj::attrib_t& attrib)
+	{
+		// nothing special just copy over vertex positions
+		RenderData renderData{};
+		Material material{};
+		renderData.m_vertexPositions = attrib.vertices;
 		m_meshes.emplace_back(new Mesh(renderData));
 	}
 }

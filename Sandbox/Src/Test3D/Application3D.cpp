@@ -2,7 +2,7 @@
 
 Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInfo) :
 	Application{ createInfo }, m_lastFrame{ 0.0f }, m_window{ nullptr }, m_scene{ nullptr }, m_renderer{ nullptr},
-	m_camera{nullptr},  m_shader{nullptr}, m_gui{nullptr}
+	m_camera{nullptr},  m_shader{nullptr}, m_gui{nullptr}, m_skyBoxShader{nullptr}
 {
 }
 
@@ -93,6 +93,9 @@ void Application3D::createScene()
 	// create scene shader
 	m_shader = std::make_shared<Ember::Renderer::Shader>(SHADER_PATH "basicShading.hlsl");
 
+	// add our skybox shader
+	m_skyBoxShader = std::make_shared<Ember::Renderer::Shader>(SHADER_PATH "skyBox.hlsl");
+
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 
 	// give our scene a camera
@@ -100,6 +103,9 @@ void Application3D::createScene()
 
 	// give our scene a shader
 	sceneCreateInfo.m_shader = m_shader;	
+
+	// give our scene a skybox shader
+	sceneCreateInfo.m_skyboxShader = m_skyBoxShader;
 
 	// create scene
 	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
@@ -137,29 +143,66 @@ void Application3D::createRenderer()
 	// give our renderer a window to render to
 	rendererCreateInfo.m_window = m_window;		
 
+	// do we want a skybox
+	rendererCreateInfo.m_skyBoxEnabled = true;
+
+	// need to give skybox files
+	rendererCreateInfo.m_skyBoxFiles = {
+		TEXTURE_PATH "skybox/right.jpg",
+		TEXTURE_PATH "skybox/left.jpg",
+		TEXTURE_PATH "skybox/top.jpg" ,
+		TEXTURE_PATH "skybox/bottom.jpg" ,
+		TEXTURE_PATH "skybox/front.jpg" ,
+		TEXTURE_PATH "skybox/back.jpg" 
+	};
+
 	// create our renderer
 	m_renderer = std::make_shared<Ember::Renderer::Renderer>(rendererCreateInfo);
 }
 
 void Application3D::addSceneObjects()
 {
-	// add a entity to the scene
+	// add two trees to the scene
+	int32_t numTrees{ 2 };
+	glm::vec3 pos{ -2.5f, 0.0f, 0.0f };
+	for (int32_t i{ 0 }; i < numTrees; i++)
+	{
+		Ember::Scene::EntityCreateInfo createInfo{};
+		createInfo.m_name = "Tree" + std::to_string(i);
+		createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
+		
+		// give path, not file
+		createInfo.m_mtlFile = OBJ_PATH "tree/";
+		createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
+		createInfo.m_position = pos;
+
+		m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+
+		pos.x += 5.0f;
+	}
+
+	// add skybox to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
-	createInfo.m_name = "tower";
-	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
-	// specify the path to the mtl file
-	createInfo.m_mtlFile = OBJ_PATH "tree/";
-	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	createInfo.m_name = "Skybox";
+	createInfo.m_type = Ember::Scene::EntityType::SKYBOX;
+	createInfo.m_objFile = OBJ_PATH "skybox/skybox.obj";
+	createInfo.m_mtlFile = "";
+	m_scene->addSkybox(EMBER_NEW Ember::Scene::Entity(createInfo));	
 }
 
 void Application3D::onStart()
 {
-	// initial app creation
-	createWindow();																
-	createScene();																
-	createRenderer();		
+	// create window first
+	createWindow();			
+
+	// then the scene
+	createScene();
+
+	// add some objects to the scene
 	addSceneObjects();
+
+	// create our renderer once the scene has been populated
+	createRenderer();		
 }
 
 void Application3D::onUpdate(float dt)

@@ -1,4 +1,5 @@
 #pragma once
+#include "../core/ImageLoading.h"
 #include "../core/Window.h"
 #include "../core//Gui.h"
 #include "../scene/Scene.h"
@@ -18,6 +19,8 @@ namespace Ember::Renderer
 		std::shared_ptr<Scene::Scene> m_scene{};
 		bool m_guiEnabled{};
 		std::shared_ptr<Core::Gui> m_gui{};
+		bool m_skyBoxEnabled{};
+		std::vector<std::string> m_skyBoxFiles{};
 	};
 
 	class Renderer
@@ -30,13 +33,15 @@ namespace Ember::Renderer
 		void render();
 
 	private:
+		void loadSkybox();
 		void updateGui();
 		void renderGui();
+		void renderMesh(const std::shared_ptr<Scene::Entity>& entity, const std::shared_ptr<Scene::Mesh>& mesh);
+		void renderSkybox();
 		
 	private:
 		const RendererCreateInfo m_createInfo;
 		glm::mat4 m_perspective;
 		glm::mat4 m_view;
-		bool m_wireFrameEnabled;
 	};
 }

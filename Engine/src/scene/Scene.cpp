@@ -3,7 +3,7 @@
 namespace Ember::Scene
 {
 	Scene::Scene(const SceneCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_sceneEntities{}, m_wireframe{ false }
+		m_createInfo{ createInfo }, m_sceneEntities{}, m_wireframe{ false }, m_skyBox{nullptr}
 	{
 	}
 
@@ -15,6 +15,11 @@ namespace Ember::Scene
 	void Scene::addEntity(Entity* e)
 	{
 		m_sceneEntities.emplace_back(e);
+	}
+
+	void Scene::addSkybox(Entity* skybox)
+	{
+		m_skyBox.reset(skybox);
 	}
 
 	std::vector<std::shared_ptr<Entity>> Scene::getEntities()
@@ -62,6 +67,16 @@ namespace Ember::Scene
 	std::shared_ptr<Renderer::Shader> Scene::getShader() const
 	{
 		return m_createInfo.m_shader;
+	}
+
+	std::shared_ptr<Renderer::Shader> Scene::getSkyboxShader() const
+	{
+		return m_createInfo.m_skyboxShader;
+	}
+
+	std::shared_ptr<Entity> Scene::getSkybox() const
+	{
+		return m_skyBox;
 	}
 
 	bool& Scene::getWireFrame()

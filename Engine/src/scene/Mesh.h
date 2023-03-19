@@ -32,6 +32,7 @@ namespace Ember::Scene
 
 		// this contatins things created by opengl
 		std::vector<uint32_t> m_resources;
+		std::vector<uint32_t> m_textures;
 
 		uint32_t m_vbo{};
 		uint32_t m_ibo{};

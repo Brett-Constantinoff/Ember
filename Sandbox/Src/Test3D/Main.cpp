@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 
 		app.run();	
 	}
-	catch(const std::runtime_error& e)
+	catch (const std::runtime_error& e)
 	{
 		std::cout << e.what() << "\n";
 	}
