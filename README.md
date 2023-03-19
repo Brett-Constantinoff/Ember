@@ -18,6 +18,20 @@
 
  This will generate a visual studio solution file in the root 
  directory which you can then use the build the poject
+ 
+ ## How To Use
+ To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel.
+
+## Abstraction
+Almost every object in Ember needs to be initialized with some creation information (much like the Vulkan specification), this allows for the creation
+of objects to be much more verbose which increases the freedom the user has to customize their experience however they like. In practice this looks like the following:
+```cpp
+CreateInfoStruct createInfo{};
+
+// setup the information stored inside the create info
+
+newEmberObject = std::make_shared<EmberObject>(createInfo);
+```
 
 ## TO-DO
 * ~~Load Obj files~~
@@ -25,13 +39,17 @@
 * Dynamic shadow mapping
 * Textured objects
 * Enhanced lighting
-* Skyboxes
+* ~~Skyboxes~~
 * PBR
 * Add cross platform support
 
 ## Progress
 * ~~Load Obj Files~~
 ![Capture](https://user-images.githubusercontent.com/77081808/225159901-6c393698-6e36-41f7-b072-52e6a802ab82.PNG)
+
+* ~~Skyboxes~~
+![Capture](https://user-images.githubusercontent.com/77081808/226146545-6890dfc5-ec24-4ba8-a454-ed4a9b92c193.PNG)
+
 
 
 ## Third Party Libraries
