@@ -27,7 +27,6 @@ namespace Ember::Scene
     {
         processKeyBoard(dt);
         processMouse();
-        processZoom();
     }
 
     glm::mat4& Camera::getView()
@@ -94,6 +93,9 @@ namespace Ember::Scene
     {
         if (glfwGetMouseButton(m_createInfo.m_winContext, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         {
+            //enable zoom ability
+            enableZoom = true;
+            
             // sensitivity
             xOffset *= m_createInfo.m_sensitivity;
             yOffset *= m_createInfo.m_sensitivity;
@@ -110,6 +112,13 @@ namespace Ember::Scene
 
             // update vectors with new angles
             updateVectors();
+
+            // check for zoom
+            processZoom();
+        }
+        else
+        {
+            enableZoom = false;
         }
     }
 
@@ -142,7 +151,8 @@ namespace Ember::Scene
 
     void Camera::scrollCallBack(GLFWwindow* window, double xOffset, double yOffset)
     {
-        // we only care about the y value
-        zoom -= static_cast<float>(yOffset);
+        if (enableZoom)
+            // we only care about the y value
+            zoom -= static_cast<float>(yOffset);
     }
 }

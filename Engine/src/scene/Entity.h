@@ -29,7 +29,7 @@ namespace Ember::Scene
 		std::string m_mtlFile{};
 
 		glm::vec3 m_position{};
-		glm::mat4 m_rotation{1.0f};
+		glm::vec3 m_rotatoinAxis{0.0f};
 		glm::vec3 m_scale{ 1.0f };
 	};
 
@@ -40,13 +40,18 @@ namespace Ember::Scene
 		~Entity();
 
 		EntityType& getType();
+		std::string getName();
 		glm::vec3& getCentroid();
+		glm::vec3& getPosition();
+		glm::vec3& getScale();
+		glm::vec3& getRotationAxis();
 		std::vector<std::shared_ptr<Mesh>> getMeshes();
-
-		void rotate(float angle, const glm::vec3& axis);
+		bool& getWireFrame();
+		
 
 	private:
 		void createMeshes();
+		void calculateCentroid();
 		void normalize(tinyobj::attrib_t& attrib);
 		void createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
 			const tinyobj::attrib_t& attrib);
@@ -56,7 +61,9 @@ namespace Ember::Scene
 
 	private:
 		EntityCreateInfo m_createInfo;
+		tinyobj::attrib_t m_attrib;
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 		glm::vec3 m_centroid;
+		bool m_wireFrame;
 	};
 }

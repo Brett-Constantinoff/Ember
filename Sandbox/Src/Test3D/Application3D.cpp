@@ -162,23 +162,29 @@ void Application3D::createRenderer()
 
 void Application3D::addSceneObjects()
 {
-	// add two trees to the scene
-	int32_t numTrees{ 2 };
-	glm::vec3 pos{ -2.5f, 0.0f, 0.0f };
-	for (int32_t i{ 0 }; i < numTrees; i++)
+	// add trees to the scene
+	int32_t numTrees{ 25 };
+	int32_t treeIdx{ 0 };
+	glm::vec3 pos{ 0.0f, 0.0f, 0.0f };
+	Ember::Scene::EntityCreateInfo createInfo{};
+	for (int32_t i{ 0 }; i < 5; i++)
 	{
-		Ember::Scene::EntityCreateInfo createInfo{};
-		createInfo.m_name = "Tree" + std::to_string(i);
-		createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
-		
-		// give path, not file
-		createInfo.m_mtlFile = OBJ_PATH "tree/";
-		createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-		createInfo.m_position = pos;
+		for (int32_t j{ 0 }; j < 5; j++)
+		{
+			createInfo.m_name = "Tree" + std::to_string(treeIdx);
+			createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
 
-		m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+			// give path, not file
+			createInfo.m_mtlFile = OBJ_PATH "tree/";
+			createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
+			createInfo.m_position = pos;
 
-		pos.x += 5.0f;
+			m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+			treeIdx++;
+			pos.x += 2.0f;
+		}
+		pos.z += 2.0f;
+		pos.x = 0.0f;
 	}
 
 	// add skybox to the scene

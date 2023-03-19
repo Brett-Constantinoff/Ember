@@ -6,17 +6,9 @@
 namespace Ember::Scene
 {
 	Entity::Entity(const EntityCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_meshes{}, m_centroid{}
+		m_createInfo{ createInfo }, m_meshes{}, m_centroid{}, m_wireFrame{false}, m_attrib{}
 	{
 		createMeshes();
-
-		// setup intial transforms
-		for (auto& mesh : m_meshes)
-		{
-			mesh->getTransformData().m_translation = m_createInfo.m_position;
-			mesh->getTransformData().m_rotate = m_createInfo.m_rotation;
-			mesh->getTransformData().m_scale = m_createInfo.m_scale;
-		}
 	}
 
 	Entity::~Entity()
@@ -28,9 +20,35 @@ namespace Ember::Scene
 		return m_createInfo.m_type;
 	}
 
+	std::string Entity::getName()
+	{
+		return m_createInfo.m_name;
+	}
+
 	glm::vec3& Entity::getCentroid()
 	{
+		calculateCentroid();
 		return m_centroid;
+	}
+
+	glm::vec3& Entity::getPosition()
+	{
+		return m_createInfo.m_position;
+	}
+
+	glm::vec3& Entity::getScale()
+	{
+		return m_createInfo.m_scale;
+	}
+
+	glm::vec3& Entity::getRotationAxis()
+	{
+		return m_createInfo.m_rotatoinAxis;
+	}
+	
+	bool& Entity::getWireFrame()
+	{
+		return m_wireFrame;
 	}
 
 	std::vector<std::shared_ptr<Mesh>> Entity::getMeshes()
@@ -38,11 +56,6 @@ namespace Ember::Scene
 		return m_meshes;
 	}
 
-	void Entity::rotate(float angle, const glm::vec3& axis)
-	{
-		for (const auto& mesh : m_meshes)
-			mesh->getTransformData().m_rotate = glm::rotate(mesh->getTransformData().m_rotate, glm::radians(angle), axis);
-	}
 
 	void Entity::normalize(tinyobj::attrib_t& attrib)
 	{
@@ -106,32 +119,74 @@ namespace Ember::Scene
 	void Entity::createMeshes()
 	{
 		// parse obj file
-		tinyobj::attrib_t attrib{};
 		std::vector<tinyobj::shape_t> shapes{};
 		std::vector<tinyobj::material_t> materials{};
 		std::string err{};
 		std::string warn{};
 		
-		bool result{ tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, m_createInfo.m_objFile.c_str(), m_createInfo.m_mtlFile.c_str()) };
+		bool result{ tinyobj::LoadObj(&m_attrib, &shapes, &materials, &warn, &err, m_createInfo.m_objFile.c_str(), m_createInfo.m_mtlFile.c_str()) };
 		if (!err.empty())
 			throw std::runtime_error{ "OBJ ERROR {" + m_createInfo.m_mtlFile + "} :: " + err };
 
 		// normalize the data first
 		if (m_createInfo.m_type == EntityType::RENDERABLE)
 		{
-			normalize(attrib);
+			normalize(m_attrib);
 			// if the obj file has materials, we create a separate mesh per material
 			if (materials.size() > 0)
-				createWithMaterials(materials, shapes, attrib);
+				createWithMaterials(materials, shapes, m_attrib);
 
 			// otherwise we just create one mesh with default material colors
 			else
-				createWithoutMaterials(materials, shapes, attrib);
+				createWithoutMaterials(materials, shapes, m_attrib);
 		}
 			
 		// create skybox
 		if (m_createInfo.m_type == EntityType::SKYBOX)
-			createSkyboxMesh(attrib);
+			createSkyboxMesh(m_attrib);
+	}
+
+	void Entity::calculateCentroid()
+	{
+
+		float sumX{};
+		float sumY{};
+		float sumZ{};
+
+		// find min and max vertex postition
+		float minX = std::numeric_limits<float>::max();
+		float minY = std::numeric_limits<float>::max();
+		float minZ = std::numeric_limits<float>::max();
+		float maxX = std::numeric_limits<float>::min();
+		float maxY = std::numeric_limits<float>::min();
+		float maxZ = std::numeric_limits<float>::min();
+		for (int32_t i = 0; i < m_attrib.vertices.size(); i += 3)
+		{
+			// min
+			if (m_attrib.vertices[i] < minX)
+				minX = m_attrib.vertices[i];
+			if (m_attrib.vertices[i + 1] < minY)
+				minY = m_attrib.vertices[i + 1];
+			if (m_attrib.vertices[i + 2] < minZ)
+				minZ = m_attrib.vertices[i + 2];
+
+			// max
+			if (m_attrib.vertices[i] > maxX)
+				maxX = m_attrib.vertices[i];
+			if (m_attrib.vertices[i + 1] > maxY)
+				maxY = m_attrib.vertices[i + 1];
+			if (m_attrib.vertices[i + 2] > maxZ)
+				maxZ = m_attrib.vertices[i + 2];
+
+			// add to sum
+			sumX += m_attrib.vertices[i];
+			sumY += m_attrib.vertices[i + 1];
+			sumZ += m_attrib.vertices[i + 2];
+		}
+
+		// calculate centroid
+		std::size_t numVertices{ m_attrib.vertices.size() / 3 };
+		m_centroid = glm::vec3{ sumX / numVertices, sumY / numVertices, sumZ / numVertices };
 	}
 
 	void Entity::createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,

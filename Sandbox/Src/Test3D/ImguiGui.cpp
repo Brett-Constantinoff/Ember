@@ -1,7 +1,7 @@
 #include "ImguiGui.h"
 
 ImguiGui::ImguiGui(const Ember::Core::GuiCreateInfo& createInfo) :
-	Gui{ createInfo }
+	Gui{ createInfo }, m_selectedItem{true}, m_selectedIndex{0}
 {
 	init();
 }
@@ -65,10 +65,10 @@ void ImguiGui::createFpsCounter()
 	ImGui::SetNextWindowPos(ImVec2(0, menuSize[1] - 1));
 
 	// fix the size
-	ImGui::SetNextWindowSize(ImVec2(250, 250));
+	ImGui::SetNextWindowSize(ImVec2(275, 258));
 
 	// give it a title and make non-resizable and non-collapseable
-	ImGui::Begin("Application Metrics", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+	ImGui::Begin("Application Metrics", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
 	// display title
 	ImGui::TextColored(ImVec4{ 0.678F, 0.847F, 0.902f, 1.0f }, "Application Metrics: ");
@@ -98,30 +98,57 @@ void ImguiGui::createSceneWindow()
 	ImVec2 metricsSize{ ImGui::GetItemRectSize() };
 
 	// set scene window to be the size of the metrics
-	ImGui::SetNextWindowPos(ImVec2(0, 250));
+	ImGui::SetNextWindowPos(ImVec2(0, 275));
 
 	// get window size
 	ImVec2 windowSize{ ImGui::GetWindowSize() };
 
 	// fix the size
-	ImGui::SetNextWindowSize(ImVec2(250, (int)m_createInfo.m_window->getHeight()));
+	ImGui::SetNextWindowSize(ImVec2(275, static_cast<int32_t>(m_createInfo.m_window->getHeight())));
 
 	// give it a title and make non-resizable and non-collapseable
-	ImGui::Begin("Scene Details", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+	ImGui::Begin("Scene Details", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
 	// display title
 	ImGui::TextColored(ImVec4{ 0.678F, 0.847F, 0.902f, 1.0f }, "Scene Details: ");
 
 	// display camera location
-	auto cameraPos = m_createInfo.m_scene->getCamera()->getPos();
+	const auto& cameraPos = m_createInfo.m_scene->getCamera()->getPos();
 	ImGui::Text("Camera Position: %.2fx %.2fy %.2fz ", cameraPos[0], cameraPos[1], cameraPos[2]);
 
 	// display camera front
-	auto cameraFront = m_createInfo.m_scene->getCamera()->getFront();
+	const auto& cameraFront = m_createInfo.m_scene->getCamera()->getFront();
 	ImGui::Text("Camera Front: %.2fx %.2fy %.2fz ", cameraFront[0], cameraFront[1], cameraFront[2]);
 
+	// get scene entities
+	const auto& entities{ m_createInfo.m_scene->getEntities() };
+
+	// display each entity
+	ImGui::SetCursorPosY(80);
+	ImGui::Text("Entities");
+	ImGui::SetNextItemWidth(275);
+	ImGui::SetCursorPosY(100);
+	if (ImGui::BeginListBox("##entity_list"));
+	{
+		for (int i = 0; i < entities.size(); i++)
+		{
+				m_selectedItem = (m_selectedIndex == i); //set the current selction
+				if (ImGui::Selectable(entities[i]->getName().c_str(), m_selectedItem))
+					m_selectedIndex = i;
+		}
+		ImGui::EndListBox();
+	}
+
+	// create details for selected entry
+	ImGui::SetCursorPosY(250);
+	const auto& entity{ entities[m_selectedIndex] };
+
+	ImGui::SliderFloat3("Translation", &entity->getPosition().x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("Scale", &entity->getScale().x, 0.1f, 10.0f);
+	ImGui::SliderFloat3("Rotation", &entity->getRotationAxis().x, 0.0f, 1.0f);
+
 	// display wireframe checkbox
-	ImGui::Checkbox("Enable Wireframe", &m_createInfo.m_scene->getWireFrame());
+	ImGui::Checkbox("Enable Wireframe", &entity->getWireFrame());
 
 	// end this component
 	ImGui::End();

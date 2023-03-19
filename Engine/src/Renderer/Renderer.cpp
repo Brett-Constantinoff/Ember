@@ -21,7 +21,6 @@ namespace Ember::Renderer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		updateGui();
 		
-
 		// update the projection matrix
 		float aspect = static_cast<float>(m_createInfo.m_window->getWidth()) / static_cast<float>(m_createInfo.m_window->getHeight());
 		float near = m_createInfo.m_scene->getCamera()->getNear();
@@ -33,13 +32,6 @@ namespace Ember::Renderer
 		m_view = m_createInfo.m_scene->getCamera()->getView();
 
 		m_createInfo.m_scene->getCamera()->move(dt);
-
-		// check for wireframe
-		if (m_createInfo.m_scene->getWireFrame())
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		else
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 	}
 
 	void Renderer::render()
@@ -118,24 +110,41 @@ namespace Ember::Renderer
 	void Renderer::renderMesh(const std::shared_ptr<Scene::Entity>& entity, const std::shared_ptr<Scene::Mesh>& mesh)
 	{
 		// update transforms
-		Ember::Scene::TransformData transforms{ mesh->getTransformData() };
 		glm::mat4 model{ 1.0f };
+		const auto& centroid(entity->getCentroid());
 
-		model = glm::translate(model, transforms.m_translation) *
-			glm::translate(model, entity->getCentroid()) *
-			transforms.m_rotate *
-			glm::translate(model, -entity->getCentroid()) *
-			glm::scale(model, transforms.m_scale);
+		// move the object
+		model = glm::translate(model, -centroid);
+		model = glm::translate(model, entity->getPosition());
+
+		// rotate the object
+		float xRad{ entity->getRotationAxis().x * glm::two_pi<float>() };
+		float yRad{ entity->getRotationAxis().y * glm::two_pi<float>() };
+		float zRad{ entity->getRotationAxis().z * glm::two_pi<float>() };
+
+		model = glm::rotate(model, xRad, { 1.0f, 0.0f, 0.0f});
+		model = glm::rotate(model, yRad, { 0.0f, 1.0f, 0.0f });
+		model = glm::rotate(model, zRad, { 0.0f, 0.0f, 1.0f });
+
+		//scale the object
+		model = glm::scale(model, entity->getScale());
+		model = glm::translate(model, -centroid);
 
 		// update the uniforms
-		auto sceneShader{ m_createInfo.m_scene->getShader() };
+		const auto& sceneShader{ m_createInfo.m_scene->getShader() };
 		sceneShader->use();
 		sceneShader->setMat4("model", model);
 		sceneShader->setMat4("projection", m_perspective);
 		sceneShader->setMat4("view", m_view);
 		sceneShader->setVec3("uViewPos", m_createInfo.m_scene->getCamera()->getPos());
 		sceneShader->setVec3("uDiffuse", mesh->getRenderData().m_material.m_diffuse);
-		Ember::Scene::RenderData data{ mesh->getRenderData() };
+		const auto& data{ mesh->getRenderData() };
+
+		// check for wire frame
+		if (entity->getWireFrame())
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		// render the object
 		glBindVertexArray(data.m_vao);
@@ -149,10 +158,10 @@ namespace Ember::Renderer
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDepthFunc(GL_LEQUAL);
 
-		auto skybox{ m_createInfo.m_scene->getSkybox() };
-		auto camera{ m_createInfo.m_scene->getCamera() };
-		auto skyboxRenderData{ skybox->getMeshes()[0]->getRenderData() };
-		auto skyboxShader{ m_createInfo.m_scene->getSkyboxShader() };
+		const auto& skybox{ m_createInfo.m_scene->getSkybox() };
+		const auto& camera{ m_createInfo.m_scene->getCamera() };
+		const auto& skyboxRenderData{ skybox->getMeshes()[0]->getRenderData() };
+		const auto& skyboxShader{ m_createInfo.m_scene->getSkyboxShader() };
 
 		skyboxShader->use();
 		skyboxShader->setMat4("uProjection", m_perspective);

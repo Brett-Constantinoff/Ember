@@ -3,7 +3,7 @@
 namespace Ember::Scene
 {
 	Scene::Scene(const SceneCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_sceneEntities{}, m_wireframe{ false }, m_skyBox{nullptr}
+		m_createInfo{ createInfo }, m_sceneEntities{}, m_skyBox{nullptr}
 	{
 	}
 
@@ -77,10 +77,5 @@ namespace Ember::Scene
 	std::shared_ptr<Entity> Scene::getSkybox() const
 	{
 		return m_skyBox;
-	}
-
-	bool& Scene::getWireFrame()
-	{
-		return m_wireframe;
 	}
 }

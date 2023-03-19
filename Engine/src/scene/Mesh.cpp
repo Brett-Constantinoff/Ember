@@ -24,11 +24,6 @@ namespace Ember::Scene
 		return m_renderData;
 	}
 
-	TransformData& Mesh::getTransformData()
-	{
-		return m_transformData;
-	}
-
 	void Mesh::initRenderData()
 	{
 		// vertex array

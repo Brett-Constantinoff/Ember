@@ -15,4 +15,8 @@ private:
 	void createMenuBar();
 	void createFpsCounter();
 	void createSceneWindow();
+
+private:
+	bool m_selectedItem;
+	int32_t m_selectedIndex;
 };

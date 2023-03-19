@@ -39,6 +39,5 @@ namespace Ember::Scene
 		SceneCreateInfo m_createInfo;
 		std::vector<std::shared_ptr<Entity>> m_sceneEntities;
 		std::shared_ptr<Entity> m_skyBox;
-		bool m_wireframe;
 	};
 }

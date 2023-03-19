@@ -40,14 +40,6 @@ namespace Ember::Scene
 		uint32_t m_vao{};
 	};
 
-	struct TransformData
-	{
-		glm::mat4 m_rotate{1.0f};
-		glm::vec3 m_translation{0.0f};
-		glm::vec3 m_scale{1.0f};
-		float m_angle{};
-	};
-
 	class Mesh
 	{
 	public:
@@ -55,13 +47,11 @@ namespace Ember::Scene
 		~Mesh();
 
 		RenderData& getRenderData();
-		TransformData& getTransformData();
 
 	private:
 		void initRenderData();
 
 	private:
 		RenderData m_renderData;
-		TransformData m_transformData;
 	};
 }
