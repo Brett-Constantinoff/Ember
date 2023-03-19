@@ -3,8 +3,8 @@
 
  # Platforms
  This project was built with the thought of cross compatability in mind, meaning it would succesfully build and run 
- on windows, macos and linux. However, due to my limited time to work on this project and the fact that most of my 
- development lands on the windows platform, Ive decided to shit my focus to the windows platform. 
+ on windows, macos and linux. However, the MacOS version was unstable and did not perform as inteded. This means that I 
+ will switch to windows development for the time being.
 
  This shift will allow me to focus more on adding the features I want to add without worrying about cross 
  platform specifications. This isnt to say that this project will stay on windows forever and in the future Im
@@ -20,7 +20,7 @@
  directory which you can then use the build the poject
  
  ## How To Use
- To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel.
+ To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel while holding the right mouse button.
 
 ## Abstraction
 Almost every object in Ember needs to be initialized with some creation information (much like the Vulkan specification), this allows for the creation
