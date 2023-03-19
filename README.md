@@ -20,7 +20,7 @@
  directory which you can then use the build the poject
  
  ## How To Use
- To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel.
+ To move the camera use the WASD keys, to look around hold down the right mouse button and move the mouse. Zoom by using the middle scroll wheel while holding the right mouse button.
 
 ## Abstraction
 Almost every object in Ember needs to be initialized with some creation information (much like the Vulkan specification), this allows for the creation
