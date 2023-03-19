@@ -33,6 +33,10 @@
 * ~~Load Obj Files~~
 ![Capture](https://user-images.githubusercontent.com/77081808/225159901-6c393698-6e36-41f7-b072-52e6a802ab82.PNG)
 
+* ~~Skyboxes~~
+![Capture](https://user-images.githubusercontent.com/77081808/226146545-6890dfc5-ec24-4ba8-a454-ed4a9b92c193.PNG)
+
+
 
 ## Third Party Libraries
 * GLFW - handles window creation
