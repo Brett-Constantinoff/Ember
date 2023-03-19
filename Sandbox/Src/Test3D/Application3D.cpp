@@ -19,7 +19,7 @@ void Application3D::run()
 	// main application loop
 	while (m_window->isOpen())
 	{
-		float currFrame = glfwGetTime();
+		float currFrame = static_cast<float>(glfwGetTime());
 		float dt = currFrame - m_lastFrame;
 		m_lastFrame = currFrame;												
 
@@ -162,33 +162,28 @@ void Application3D::createRenderer()
 
 void Application3D::addSceneObjects()
 {
-	// add trees to the scene
-	int32_t numTrees{ 25 };
-	int32_t treeIdx{ 0 };
-	glm::vec3 pos{ 0.0f, 0.0f, 0.0f };
+	// add some objects to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
-	for (int32_t i{ 0 }; i < 5; i++)
+	
+	for (int32_t i{ 0 }; i < 2; i++)
 	{
-		for (int32_t j{ 0 }; j < 5; j++)
-		{
-			createInfo.m_name = "Tree" + std::to_string(treeIdx);
-			createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
-
-			// give path, not file
-			createInfo.m_mtlFile = OBJ_PATH "tree/";
-			createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-			createInfo.m_position = pos;
-
-			m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
-			treeIdx++;
-			pos.x += 2.0f;
-		}
-		pos.z += 2.0f;
-		pos.x = 0.0f;
+		// add a tree
+		createInfo.m_name = "Tree" + std::to_string(i);
+		createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
+		createInfo.m_mtlFile = OBJ_PATH "tree/";
+		createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
+		m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	
 	}
 
+	// add a tower
+	createInfo.m_name = "Tower";
+	createInfo.m_objFile = OBJ_PATH "tower/objTower.obj";
+	createInfo.m_mtlFile = "";
+	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+
 	// add skybox to the scene
-	Ember::Scene::EntityCreateInfo createInfo{};
 	createInfo.m_name = "Skybox";
 	createInfo.m_type = Ember::Scene::EntityType::SKYBOX;
 	createInfo.m_objFile = OBJ_PATH "skybox/skybox.obj";

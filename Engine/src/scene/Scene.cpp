@@ -3,7 +3,7 @@
 namespace Ember::Scene
 {
 	Scene::Scene(const SceneCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_sceneEntities{}, m_skyBox{nullptr}
+		m_createInfo{ createInfo }, m_sceneEntities{}, m_skyBox{nullptr}, m_attribMap{}
 	{
 	}
 
@@ -11,10 +11,18 @@ namespace Ember::Scene
 	{
 	}
 
-
 	void Scene::addEntity(Entity* e)
 	{
+		// fist check if entity obj data is in map
+		const auto& it{ m_attribMap.find(e->getObjFile()) };
+		if (it != m_attribMap.end())
+			e->setAttrib(it->second);
+
 		m_sceneEntities.emplace_back(e);
+
+		// if object wasnt in map, add it after the data has been loaded
+		if (it == m_attribMap.end())
+			m_attribMap.insert({ e->getObjFile(), e->getAttrib() });
 	}
 
 	void Scene::addSkybox(Entity* skybox)
@@ -22,41 +30,46 @@ namespace Ember::Scene
 		m_skyBox.reset(skybox);
 	}
 
-	std::vector<std::shared_ptr<Entity>> Scene::getEntities()
+	std::vector<std::shared_ptr<Entity>> Scene::getEntities() const
 	{
 		return m_sceneEntities;
 	}
 
-	int32_t Scene::getMeshCount()
+	int32_t Scene::getMeshCount() const
 	{
-		int32_t meshCount{ 0 };
+		std::size_t meshCount{ 0 };
 		for (const auto& e : m_sceneEntities)
 			meshCount += e->getMeshes().size();
-		return meshCount;
+		return static_cast<int32_t>(meshCount);
 	}
 
-	int32_t Scene::getVertexCount()
+	int32_t Scene::getVertexCount() const
 	{
-		int32_t count{};
+		std::size_t count{};
 		for (const auto& e : m_sceneEntities)
 			for (const auto& mesh : e->getMeshes())
 				count += (mesh->getRenderData().m_vertexPositions.size()) / 3;
-		return count;
+		return static_cast<int32_t>(count);
 	}
 
-	int32_t Scene::getPolygonCount()
+	int32_t Scene::getPolygonCount() const
 	{
-		int32_t count{};
+		std::size_t count{};
 		for (const auto& e : m_sceneEntities)
 			for (const auto& mesh : e->getMeshes())
 				count += (mesh->getRenderData().m_vertexPositions.size()) / 9;
-		return count;
+		return static_cast<int32_t>(count);
+	}
+
+	int32_t Scene::getDifferingObjects() const
+	{
+		return static_cast<int32_t>(m_attribMap.size());
 	}
 
 
 	int32_t Scene::getEntityCount() const
 	{
-		return m_sceneEntities.size();
+		return static_cast<int32_t>(m_sceneEntities.size());
 	}
 
 	std::shared_ptr<Camera> Scene::getCamera() const

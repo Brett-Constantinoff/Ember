@@ -88,6 +88,9 @@ void ImguiGui::createFpsCounter()
 	// display polygon count
 	ImGui::Text("Total Trianlges: %d ", m_createInfo.m_scene->getPolygonCount());
 
+	// display total amount of different mesh types
+	ImGui::Text("Unique Models: %d", m_createInfo.m_scene->getDifferingObjects());
+
 	// end this component
 	ImGui::End();
 }
@@ -104,7 +107,7 @@ void ImguiGui::createSceneWindow()
 	ImVec2 windowSize{ ImGui::GetWindowSize() };
 
 	// fix the size
-	ImGui::SetNextWindowSize(ImVec2(275, static_cast<int32_t>(m_createInfo.m_window->getHeight())));
+	ImGui::SetNextWindowSize(ImVec2(275, static_cast<float>(m_createInfo.m_window->getHeight())));
 
 	// give it a title and make non-resizable and non-collapseable
 	ImGui::Begin("Scene Details", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
@@ -128,7 +131,7 @@ void ImguiGui::createSceneWindow()
 	ImGui::Text("Entities");
 	ImGui::SetNextItemWidth(275);
 	ImGui::SetCursorPosY(100);
-	if (ImGui::BeginListBox("##entity_list"));
+	if (ImGui::BeginListBox("##entity_list"))
 	{
 		for (int i = 0; i < entities.size(); i++)
 		{

@@ -23,21 +23,21 @@ namespace Ember::Scene
 
 		void addEntity(Entity* e);
 		void addSkybox(Entity* skybox);
-		std::vector<std::shared_ptr<Entity>> getEntities();
-		int32_t getMeshCount();
-		int32_t getVertexCount();
-		int32_t getPolygonCount();
-
+		std::vector<std::shared_ptr<Entity>> getEntities() const;
+		int32_t getMeshCount() const;
+		int32_t getVertexCount() const;
+		int32_t getPolygonCount() const;
+		int32_t getDifferingObjects() const;
 		int32_t getEntityCount() const;
 		std::shared_ptr<Camera> getCamera() const;
 		std::shared_ptr<Renderer::Shader> getShader() const;
 		std::shared_ptr<Renderer::Shader> getSkyboxShader() const;
 		std::shared_ptr<Entity> getSkybox() const;
-		bool& getWireFrame();
 
 	private:
 		SceneCreateInfo m_createInfo;
 		std::vector<std::shared_ptr<Entity>> m_sceneEntities;
 		std::shared_ptr<Entity> m_skyBox;
+		std::unordered_map<std::string, tinyobj::attrib_t> m_attribMap;
 	};
 }

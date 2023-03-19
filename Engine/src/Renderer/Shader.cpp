@@ -39,7 +39,7 @@ namespace Ember
             glUseProgram(0);
         }
 
-        int32_t Shader::getId(void)
+        int32_t Shader::getId(void) const
         {
             return m_ID;
         }

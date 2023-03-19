@@ -21,7 +21,7 @@ namespace Ember::Renderer
     public:
         Shader(const std::string& filepath);
         ~Shader();
-        int32_t getId(void);
+        int32_t getId(void) const;
         void setVec3(const std::string& name, const glm::vec3& uniform);
         void setVec4(const std::string& name, const glm::vec4& uniform);
         void setMat4(const std::string& name, const glm::mat4& uniform);

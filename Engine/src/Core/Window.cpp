@@ -38,12 +38,12 @@ namespace Ember::Core
         return &m_winID;
     }
 
-    int32_t Window::getWidth()
+    int32_t Window::getWidth() const
     {
         return m_createInfo.m_width;
     }
 
-    int32_t Window::getHeight()
+    int32_t Window::getHeight() const
     {
         return m_createInfo.m_height;
     }

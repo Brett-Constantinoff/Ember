@@ -6,21 +6,23 @@
 namespace Ember::Scene
 {
 	Entity::Entity(const EntityCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_meshes{}, m_centroid{}, m_wireFrame{false}, m_attrib{}
+		m_createInfo{ createInfo }, m_meshes{}, m_centroid{}, m_wireFrame{false}
 	{
-		createMeshes();
+		// only create meshes if we need to
+		if (m_createInfo.m_attrib.vertices.size() == 0)
+			createMeshes();
 	}
 
 	Entity::~Entity()
 	{
 	}
 
-	EntityType& Entity::getType()
+	EntityType Entity::getType() const
 	{
 		return m_createInfo.m_type;
 	}
 
-	std::string Entity::getName()
+	std::string Entity::getName() const
 	{
 		return m_createInfo.m_name;
 	}
@@ -51,13 +53,27 @@ namespace Ember::Scene
 		return m_wireFrame;
 	}
 
-	std::vector<std::shared_ptr<Mesh>> Entity::getMeshes()
+	std::vector<std::shared_ptr<Mesh>> Entity::getMeshes() const
 	{
 		return m_meshes;
 	}
 
+	tinyobj::attrib_t Entity::getAttrib() const
+	{
+		return m_createInfo.m_attrib;
+	}
 
-	void Entity::normalize(tinyobj::attrib_t& attrib)
+	void Entity::setAttrib(const tinyobj::attrib_t& attrib)
+	{
+		m_createInfo.m_attrib = attrib;
+	}
+
+	std::string Entity::getObjFile() const
+	{
+		return m_createInfo.m_objFile;
+	}
+
+	void Entity::normalize()
 	{
 		// sum for centroid
 		float sumX{};
@@ -71,32 +87,32 @@ namespace Ember::Scene
 		float maxX = std::numeric_limits<float>::min();
 		float maxY = std::numeric_limits<float>::min();
 		float maxZ = std::numeric_limits<float>::min();
-		for (int32_t i = 0; i < attrib.vertices.size(); i += 3)
+		for (int32_t i = 0; i < m_createInfo.m_attrib.vertices.size(); i += 3)
 		{
 			// min
-			if (attrib.vertices[i] < minX)
-				minX = attrib.vertices[i];
-			if (attrib.vertices[i + 1] < minY)
-				minY = attrib.vertices[i + 1];
-			if (attrib.vertices[i + 2] < minZ)
-				minZ = attrib.vertices[i + 2];
+			if (m_createInfo.m_attrib.vertices[i] < minX)
+				minX = m_createInfo.m_attrib.vertices[i];
+			if (m_createInfo.m_attrib.vertices[i + 1] < minY)
+				minY = m_createInfo.m_attrib.vertices[i + 1];
+			if (m_createInfo.m_attrib.vertices[i + 2] < minZ)
+				minZ = m_createInfo.m_attrib.vertices[i + 2];
 
 			// max
-			if (attrib.vertices[i] > maxX)
-				maxX = attrib.vertices[i];
-			if (attrib.vertices[i + 1] > maxY)
-				maxY = attrib.vertices[i + 1];
-			if (attrib.vertices[i + 2] > maxZ)
-				maxZ = attrib.vertices[i + 2];
+			if (m_createInfo.m_attrib.vertices[i] > maxX)
+				maxX = m_createInfo.m_attrib.vertices[i];
+			if (m_createInfo.m_attrib.vertices[i + 1] > maxY)
+				maxY = m_createInfo.m_attrib.vertices[i + 1];
+			if (m_createInfo.m_attrib.vertices[i + 2] > maxZ)
+				maxZ = m_createInfo.m_attrib.vertices[i + 2];
 
 			// add to sum
-			sumX += attrib.vertices[i];
-			sumY += attrib.vertices[i + 1];
-			sumZ += attrib.vertices[i + 2];
+			sumX += m_createInfo.m_attrib.vertices[i];
+			sumY += m_createInfo.m_attrib.vertices[i + 1];
+			sumZ += m_createInfo.m_attrib.vertices[i + 2];
 		}
 
 		// calculate centroid
-		std::size_t numVertices{ attrib.vertices.size() / 3 };
+		std::size_t numVertices{ m_createInfo.m_attrib.vertices.size() / 3 };
 		m_centroid = glm::vec3{ sumX / numVertices, sumY / numVertices, sumZ / numVertices };
 
 		// calculate scale
@@ -108,11 +124,11 @@ namespace Ember::Scene
 		float scaleZ = 2.0f / rangeZ;
 
 		// normalize
-		for (int32_t i = 0; i < attrib.vertices.size(); i += 3)
+		for (int32_t i = 0; i < m_createInfo.m_attrib.vertices.size(); i += 3)
 		{
-			attrib.vertices[i] = (attrib.vertices[i] - minX) * scaleX;
-			attrib.vertices[i + 1] = (attrib.vertices[i + 1] - minY) * scaleY;
-			attrib.vertices[i + 2] = (attrib.vertices[i + 2] - minZ) * scaleZ;
+			m_createInfo.m_attrib.vertices[i] = (m_createInfo.m_attrib.vertices[i] - minX) * scaleX;
+			m_createInfo.m_attrib.vertices[i + 1] = (m_createInfo.m_attrib.vertices[i + 1] - minY) * scaleY;
+			m_createInfo.m_attrib.vertices[i + 2] = (m_createInfo.m_attrib.vertices[i + 2] - minZ) * scaleZ;
 		}
 	}
 
@@ -124,26 +140,26 @@ namespace Ember::Scene
 		std::string err{};
 		std::string warn{};
 		
-		bool result{ tinyobj::LoadObj(&m_attrib, &shapes, &materials, &warn, &err, m_createInfo.m_objFile.c_str(), m_createInfo.m_mtlFile.c_str()) };
+		bool result{ tinyobj::LoadObj(&m_createInfo.m_attrib, &shapes, &materials, &warn, &err, m_createInfo.m_objFile.c_str(), m_createInfo.m_mtlFile.c_str()) };
 		if (!err.empty())
 			throw std::runtime_error{ "OBJ ERROR {" + m_createInfo.m_mtlFile + "} :: " + err };
 
 		// normalize the data first
 		if (m_createInfo.m_type == EntityType::RENDERABLE)
 		{
-			normalize(m_attrib);
+			normalize();
 			// if the obj file has materials, we create a separate mesh per material
 			if (materials.size() > 0)
-				createWithMaterials(materials, shapes, m_attrib);
+				createWithMaterials(materials, shapes);
 
 			// otherwise we just create one mesh with default material colors
 			else
-				createWithoutMaterials(materials, shapes, m_attrib);
+				createWithoutMaterials(materials, shapes);
 		}
 			
 		// create skybox
 		if (m_createInfo.m_type == EntityType::SKYBOX)
-			createSkyboxMesh(m_attrib);
+			createSkyboxMesh();
 	}
 
 	void Entity::calculateCentroid()
@@ -160,37 +176,36 @@ namespace Ember::Scene
 		float maxX = std::numeric_limits<float>::min();
 		float maxY = std::numeric_limits<float>::min();
 		float maxZ = std::numeric_limits<float>::min();
-		for (int32_t i = 0; i < m_attrib.vertices.size(); i += 3)
+		for (int32_t i = 0; i < m_createInfo.m_attrib.vertices.size(); i += 3)
 		{
 			// min
-			if (m_attrib.vertices[i] < minX)
-				minX = m_attrib.vertices[i];
-			if (m_attrib.vertices[i + 1] < minY)
-				minY = m_attrib.vertices[i + 1];
-			if (m_attrib.vertices[i + 2] < minZ)
-				minZ = m_attrib.vertices[i + 2];
+			if (m_createInfo.m_attrib.vertices[i] < minX)
+				minX = m_createInfo.m_attrib.vertices[i];
+			if (m_createInfo.m_attrib.vertices[i + 1] < minY)
+				minY = m_createInfo.m_attrib.vertices[i + 1];
+			if (m_createInfo.m_attrib.vertices[i + 2] < minZ)
+				minZ = m_createInfo.m_attrib.vertices[i + 2];
 
 			// max
-			if (m_attrib.vertices[i] > maxX)
-				maxX = m_attrib.vertices[i];
-			if (m_attrib.vertices[i + 1] > maxY)
-				maxY = m_attrib.vertices[i + 1];
-			if (m_attrib.vertices[i + 2] > maxZ)
-				maxZ = m_attrib.vertices[i + 2];
+			if (m_createInfo.m_attrib.vertices[i] > maxX)
+				maxX = m_createInfo.m_attrib.vertices[i];
+			if (m_createInfo.m_attrib.vertices[i + 1] > maxY)
+				maxY = m_createInfo.m_attrib.vertices[i + 1];
+			if (m_createInfo.m_attrib.vertices[i + 2] > maxZ)
+				maxZ = m_createInfo.m_attrib.vertices[i + 2];
 
 			// add to sum
-			sumX += m_attrib.vertices[i];
-			sumY += m_attrib.vertices[i + 1];
-			sumZ += m_attrib.vertices[i + 2];
+			sumX += m_createInfo.m_attrib.vertices[i];
+			sumY += m_createInfo.m_attrib.vertices[i + 1];
+			sumZ += m_createInfo.m_attrib.vertices[i + 2];
 		}
 
 		// calculate centroid
-		std::size_t numVertices{ m_attrib.vertices.size() / 3 };
+		std::size_t numVertices{ m_createInfo.m_attrib.vertices.size() / 3 };
 		m_centroid = glm::vec3{ sumX / numVertices, sumY / numVertices, sumZ / numVertices };
 	}
 
-	void Entity::createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
-		const tinyobj::attrib_t& attrib)
+	void Entity::createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes)
 	{
 		// loop over each material
 		for (std::size_t i{ 0 }; i < materials.size(); i++)
@@ -216,16 +231,16 @@ namespace Ember::Scene
 						for (std::size_t k{ 0 }; k < numFaceVertices; k++)
 						{
 							auto index{ shape.mesh.indices[startIndex + k].vertex_index };
-							renderData.m_vertexPositions.push_back(attrib.vertices[index * 3]);
-							renderData.m_vertexPositions.push_back(attrib.vertices[index * 3 + 1]);
-							renderData.m_vertexPositions.push_back(attrib.vertices[index * 3 + 2]);
+							renderData.m_vertexPositions.push_back(m_createInfo.m_attrib.vertices[index * 3]);
+							renderData.m_vertexPositions.push_back(m_createInfo.m_attrib.vertices[index * 3 + 1]);
+							renderData.m_vertexPositions.push_back(m_createInfo.m_attrib.vertices[index * 3 + 2]);
 
 							index = shape.mesh.indices[startIndex + k].normal_index;
 							if (index >= 0)
 							{
-								renderData.m_normals.push_back(attrib.normals[index * 3]);
-								renderData.m_normals.push_back(attrib.normals[index * 3 + 1]);
-								renderData.m_normals.push_back(attrib.normals[index * 3 + 2]);
+								renderData.m_normals.push_back(m_createInfo.m_attrib.normals[index * 3]);
+								renderData.m_normals.push_back(m_createInfo.m_attrib.normals[index * 3 + 1]);
+								renderData.m_normals.push_back(m_createInfo.m_attrib.normals[index * 3 + 2]);
 							}
 						}
 
@@ -241,8 +256,7 @@ namespace Ember::Scene
 		}
 	}
 
-	void Entity::createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
-		const tinyobj::attrib_t& attrib)
+	void Entity::createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes)
 	{
 		RenderData renderData{};
 
@@ -263,16 +277,16 @@ namespace Ember::Scene
 				for (std::size_t k{ 0 }; k < numFaceVertices; k++)
 				{
 					auto index{ shape.mesh.indices[startIndex + k].vertex_index };
-					renderData.m_vertexPositions.push_back(attrib.vertices[index * 3]);
-					renderData.m_vertexPositions.push_back(attrib.vertices[index * 3 + 1]);
-					renderData.m_vertexPositions.push_back(attrib.vertices[index * 3 + 2]);
+					renderData.m_vertexPositions.push_back(m_createInfo.m_attrib.vertices[index * 3]);
+					renderData.m_vertexPositions.push_back(m_createInfo.m_attrib.vertices[index * 3 + 1]);
+					renderData.m_vertexPositions.push_back(m_createInfo.m_attrib.vertices[index * 3 + 2]);
 
 					index = shape.mesh.indices[startIndex + k].normal_index;
 					if (index >= 0)
 					{
-						renderData.m_normals.push_back(attrib.normals[index * 3]);
-						renderData.m_normals.push_back(attrib.normals[index * 3 + 1]);
-						renderData.m_normals.push_back(attrib.normals[index * 3 + 2]);
+						renderData.m_normals.push_back(m_createInfo.m_attrib.normals[index * 3]);
+						renderData.m_normals.push_back(m_createInfo.m_attrib.normals[index * 3 + 1]);
+						renderData.m_normals.push_back(m_createInfo.m_attrib.normals[index * 3 + 2]);
 					}
 				}
 				startIndex += numFaceVertices;
@@ -281,12 +295,12 @@ namespace Ember::Scene
 		m_meshes.emplace_back(new Mesh(renderData));
 	}
 
-	void Entity::createSkyboxMesh(const tinyobj::attrib_t& attrib)
+	void Entity::createSkyboxMesh()
 	{
 		// nothing special just copy over vertex positions
 		RenderData renderData{};
 		Material material{};
-		renderData.m_vertexPositions = attrib.vertices;
+		renderData.m_vertexPositions = m_createInfo.m_attrib.vertices;
 		m_meshes.emplace_back(new Mesh(renderData));
 	}
 }

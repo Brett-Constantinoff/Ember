@@ -148,7 +148,7 @@ namespace Ember::Renderer
 
 		// render the object
 		glBindVertexArray(data.m_vao);
-		glDrawArrays(GL_TRIANGLES, 0, data.m_vertexPositions.size() / 3);
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(data.m_vertexPositions.size() / 3));
 		glBindVertexArray(0);
 		sceneShader->disuse();
 	}
@@ -174,7 +174,7 @@ namespace Ember::Renderer
 		glBindVertexArray(skyboxRenderData.m_vao);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxRenderData.m_textures[0]);
 		glActiveTexture(GL_TEXTURE0);
-		glDrawArrays(GL_TRIANGLES, 0, skyboxRenderData.m_vertexPositions.size() / 3);
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(skyboxRenderData.m_vertexPositions.size() / 3));
 		glBindVertexArray(0);
 
 		skyboxShader->disuse();

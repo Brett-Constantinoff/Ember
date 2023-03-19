@@ -27,6 +27,7 @@ namespace Ember::Scene
 		std::string m_name{};
 		std::string m_objFile{};
 		std::string m_mtlFile{};
+		tinyobj::attrib_t m_attrib{};
 
 		glm::vec3 m_position{};
 		glm::vec3 m_rotatoinAxis{0.0f};
@@ -39,29 +40,28 @@ namespace Ember::Scene
 		Entity(const EntityCreateInfo& createInfo);
 		~Entity();
 
-		EntityType& getType();
-		std::string getName();
+		EntityType getType() const;
+		std::string getName() const;
 		glm::vec3& getCentroid();
 		glm::vec3& getPosition();
 		glm::vec3& getScale();
 		glm::vec3& getRotationAxis();
-		std::vector<std::shared_ptr<Mesh>> getMeshes();
+		std::vector<std::shared_ptr<Mesh>> getMeshes() const;
+		tinyobj::attrib_t getAttrib() const;
+		void setAttrib(const tinyobj::attrib_t& attrib);
+		std::string getObjFile() const;
 		bool& getWireFrame();
 		
-
 	private:
 		void createMeshes();
 		void calculateCentroid();
-		void normalize(tinyobj::attrib_t& attrib);
-		void createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
-			const tinyobj::attrib_t& attrib);
-		void createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes,
-			const tinyobj::attrib_t& attrib);
-		void createSkyboxMesh(const tinyobj::attrib_t& attrib);
+		void normalize();
+		void createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes);
+		void createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes);
+		void createSkyboxMesh();
 
 	private:
 		EntityCreateInfo m_createInfo;
-		tinyobj::attrib_t m_attrib;
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 		glm::vec3 m_centroid;
 		bool m_wireFrame;
