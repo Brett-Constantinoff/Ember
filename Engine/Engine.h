@@ -1,8 +1,8 @@
 #pragma once
 
-#define SHADER_PATH ".\\.\\Src\\Test3D\\Assets\\Hlsl\\"
-#define OBJ_PATH ".\\.\\Src\\Test3D\\Assets\\objFiles\\"
-#define TEXTURE_PATH ".\\.\\Src\\Test3D\\Assets\\textures\\"
+#define SHADER_PATH ".\\.\\Src\\Test3D\\assets\\Hlsl\\"
+#define OBJ_PATH ".\\.\\Src\\Test3D\\assets\\models\\"
+#define TEXTURE_PATH ".\\.\\Src\\Test3D\\assets\\textures\\"
 
 #include "libs/objLoader/tiny_obj_loader.h"
 #include "src/core/Glm.h"

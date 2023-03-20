@@ -194,7 +194,5 @@ namespace Ember::Renderer
 
 		skyboxShader->disuse();
 		glDepthFunc(GL_LESS);
-
-		float* x = new float[10000];
 	}
 }

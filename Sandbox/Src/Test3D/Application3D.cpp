@@ -153,19 +153,11 @@ void Application3D::addSceneObjects()
 	{
 		// add a tree
 		createInfo.m_name = "Tree" + std::to_string(i);
-		createInfo.m_objFile = OBJ_PATH "tree/tree.obj";
-		createInfo.m_mtlFile = OBJ_PATH "tree/";
+		createInfo.m_objFile = OBJ_PATH "tree1/Lowpoly_tree_sample.obj";
+		createInfo.m_mtlFile = OBJ_PATH "tree1/";
 		createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 		m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
-	
 	}
-
-	// add a tower
-	createInfo.m_name = "Tower";
-	createInfo.m_objFile = OBJ_PATH "tower/objTower.obj";
-	createInfo.m_mtlFile = "";
-	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
 void Application3D::onStart()
