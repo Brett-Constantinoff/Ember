@@ -6,7 +6,7 @@ namespace Ember::Renderer
 		m_createInfo{ createInfo }, m_perspective{}, m_view{}
 	{
 		glEnable(GL_DEPTH_TEST);
-		if (m_createInfo.m_skyBoxEnabled)
+		if (m_createInfo.m_scene->getSkyboxEnabled())
 			loadSkybox();
 	}
 
@@ -50,7 +50,8 @@ namespace Ember::Renderer
 		}
 
 		// render skybox last
-		renderSkybox();
+		if (m_createInfo.m_scene->getSkyboxEnabled())
+			renderSkybox();
 
 		// render our gui
 		renderGui();
@@ -58,6 +59,20 @@ namespace Ember::Renderer
 
 	void Renderer::loadSkybox()
 	{
+		std::filesystem::path dir{ std::filesystem::current_path() };
+		std::string skyboxPath{ "../Engine/assets/textures/skybox/" };
+		std::filesystem::path rel{ std::filesystem::relative(skyboxPath, dir) };
+	
+		//get skybox files
+		std::vector<std::string> files = {
+			rel.string() + "/right.jpg",
+			rel.string() + "/left.jpg",
+			rel.string() + "/top.jpg",
+			rel.string() + "/bottom.jpg",
+			rel.string() + "/front.jpg",
+			rel.string() + "/back.jpg",
+		};
+
 		uint32_t textureID{};
 		glGenTextures(1, &textureID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -65,9 +80,9 @@ namespace Ember::Renderer
 		int32_t width{};
 		int32_t height{};
 		int32_t channels{};
-		for (int32_t i{0}; i < m_createInfo.m_skyBoxFiles.size(); i++) 
+		for (int32_t i{0}; i < files.size(); i++) 
 		{
-			uint8_t* fileData{ stbi_load(m_createInfo.m_skyBoxFiles[i].c_str(), &width, &height, &channels, 0) };
+			uint8_t* fileData{ stbi_load(files[i].data(), &width, &height, &channels, 0)};
 			if (fileData) 
 			{
 				GLenum format{0};
@@ -81,7 +96,7 @@ namespace Ember::Renderer
 			}
 			else 
 			{
-				throw std::runtime_error{ "File failed to load: " + m_createInfo.m_skyBoxFiles[i] };
+				throw std::runtime_error{ "File failed to load: " + files[i]};
 			}
 			stbi_image_free(fileData);
 		}
@@ -179,5 +194,7 @@ namespace Ember::Renderer
 
 		skyboxShader->disuse();
 		glDepthFunc(GL_LESS);
+
+		float* x = new float[10000];
 	}
 }

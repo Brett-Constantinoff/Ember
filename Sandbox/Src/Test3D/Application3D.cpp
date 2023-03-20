@@ -2,7 +2,7 @@
 
 Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInfo) :
 	Application{ createInfo }, m_lastFrame{ 0.0f }, m_window{ nullptr }, m_scene{ nullptr }, m_renderer{ nullptr},
-	m_camera{nullptr},  m_shader{nullptr}, m_gui{nullptr}, m_skyBoxShader{nullptr}
+	m_camera{nullptr}, m_gui{nullptr}
 {
 }
 
@@ -90,22 +90,19 @@ void Application3D::createScene()
 	// create camera
 	m_camera = std::make_shared<Ember::Scene::Camera>(cameraCreateInfo);
 
-	// create scene shader
-	m_shader = std::make_shared<Ember::Renderer::Shader>(SHADER_PATH "basicShading.hlsl");
-
-	// add our skybox shader
-	m_skyBoxShader = std::make_shared<Ember::Renderer::Shader>(SHADER_PATH "skyBox.hlsl");
-
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 
 	// give our scene a camera
 	sceneCreateInfo.m_camera = m_camera;	
 
-	// give our scene a shader
-	sceneCreateInfo.m_shader = m_shader;	
+	// set our shading type
+	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::BASIC;
 
-	// give our scene a skybox shader
-	sceneCreateInfo.m_skyboxShader = m_skyBoxShader;
+	// dont want custome shading
+	sceneCreateInfo.m_customShader = nullptr;
+
+	// enable a skybox
+	sceneCreateInfo.m_enableSkybox = true;
 
 	// create scene
 	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
@@ -143,19 +140,6 @@ void Application3D::createRenderer()
 	// give our renderer a window to render to
 	rendererCreateInfo.m_window = m_window;		
 
-	// do we want a skybox
-	rendererCreateInfo.m_skyBoxEnabled = true;
-
-	// need to give skybox files
-	rendererCreateInfo.m_skyBoxFiles = {
-		TEXTURE_PATH "skybox/right.jpg",
-		TEXTURE_PATH "skybox/left.jpg",
-		TEXTURE_PATH "skybox/top.jpg" ,
-		TEXTURE_PATH "skybox/bottom.jpg" ,
-		TEXTURE_PATH "skybox/front.jpg" ,
-		TEXTURE_PATH "skybox/back.jpg" 
-	};
-
 	// create our renderer
 	m_renderer = std::make_shared<Ember::Renderer::Renderer>(rendererCreateInfo);
 }
@@ -182,13 +166,6 @@ void Application3D::addSceneObjects()
 	createInfo.m_mtlFile = "";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
-
-	// add skybox to the scene
-	createInfo.m_name = "Skybox";
-	createInfo.m_type = Ember::Scene::EntityType::SKYBOX;
-	createInfo.m_objFile = OBJ_PATH "skybox/skybox.obj";
-	createInfo.m_mtlFile = "";
-	m_scene->addSkybox(EMBER_NEW Ember::Scene::Entity(createInfo));	
 }
 
 void Application3D::onStart()

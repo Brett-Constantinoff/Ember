@@ -27,6 +27,4 @@ private:
 	std::shared_ptr<ImguiGui> m_gui;
 	std::shared_ptr<Ember::Renderer::Renderer> m_renderer;
 	std::shared_ptr<Ember::Scene::Camera> m_camera;
-	std::shared_ptr<Ember::Renderer::Shader> m_shader;
-	std::shared_ptr<Ember::Renderer::Shader> m_skyBoxShader;
 };

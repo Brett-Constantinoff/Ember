@@ -27,7 +27,6 @@ namespace Ember::Scene
 		std::string m_name{};
 		std::string m_objFile{};
 		std::string m_mtlFile{};
-		tinyobj::attrib_t m_attrib{};
 
 		glm::vec3 m_position{};
 		glm::vec3 m_rotatoinAxis{0.0f};
@@ -47,17 +46,14 @@ namespace Ember::Scene
 		glm::vec3& getScale();
 		glm::vec3& getRotationAxis();
 		std::vector<std::shared_ptr<Mesh>> getMeshes() const;
-		tinyobj::attrib_t getAttrib() const;
-		void setAttrib(const tinyobj::attrib_t& attrib);
-		std::string getObjFile() const;
 		bool& getWireFrame();
 		
 	private:
-		void createMeshes();
+		void createMeshes(bool loadObj);
 		void calculateCentroid();
 		void normalize();
-		void createWithMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes);
-		void createWithoutMaterials(const std::vector<tinyobj::material_t>& materials, const std::vector<tinyobj::shape_t>& shapes);
+		void createWithMaterials();
+		void createWithoutMaterials();
 		void createSkyboxMesh();
 
 	private:
@@ -65,5 +61,11 @@ namespace Ember::Scene
 		std::vector<std::shared_ptr<Mesh>> m_meshes;
 		glm::vec3 m_centroid;
 		bool m_wireFrame;
+		tinyobj::attrib_t m_attrib{};
+		std::vector<tinyobj::material_t> m_materials{};
+		std::vector<tinyobj::shape_t> m_shapes{};
+
+		// allow the scene to access things about an entity
+		friend class Scene;
 	};
 }

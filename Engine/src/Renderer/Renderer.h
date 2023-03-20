@@ -19,8 +19,6 @@ namespace Ember::Renderer
 		std::shared_ptr<Scene::Scene> m_scene{};
 		bool m_guiEnabled{};
 		std::shared_ptr<Core::Gui> m_gui{};
-		bool m_skyBoxEnabled{};
-		std::vector<std::string> m_skyBoxFiles{};
 	};
 
 	class Renderer
