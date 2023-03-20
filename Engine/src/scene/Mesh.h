@@ -2,6 +2,7 @@
 #include "../core/TinyObj.h"
 #include "../core/Glm.h"
 #include "../core/OpenGL.h"
+#include "../core/ImageLoading.h"
 #include <string>
 #include <stdexcept>
 
@@ -15,7 +16,9 @@ namespace Ember::Scene
 
 		float m_shine{};
 
+		std::string m_texturePath{};
 		std::string m_diffuseTexture{};
+		std::string m_ambientTexture{};
 		std::string m_specularTexture{};
 		std::string m_normalTexture{};
 		std::string m_emissiveTexture{};
@@ -37,7 +40,10 @@ namespace Ember::Scene
 		uint32_t m_vbo{};
 		uint32_t m_ibo{};
 		uint32_t m_nbo{};
+		uint32_t m_uvbo{};
 		uint32_t m_vao{};
+
+		uint32_t m_diffuseTexId{};
 	};
 
 	class Mesh
@@ -50,6 +56,8 @@ namespace Ember::Scene
 
 	private:
 		void initRenderData();
+		void initTextures();
+		void loadTexture(const std::string& texture);
 
 	private:
 		RenderData m_renderData;
