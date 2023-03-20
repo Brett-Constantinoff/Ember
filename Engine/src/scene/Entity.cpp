@@ -26,7 +26,6 @@ namespace Ember::Scene
 
 	glm::vec3& Entity::getCentroid()
 	{
-		calculateCentroid();
 		return m_centroid;
 	}
 
@@ -95,7 +94,6 @@ namespace Ember::Scene
 
 		// calculate centroid
 		std::size_t numVertices{ m_attrib.vertices.size() / 3 };
-		m_centroid = glm::vec3{ sumX / numVertices, sumY / numVertices, sumZ / numVertices };
 
 		// calculate scale
 		float rangeX = maxX - minX;
@@ -124,13 +122,15 @@ namespace Ember::Scene
 
 			bool result{ tinyobj::LoadObj(&m_attrib, &m_shapes, &m_materials, &warn, &err, m_createInfo.m_objFile.c_str(), m_createInfo.m_mtlFile.c_str()) };
 			if (!err.empty())
-				throw std::runtime_error{ "OBJ ERROR {" + m_createInfo.m_mtlFile + "} :: " + err };
+				throw std::runtime_error{ "OBJ ERROR {" + m_createInfo.m_objFile +  "} :: " + err};
 		}
 
 		// normalize the data first
 		if (m_createInfo.m_type == EntityType::RENDERABLE)
 		{
 			normalize();
+			calculateCentroid();
+
 			// if the obj file has materials, we create a separate mesh per material
 			if (m_materials.size() > 0)
 				createWithMaterials();
@@ -199,6 +199,9 @@ namespace Ember::Scene
 			Material material{};
 			material.m_ambient = { m_materials[i].ambient[0], m_materials[i].ambient[1] , m_materials[i].ambient[2] };
 			material.m_diffuse = { m_materials[i].diffuse[0], m_materials[i].diffuse[1] , m_materials[i].diffuse[2] };
+			material.m_specular = { m_materials[i].specular[0], m_materials[i].specular[1] , m_materials[i].specular[2] };
+			material.m_texturePath = m_createInfo.m_mtlFile;
+			material.m_diffuseTexture = m_materials[i].diffuse_texname;
 			renderData.m_material = material;
 
 			// loop over each shape
@@ -224,6 +227,13 @@ namespace Ember::Scene
 								renderData.m_normals.push_back(m_attrib.normals[index * 3]);
 								renderData.m_normals.push_back(m_attrib.normals[index * 3 + 1]);
 								renderData.m_normals.push_back(m_attrib.normals[index * 3 + 2]);
+							}
+
+							index = shape.mesh.indices[startIndex + k].texcoord_index;
+							if (index >= 0)
+							{
+								renderData.m_uvCoords.push_back(m_attrib.texcoords[index * 2]);
+								renderData.m_uvCoords.push_back(m_attrib.texcoords[index * 2 + 1]);
 							}
 						}
 

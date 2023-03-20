@@ -76,6 +76,7 @@ namespace Ember::Renderer
 		uint32_t textureID{};
 		glGenTextures(1, &textureID);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+		stbi_set_flip_vertically_on_load_thread(false);
 
 		int32_t width{};
 		int32_t height{};
@@ -153,6 +154,18 @@ namespace Ember::Renderer
 		sceneShader->setMat4("view", m_view);
 		sceneShader->setVec3("uViewPos", m_createInfo.m_scene->getCamera()->getPos());
 		sceneShader->setVec3("uDiffuse", mesh->getRenderData().m_material.m_diffuse);
+
+		// check for diffuse texture
+		if (!mesh->getRenderData().m_material.m_diffuseTexture.empty())
+		{
+			sceneShader->setInt("uDiffTextureExists", 1);
+			sceneShader->setInt("uDiffTexture", 0);
+		}
+		else
+		{
+			sceneShader->setInt("uDiffTextureExists", 0);
+		}
+
 		const auto& data{ mesh->getRenderData() };
 
 		// check for wire frame
@@ -163,6 +176,11 @@ namespace Ember::Renderer
 
 		// render the object
 		glBindVertexArray(data.m_vao);
+
+		// diffuse texture
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, data.m_diffuseTexId);
+
 		glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(data.m_vertexPositions.size() / 3));
 		glBindVertexArray(0);
 		sceneShader->disuse();

@@ -9,6 +9,8 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <thread>
+#include <mutex>
 
 namespace Ember::Scene
 {

@@ -98,7 +98,7 @@ void Application3D::createScene()
 	// set our shading type
 	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::BASIC;
 
-	// dont want custome shading
+	// dont want custom shading
 	sceneCreateInfo.m_customShader = nullptr;
 
 	// enable a skybox
@@ -148,16 +148,13 @@ void Application3D::addSceneObjects()
 {
 	// add some objects to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
+
+	createInfo.m_name = "sponza";
+	createInfo.m_objFile = OBJ_PATH "sponza/sponza.obj";
+	createInfo.m_mtlFile = OBJ_PATH "sponza/";
+	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 	
-	for (int32_t i{ 0 }; i < 2; i++)
-	{
-		// add a tree
-		createInfo.m_name = "Tree" + std::to_string(i);
-		createInfo.m_objFile = OBJ_PATH "tree1/Lowpoly_tree_sample.obj";
-		createInfo.m_mtlFile = OBJ_PATH "tree1/";
-		createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-		m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
-	}
 }
 
 void Application3D::onStart()
