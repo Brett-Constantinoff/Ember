@@ -41,7 +41,7 @@ void main()
     vec3 lightPos = vec3(0, 25, 0);
     vec3 lightCol = vec3(0.91, 0.88, 0.79);
 
-    vec3 ambient = lightCol;
+    vec3 ambient = 0.15 * lightCol;
 
     vec3 lightDir = normalize(lightPos - oFragPos);
     float diff = max(dot(oNorm, lightDir), 0.0);
