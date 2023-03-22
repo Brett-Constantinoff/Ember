@@ -14,7 +14,7 @@
  First clone the repository using:
  ```git clone --recursive git@github.com:Brett-Constantinoff/Ember.git```
  
- To build run ```bin\premake\windows\premake5 vs2022```
+ To build run ```bin\premake\premake5 vs2022```
 
  This will generate a visual studio solution file in the root 
  directory which you can then use the build the poject
