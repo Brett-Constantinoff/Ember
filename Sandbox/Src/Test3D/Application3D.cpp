@@ -1,4 +1,5 @@
 #include "Application3D.h"
+#include "PerlinNoise.hpp"
 
 Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInfo) :
 	Application{ createInfo }, m_lastFrame{ 0.0f }, m_window{ nullptr }, m_scene{ nullptr }, m_renderer{ nullptr},
@@ -155,6 +156,42 @@ void Application3D::addSceneObjects()
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 	
+	std::vector<std::vector<float>> heightMap = createNoiseMap(10, 10);
+	
+	//iterate through the heightmap
+	for (int i = 0; i < heightMap.size(); i++)
+	{
+		for (int j = 0; j < heightMap[i].size(); j++)
+		{
+			std::cout << heightMap[i][j] << " ";
+		}
+	}
+	
+	
+}
+
+
+
+std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, int32_t m_height)
+{
+	const siv::PerlinNoise::seed_type seed = 123456u;
+
+	const siv::PerlinNoise perlin{ seed };
+	
+	//create 2d array of floats
+	std::vector<std::vector<float>> noiseMap(m_width, std::vector<float>(m_height));
+
+	//loop through the 2d array and fill it with perlin noise
+	for (int32_t x = 0; x < m_width; x++)
+	{
+		for (int32_t y = 0; y < m_height; y++)
+		{
+			const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), 4);
+			noiseMap[x][y] = noise;
+		}
+	}
+
+	return noiseMap;
 }
 
 void Application3D::onStart()

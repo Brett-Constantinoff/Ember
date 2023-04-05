@@ -30,7 +30,8 @@ project "Engine"
         "Engine/libs/glad/include/",
         "Enigne/libs/imgui/",
         "Engine/libs/stb/",
-        "Engine/libs/objLoader/"
+        "Engine/libs/objLoader/",
+        "Engine/libs/noise/"
     }
     
     files 
@@ -77,7 +78,8 @@ project "Sandbox"
         "Engine/libs/imgui/",
         "Engine/libs/stb/",
         "Engine/libs/objLoader",
-        "Engine"
+        "Engine",
+        "Engine/libs/noise/"
     }
 
     files

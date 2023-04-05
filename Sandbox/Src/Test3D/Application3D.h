@@ -2,6 +2,7 @@
 #include <Engine.h>
 #include "ImguiGui.h"
 
+
 class Application3D : public Ember::Core::Application
 {
 public:
@@ -15,6 +16,8 @@ private:
 	void createScene();
 	void createRenderer();
 	void addSceneObjects();
+	//returns a 2d vector of floats between 0 and 1
+	std::vector<std::vector<float>> createNoiseMap(int32_t width, int32_t height);
 
 	virtual void onStart();
 	virtual void onUpdate(float dt);
