@@ -17,7 +17,7 @@ private:
 	void createRenderer();
 	void addSceneObjects();
 	//returns a 2d vector of floats between 0 and 1
-	std::vector<std::vector<float>> createNoiseMap(int32_t width, int32_t height);
+	std::vector<std::vector<float>> createNoiseMap(int32_t width, int32_t height, int32_t octaves, double persistence = 0.5);
 
 	virtual void onStart();
 	virtual void onUpdate(float dt);

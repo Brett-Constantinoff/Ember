@@ -156,7 +156,7 @@ void Application3D::addSceneObjects()
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 	
-	std::vector<std::vector<float>> heightMap = createNoiseMap(10, 10);
+	std::vector<std::vector<float>> heightMap = createNoiseMap(10, 10, 4);
 	
 	//iterate through the heightmap
 	for (int i = 0; i < heightMap.size(); i++)
@@ -171,8 +171,8 @@ void Application3D::addSceneObjects()
 }
 
 
-
-std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, int32_t m_height)
+// octaves = number of layers of noise, persistence = how much each layer affects the next
+std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, int32_t m_height, int32_t octaves, double persistence = 0.5)
 {
 	const siv::PerlinNoise::seed_type seed = 123456u;
 
@@ -186,7 +186,7 @@ std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, i
 	{
 		for (int32_t y = 0; y < m_height; y++)
 		{
-			const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), 4);
+			const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), octaves, persistence);
 			noiseMap[x][y] = noise;
 		}
 	}
