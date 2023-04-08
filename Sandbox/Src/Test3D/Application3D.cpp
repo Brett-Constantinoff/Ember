@@ -204,12 +204,10 @@ void Application3D::addSceneObjects()
 	std::vector<std::vector<float>> heightMap = createNoiseMap(10, 10, 4);
 	
 	//iterate through the heightmap
-	for (int i = 0; i < heightMap.size(); i++)
+	for (int32_t i = 0; i < heightMap.size(); i++)
 	{
-		for (int j = 0; j < heightMap[i].size(); j++)
-		{
+		for (int32_t j = 0; j < heightMap[i].size(); j++)
 			std::cout << heightMap[i][j] << " ";
-		}
 	}
 }
 
