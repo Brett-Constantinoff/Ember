@@ -172,7 +172,7 @@ void Application3D::addSceneObjects()
 
 
 // octaves = number of layers of noise, persistence = how much each layer affects the next
-std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, int32_t m_height, int32_t octaves, double persistence = 0.5)
+std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, int32_t m_height, int32_t octaves, double persistence)
 {
 	const siv::PerlinNoise::seed_type seed = 123456u;
 
