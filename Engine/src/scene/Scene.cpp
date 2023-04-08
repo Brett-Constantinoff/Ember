@@ -37,6 +37,11 @@ namespace Ember::Scene
 					e->m_shapes, e->m_materials} });
 			}
 		}
+		// custom entities should be small enough that their render data doesnt need to be saved
+		else if (e->m_createInfo.m_type == EntityType::CUSTOM)
+		{
+			e->createCustom();
+		}
 		m_sceneEntities.emplace_back(e);
 	}
 

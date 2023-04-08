@@ -147,6 +147,7 @@ void Application3D::createRenderer()
 
 void Application3D::addSceneObjects()
 {
+	/*
 	// add some objects to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
 
@@ -155,7 +156,51 @@ void Application3D::addSceneObjects()
 	createInfo.m_mtlFile = OBJ_PATH "sponza/";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	*/
 	
+	Ember::Scene::EntityCreateInfo createInfo{};
+	createInfo.m_name = "Custom Entity";
+	createInfo.m_type = Ember::Scene::EntityType::CUSTOM;
+	createInfo.m_vertexPositions = {
+		-0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f, -0.5f,  	
+	};
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+
 	std::vector<std::vector<float>> heightMap = createNoiseMap(10, 10, 4);
 	
 	//iterate through the heightmap
@@ -166,8 +211,6 @@ void Application3D::addSceneObjects()
 			std::cout << heightMap[i][j] << " ";
 		}
 	}
-	
-	
 }
 
 
