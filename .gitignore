@@ -13,3 +13,4 @@ Sandbox/bin
 Sandbox/bin-int
 .vs/
 .vscode
+**.vcxproj.user
