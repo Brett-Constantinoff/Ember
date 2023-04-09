@@ -47,7 +47,8 @@ project "Engine"
         "GLAD",
         "IMGUI",
         "STB",
-        "TINY_OBJ"
+        "TINY_OBJ",
+        "NOISE"
     }
 
     filter "system:windows"
@@ -96,7 +97,8 @@ project "Sandbox"
         "GLM",
         "IMGUI",
         "STB",
-        "TINY_OBJ"
+        "TINY_OBJ",
+        "NOISE"
     }
     
     filter "system:windows"
@@ -112,4 +114,5 @@ include "Engine/libs/gladPremake5.lua"
 include "Engine/libs/imguiPremake5.lua"
 include "Engine/libs/stbPremake5.lua"
 include "Engine/libs/tinyObjPremake5.lua"
+include "Engine/libs/noisePremake5.lua"
     

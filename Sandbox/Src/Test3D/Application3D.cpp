@@ -201,16 +201,16 @@ void Application3D::addSceneObjects()
 	};*/
 
 	//generate verticies for a plane
-	int32_t m_width = 10; //width of plane
-	int32_t m_height = 10; //height of plane
-	int32_t m_quads = (m_width < m_height) ? m_width/2 : m_height/2; //number of quads in plane
+	int32_t width = 10; //width of plane
+	int32_t height = 10; //height of plane
+	int32_t quads = (width < height) ? width/2 : height/2; //number of quads in plane
 
-	std::vector<std::vector<float>> heightMap = createNoiseMap(m_width, m_height, 100, 4, 0.5, 2);
+	std::vector<std::vector<float>> heightMap = createNoiseMap(width, height, 100.0f, 4, 0.5f, 2.0f);
 
 	//print the noiseMap
-	for (int32_t y = 0; y < m_height; y++)
+	for (int32_t y = 0; y < height; y++)
 	{
-		for (int32_t x = 0; x < m_width; x++)
+		for (int32_t x = 0; x < width; x++)
 		{
 			std::cout << heightMap[y][x] << " ";
 		}
@@ -220,7 +220,7 @@ void Application3D::addSceneObjects()
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
-std::vector<std::vector<float>> createNoiseMap(int32_t width, int32_t height, float scale, int32_t octaves, float persistence, float lacunarity)
+std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t width, int32_t height, float scale, int32_t octaves, float persistence, float lacunarity)
 {
 
 	FastNoiseLite noise;
