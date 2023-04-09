@@ -201,9 +201,9 @@ void Application3D::addSceneObjects()
 	};*/
 
 	//generate verticies for a plane
-	int32_t width = 10; //width of plane
-	int32_t height = 10; //height of plane
-	int32_t quads = (width < height) ? width/2 : height/2; //number of quads in plane
+	int32_t width{10}; //width of plane
+	int32_t height{ 10 }; //height of plane
+	int32_t quads{ (width < height) ? width / 2 : height / 2 }; //number of quads in plane
 
 	std::vector<std::vector<float>> heightMap = createNoiseMap(width, height, 100.0f, 4, 0.5f, 2.0f);
 
@@ -211,9 +211,7 @@ void Application3D::addSceneObjects()
 	for (int32_t y = 0; y < height; y++)
 	{
 		for (int32_t x = 0; x < width; x++)
-		{
 			std::cout << heightMap[y][x] << " ";
-		}
 		std::cout << std::endl;
 	}
 	
@@ -223,29 +221,27 @@ void Application3D::addSceneObjects()
 std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t width, int32_t height, float scale, int32_t octaves, float persistence, float lacunarity)
 {
 
-	FastNoiseLite noise;
+	FastNoiseLite noise{};
 	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 
-	std::vector<std::vector<float>> noiseMap;
+	std::vector<std::vector<float>> noiseMap{};
 	
 	if (scale <= 0)
-	{
 		scale = (float)0.001;
-	}
-
+	
 	for (int32_t y = 0; y < height; y++)
 	{
-		std::vector<float> row;
+		std::vector<float> row{};
 		for (int32_t x = 0; x < width; x++)
 		{
-			float amplitude = 1;
-			float frequency = 1;
-			float noiseHeight = 0;
+			float amplitude{1.0f};
+			float frequency{1.0f};
+			float noiseHeight{0.0f};
 			for (int32_t i = 0; i < octaves; i++)
 			{
-				float sampleX = x / scale * frequency;
-				float sampleY = y / scale * frequency;
-				float perlinValue = noise.GetNoise(sampleX, sampleY);
+				float sampleX{ x / scale * frequency };
+				float sampleY{ y / scale * frequency };
+				float perlinValue{ noise.GetNoise(sampleX, sampleY) };
 				noiseHeight += perlinValue * amplitude;
 				amplitude *= persistence;
 				frequency *= 2;
@@ -254,7 +250,6 @@ std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t width, int
 		}
 		noiseMap.push_back(row);
 	}
-
 	return noiseMap;
 }
 

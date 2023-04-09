@@ -6,9 +6,9 @@ project "NOISE"
 	targetdir "bin/%{cfg.buildcfg}"
 	objdir "bin-int/%{cfg.buildcfg}"
     
-    includedirs { "objLoader/" }
+    includedirs { "noise/" }
 
-	files { "objLoader/*.cc", "objLoader/*.h" }
+	files { "noise/*.h"}
     
 	filter "configurations:Debug"
 		runtime "Debug"
