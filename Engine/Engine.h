@@ -20,6 +20,6 @@
 #include "src/scene/Camera.h"
 #include "src/scene/Scene.h"
 #include "src//scene/Entity.h"
-#include "PerlinNoise.hpp"
+#include "FastNoise.h"
 
 

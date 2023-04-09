@@ -1,5 +1,5 @@
 #include "Application3D.h"
-#include "PerlinNoise.hpp"
+#include "FastNoiseLite.h"
 
 Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInfo) :
 	Application{ createInfo }, m_lastFrame{ 0.0f }, m_window{ nullptr }, m_scene{ nullptr }, m_renderer{ nullptr},
@@ -161,7 +161,7 @@ void Application3D::addSceneObjects()
 	Ember::Scene::EntityCreateInfo createInfo{};
 	createInfo.m_name = "Custom Entity";
 	createInfo.m_type = Ember::Scene::EntityType::CUSTOM;
-	createInfo.m_vertexPositions = {
+	/*createInfo.m_vertexPositions = {
 		-0.5f, -0.5f, -0.5f,  
 		 0.5f, -0.5f, -0.5f,  
 		 0.5f,  0.5f, -0.5f,  
@@ -198,42 +198,66 @@ void Application3D::addSceneObjects()
 		 0.5f,  0.5f,  0.5f,  
 		-0.5f,  0.5f,  0.5f,  
 		-0.5f,  0.5f, -0.5f,  	
-	};
-	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	};*/
 
-	std::vector<std::vector<float>> heightMap = createNoiseMap(10, 10, 4);
-	
-	//iterate through the heightmap
-	for (int32_t i = 0; i < heightMap.size(); i++)
+	//generate verticies for a plane
+	int32_t m_width = 10; //width of plane
+	int32_t m_height = 10; //height of plane
+	int32_t m_quads = (m_width < m_height) ? m_width/2 : m_height/2; //number of quads in plane
+
+	std::vector<std::vector<float>> heightMap = createNoiseMap(m_width, m_height, 100, 4, 0.5, 2);
+
+	//print the noiseMap
+	for (int32_t y = 0; y < m_height; y++)
 	{
-		for (int32_t j = 0; j < heightMap[i].size(); j++)
-			std::cout << heightMap[i][j] << " ";
+		for (int32_t x = 0; x < m_width; x++)
+		{
+			std::cout << heightMap[y][x] << " ";
+		}
+		std::cout << std::endl;
 	}
+	
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
-
-// octaves = number of layers of noise, persistence = how much each layer affects the next
-std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t m_width, int32_t m_height, int32_t octaves, double persistence)
+std::vector<std::vector<float>> createNoiseMap(int32_t width, int32_t height, float scale, int32_t octaves, float persistence, float lacunarity)
 {
-	const siv::PerlinNoise::seed_type seed = 123456u;
 
-	const siv::PerlinNoise perlin{ seed };
+	FastNoiseLite noise;
+	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+
+	std::vector<std::vector<float>> noiseMap;
 	
-	//create 2d array of floats
-	std::vector<std::vector<float>> noiseMap(m_width, std::vector<float>(m_height));
-
-	//loop through the 2d array and fill it with perlin noise
-	for (int32_t x = 0; x < m_width; x++)
+	if (scale <= 0)
 	{
-		for (int32_t y = 0; y < m_height; y++)
+		scale = (float)0.001;
+	}
+
+	for (int32_t y = 0; y < height; y++)
+	{
+		std::vector<float> row;
+		for (int32_t x = 0; x < width; x++)
 		{
-			const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), octaves, persistence);
-			noiseMap[x][y] = noise;
+			float amplitude = 1;
+			float frequency = 1;
+			float noiseHeight = 0;
+			for (int32_t i = 0; i < octaves; i++)
+			{
+				float sampleX = x / scale * frequency;
+				float sampleY = y / scale * frequency;
+				float perlinValue = noise.GetNoise(sampleX, sampleY);
+				noiseHeight += perlinValue * amplitude;
+				amplitude *= persistence;
+				frequency *= 2;
+			}
+			row.push_back(noiseHeight);
 		}
+		noiseMap.push_back(row);
 	}
 
 	return noiseMap;
 }
+
 
 void Application3D::onStart()
 {
