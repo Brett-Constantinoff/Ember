@@ -8,7 +8,7 @@ project "NOISE"
     
     includedirs { "noise/" }
 
-	files { "noise/*.h"}
+	files { "noise/*.h", "noise/*.cpp"}
     
 	filter "configurations:Debug"
 		runtime "Debug"
