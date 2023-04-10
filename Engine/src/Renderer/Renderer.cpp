@@ -40,12 +40,10 @@ namespace Ember::Renderer
 		for (const auto& entity : objects)
 		{
 			// only render the physical objetcs in the scene
-			if (entity->getType() == Ember::Scene::EntityType::RENDERABLE)
+			if (entity->getType() == Ember::Scene::EntityType::RENDERABLE || entity->getType() == Ember::Scene::EntityType::CUSTOM)
 			{
 				for (const auto& mesh : entity->getMeshes())
-				{
 					renderMesh(entity, mesh);
-				}
 			}
 		}
 

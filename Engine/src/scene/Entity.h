@@ -17,6 +17,7 @@ namespace Ember::Scene
 	enum class EntityType
 	{
 		NO_TYPE,
+		CUSTOM,
 		RENDERABLE,
 		SKYBOX,
 		DIRECTIONAL_LIGHT,
@@ -33,6 +34,12 @@ namespace Ember::Scene
 		glm::vec3 m_position{};
 		glm::vec3 m_rotatoinAxis{0.0f};
 		glm::vec3 m_scale{ 1.0f };
+
+		// for custom entities
+		// can have more stuff like textures etc.
+		std::vector<float> m_vertexPositions{};
+		std::vector<float> m_normals{};
+		std::vector<float> m_uvs{};
 	};
 
 	class Entity
@@ -54,6 +61,7 @@ namespace Ember::Scene
 		void createMeshes(bool loadObj);
 		void calculateCentroid();
 		void normalize();
+		void createCustom();
 		void createWithMaterials();
 		void createWithoutMaterials();
 		void createSkyboxMesh();

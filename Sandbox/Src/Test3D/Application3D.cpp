@@ -1,4 +1,5 @@
 #include "Application3D.h"
+#include "FastNoiseLite.h"
 
 Application3D::Application3D(const Ember::Core::ApplicationCreateInfo& createInfo) :
 	Application{ createInfo }, m_lastFrame{ 0.0f }, m_window{ nullptr }, m_scene{ nullptr }, m_renderer{ nullptr},
@@ -146,6 +147,7 @@ void Application3D::createRenderer()
 
 void Application3D::addSceneObjects()
 {
+	/*
 	// add some objects to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
 
@@ -154,8 +156,103 @@ void Application3D::addSceneObjects()
 	createInfo.m_mtlFile = OBJ_PATH "sponza/";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	*/
 	
+	Ember::Scene::EntityCreateInfo createInfo{};
+	createInfo.m_name = "Custom Entity";
+	createInfo.m_type = Ember::Scene::EntityType::CUSTOM;
+	/*createInfo.m_vertexPositions = {
+		-0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f, -0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		 0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f, -0.5f,  
+		-0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f, -0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f, -0.5f,  	
+	};*/
+
+	//generate verticies for a plane
+	int32_t width{10}; //width of plane
+	int32_t height{ 10 }; //height of plane
+	int32_t quads{ (width < height) ? width / 2 : height / 2 }; //number of quads in plane
+
+	std::vector<std::vector<float>> heightMap = createNoiseMap(width, height, 100.0f, 4, 0.5f, 2.0f);
+
+	//print the noiseMap
+	for (int32_t y = 0; y < height; y++)
+	{
+		for (int32_t x = 0; x < width; x++)
+			std::cout << heightMap[y][x] << " ";
+		std::cout << std::endl;
+	}
+	
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
+
+std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t width, int32_t height, float scale, int32_t octaves, float persistence, float lacunarity)
+{
+
+	FastNoiseLite noise{};
+	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+
+	std::vector<std::vector<float>> noiseMap{};
+	
+	if (scale <= 0)
+		scale = (float)0.001;
+	
+	for (int32_t y = 0; y < height; y++)
+	{
+		std::vector<float> row{};
+		for (int32_t x = 0; x < width; x++)
+		{
+			float amplitude{1.0f};
+			float frequency{1.0f};
+			float noiseHeight{0.0f};
+			for (int32_t i = 0; i < octaves; i++)
+			{
+				float sampleX{ x / scale * frequency };
+				float sampleY{ y / scale * frequency };
+				float perlinValue{ noise.GetNoise(sampleX, sampleY) };
+				noiseHeight += perlinValue * amplitude;
+				amplitude *= persistence;
+				frequency *= 2;
+			}
+			row.push_back(noiseHeight);
+		}
+		noiseMap.push_back(row);
+	}
+	return noiseMap;
+}
+
 
 void Application3D::onStart()
 {

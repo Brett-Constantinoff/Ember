@@ -188,6 +188,16 @@ namespace Ember::Scene
 		m_centroid = glm::vec3{ sumX / numVertices, sumY / numVertices, sumZ / numVertices };
 	}
 
+	void Entity::createCustom()
+	{
+		RenderData renderData{};
+		renderData.m_vertexPositions = m_createInfo.m_vertexPositions;
+		renderData.m_uvCoords = m_createInfo.m_uvs;
+		renderData.m_normals = m_createInfo.m_normals;
+
+		m_meshes.emplace_back(new Mesh(renderData));
+	}
+
 	void Entity::createWithMaterials()
 	{
 		// loop over each material
