@@ -161,6 +161,16 @@ void Application3D::addSceneObjects()
 	Ember::Scene::EntityCreateInfo createInfo{};
 	createInfo.m_name = "Custom Entity";
 	createInfo.m_type = Ember::Scene::EntityType::CUSTOM;
+	createInfo.m_vertexPositions = {
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 1.0f,
+		
+	};
 	/*createInfo.m_vertexPositions = {
 		-0.5f, -0.5f, -0.5f,  
 		 0.5f, -0.5f, -0.5f,  
@@ -201,20 +211,66 @@ void Application3D::addSceneObjects()
 	};*/
 
 	//generate verticies for a plane
-	int32_t width{10}; //width of plane
-	int32_t height{ 10 }; //height of plane
+	int32_t width{100}; //width of plane
+	int32_t height{100}; //height of plane
+	int32_t quadSpacing{1}; //spacing between quads
+	int32_t scale{5}; //scale of plane
 	int32_t quads{ (width < height) ? width / 2 : height / 2 }; //number of quads in plane
 
-	std::vector<std::vector<float>> heightMap = createNoiseMap(width, height, 100.0f, 4, 0.5f, 2.0f);
+	std::vector<std::vector<float>> heightMap = createNoiseMap(width*2, height*2, 10, 5, 0.5f, 2.0f);
+	std::vector<float> vertices{};
 
-	//print the noiseMap
 	for (int32_t y = 0; y < height; y++)
 	{
 		for (int32_t x = 0; x < width; x++)
-			std::cout << heightMap[y][x] << " ";
-		std::cout << std::endl;
-	}
+		{
+			vertices.push_back(x * quadSpacing);
+			vertices.push_back(heightMap[y][x] * scale);
+			vertices.push_back(y * quadSpacing);
 	
+			vertices.push_back(x + 1 * quadSpacing);
+			vertices.push_back(heightMap[y+1][x+1] * scale);
+			vertices.push_back(y * quadSpacing);
+
+			vertices.push_back(x * quadSpacing);
+			vertices.push_back(heightMap[y+2][x+2] * scale);
+			vertices.push_back(y + 1 * quadSpacing);
+
+			vertices.push_back(x * quadSpacing);
+			vertices.push_back(heightMap[y+3][x+3] * scale);
+			vertices.push_back(y + 1 * quadSpacing);
+
+			vertices.push_back(x + 1 * quadSpacing);
+			vertices.push_back(heightMap[y+4][x+4] * scale);
+			vertices.push_back(y * quadSpacing);
+
+			vertices.push_back(x + 1 * quadSpacing);
+			vertices.push_back(heightMap[y+5][x+5] * scale);
+			vertices.push_back(y + 1 * quadSpacing);
+
+
+		}
+	}
+
+	//print vertices
+	for (int32_t i = 0; i < vertices.size(); i++)
+	{
+		std::cout << vertices[i] << " ";
+		if (i % 3 == 2)
+			std::cout << std::endl;
+	}
+
+	////print vertices
+	//for (int32_t i = 0; i < createInfo.m_vertexPositions.size(); i++)
+	//{
+	//	std::cout << createInfo.m_vertexPositions[i] << " ";
+	//	if (i % 3 == 2)
+	//		std::cout << std::endl;
+	//}
+
+	
+	createInfo.m_vertexPositions = vertices;
+
 	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
@@ -222,7 +278,13 @@ std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t width, int
 {
 
 	FastNoiseLite noise{};
+	noise.SetSeed(1337);
 	noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+	noise.SetFrequency(0.025f);
+	noise.SetFractalType(FastNoiseLite::FractalType_FBm);
+	noise.SetFractalOctaves(5);
+	noise.SetFractalLacunarity(2.00f);
+	noise.SetFractalGain(0.5f);
 
 	std::vector<std::vector<float>> noiseMap{};
 	
@@ -234,19 +296,10 @@ std::vector<std::vector<float>> Application3D::createNoiseMap(int32_t width, int
 		std::vector<float> row{};
 		for (int32_t x = 0; x < width; x++)
 		{
-			float amplitude{1.0f};
-			float frequency{1.0f};
-			float noiseHeight{0.0f};
-			for (int32_t i = 0; i < octaves; i++)
-			{
-				float sampleX{ x / scale * frequency };
-				float sampleY{ y / scale * frequency };
-				float perlinValue{ noise.GetNoise(sampleX, sampleY) };
-				noiseHeight += perlinValue * amplitude;
-				amplitude *= persistence;
-				frequency *= 2;
-			}
-			row.push_back(noiseHeight);
+			float perlinValue{ noise.GetNoise((float)x, (float)y) };
+			row.push_back(perlinValue);
+
+
 		}
 		noiseMap.push_back(row);
 	}
