@@ -17,13 +17,13 @@ namespace Ember::Core
 
         if (!m_winID)
             throw::std::runtime_error{ "ERROR::CANNOT CREATE GLFW WINDOW CONTEXT!" };
-        Logger::getInstance().logInfo(std::string{"GLFW initialized"});
+        Logger::getInstance().logInfo("GLFW initialized");
 
         glfwMakeContextCurrent(m_winID);
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
             throw::std::runtime_error{ "ERROR::CANNOT INITIALIZE GLEW!" };
-        Logger::getInstance().logInfo(std::string{"GLAD initialized"});
+        Logger::getInstance().logInfo("GLAD initialized");
 
         if (m_createInfo.m_api.compare("API_OPENGL") == 0)
             glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
