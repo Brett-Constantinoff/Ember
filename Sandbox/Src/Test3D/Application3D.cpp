@@ -113,7 +113,7 @@ void Application3D::createRenderer()
 	Ember::Renderer::RendererCreateInfo rendererCreateInfo;
 
 	// set a backend API
-	rendererCreateInfo.m_api = "API_OPENGL";		
+	rendererCreateInfo.m_api = Ember::Renderer::RendererApi::Opengl;		
 
 	// do we want a GUI
 	rendererCreateInfo.m_guiEnabled = true;
