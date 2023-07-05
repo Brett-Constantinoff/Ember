@@ -38,10 +38,10 @@ void Application3D::createWindow()
 	windowCreateInfo.m_api = "API_OPENGL";		
 
 	// give a width
-	windowCreateInfo.m_width = 1440;	
+	windowCreateInfo.m_width = 720;	
 
 	// give a height
-	windowCreateInfo.m_height = 1080;
+	windowCreateInfo.m_height = 720;
 
 	// give our app a name
 	windowCreateInfo.m_label = "Application 3D";

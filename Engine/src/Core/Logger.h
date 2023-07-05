@@ -17,6 +17,8 @@ namespace Ember::Core
 		ERROR = 1
 	};
 
+	// not thead safe, if multithreading is used in the future this will
+	// need to be updated
 	class Logger
 	{
 	public:
@@ -24,9 +26,9 @@ namespace Ember::Core
 		static Logger& getInstance();
 
 		// public methods
-		LogResult logInfo(const char* message, const LogType type = LogType::CONSOLE);
-		LogResult logWarn(const char* message, const LogType type = LogType::CONSOLE);
-		LogResult logError(const char* message, const LogType type = LogType::CONSOLE);
+		LogResult logInfo(std::string& message, const char* file,  const LogType type = LogType::CONSOLE);
+		LogResult logWarn(std::string& message, const char* file, const LogType type = LogType::CONSOLE);
+		LogResult logError(std::string& message, const char* file, const LogType type = LogType::CONSOLE);
 
 	private:
 		enum class LogLevel
@@ -37,6 +39,8 @@ namespace Ember::Core
 		};
 		const std::string m_resetColor{"\033[0m"};
 		const std::string m_infoColor{"\033[32m"};
+		const std::string m_warnColor{"\033[33m"};
+		const std::string m_errorColor{"\033[31m"};
 
 	private:
 		// singleton stuff
@@ -46,7 +50,7 @@ namespace Ember::Core
 		Logger(const Logger&) = delete;
 		Logger& operator=(const Logger&) = delete;
 
-		LogResult log(const char* message, LogLevel level, const LogType type = LogType::CONSOLE);
+		LogResult log(std::string& message, const char* file, LogLevel level, const LogType type = LogType::CONSOLE);
 		std::string getLogTime();
 	};
 }

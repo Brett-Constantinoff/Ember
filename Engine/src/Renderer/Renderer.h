@@ -2,6 +2,7 @@
 #include "../core/ImageLoading.h"
 #include "../core/Window.h"
 #include "../core//Gui.h"
+#include "../Core/Logger.h"
 #include "../scene/Scene.h"
 #include "../scene/Entity.h"
 

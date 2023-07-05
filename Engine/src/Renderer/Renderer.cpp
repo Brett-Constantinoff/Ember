@@ -97,7 +97,7 @@ namespace Ember::Renderer
 			}
 			else 
 			{
-				throw std::runtime_error{ "File failed to load: " + files[i]};
+				Core::Logger::getInstance().logError(std::string{ "Cannot load skybox file: " + files[i] }, __FILE__);
 			}
 			stbi_image_free(fileData);
 		}

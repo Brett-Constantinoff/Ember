@@ -3,6 +3,7 @@
 #include "../core/Glm.h"
 #include "../core/OpenGL.h"
 #include "../core/ImageLoading.h"
+#include "../core/Logger.h"
 #include <string>
 #include <stdexcept>
 

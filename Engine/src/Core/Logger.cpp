@@ -11,33 +11,35 @@ namespace Ember::Core
 		return logger;
 	}
 
-	LogResult Logger::logInfo(const char* message, LogType type)
+	LogResult Logger::logInfo(std::string& message, const char* file, LogType type)
 	{
-		return log(message, LogLevel::INFO, type);
+		return log(message, file, LogLevel::INFO, type);
 	}
 
-	LogResult Logger::logWarn(const char* message, LogType type)
+	LogResult Logger::logWarn(std::string& message, const char* file, LogType type)
 	{
-		return log(message, LogLevel::WARN, type);
+		return log(message, file, LogLevel::WARN, type);
 	}
 
-	LogResult Logger::logError(const char* message, LogType type)
+	LogResult Logger::logError(std::string& message, const char* file, LogType type)
 	{
-		return log(message, LogLevel::ERROR, type);
+		return log(message, file, LogLevel::ERROR, type);
 	}
 
-	LogResult Logger::log(const char* message, LogLevel level, LogType type)
+	LogResult Logger::log(std::string& message, const char* file, LogLevel level, LogType type)
 	{
-		std::string startLog{ m_infoColor + '[' + getLogTime() + ']' + "in " + __FILE__};
+		std::string startLog{'[' + getLogTime() + ']' + "in " + file};
 		std::string endLog{m_resetColor + '\n'};
 		switch (level)
 		{
 			case LogLevel::INFO:
-				std::cout << startLog <<  ":::INFO:::" << message << endLog;
+				std::cout << m_infoColor << startLog <<  ":::INFO:::" << message << endLog;
 				break;
 			case LogLevel::WARN:
+				std::cout << m_warnColor << startLog << ":::WARN:::" << message << endLog;
 				break;
 			case LogLevel::ERROR:
+				std::cout << m_errorColor << startLog << ":::ERROR:::" << message << endLog;
 				break;
 		}
 	}

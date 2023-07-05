@@ -4,11 +4,12 @@ namespace Ember
 {
     namespace Renderer
     {
-        Shader::Shader(const std::string& filepath)
+        Shader::Shader(const std::string& filepath) :
+            m_shaderFile{filepath}
         {
             m_ID = glCreateProgram(); //creates current shader program
 
-            Shader::parseShader(filepath);
+            Shader::parseShader();
             uint32_t vShader = Shader::compileShader(m_shaderSource.vertexSource, GL_VERTEX_SHADER); //compiles vertex source
             uint32_t fShader = Shader::compileShader(m_shaderSource.fragmentSource, GL_FRAGMENT_SHADER); //compiles fragment source
 
@@ -58,13 +59,12 @@ namespace Ember
             if (!success)
             {
                 glGetShaderInfoLog(shadermID, 512, NULL, infoLog);
-                glDeleteShader(shadermID);
-                throw std::runtime_error{ "ERROR:SHADER::" + std::to_string(type) + "::COMPILATION_FAILED::" + infoLog };
+                Core::Logger::getInstance().logError(std::string{"Cannot compile shader from: " + m_shaderFile + " " + infoLog}, __FILE__);
             }
             return shadermID;
         }
 
-        void Shader::parseShader(const std::string& filePath)
+        void Shader::parseShader()
         {
             enum class ShaderType
             {
@@ -72,9 +72,9 @@ namespace Ember
             };
 
             ShaderType type = ShaderType::NONE;
-            std::ifstream stream(filePath);
+            std::ifstream stream(m_shaderFile);
             if (!stream)
-                throw::std::runtime_error{ "ERROR::CANNOT FIND SHADER FILE " + filePath };
+                Core::Logger::getInstance().logError(std::string{"Cannot find shader file: " + m_shaderFile}, __FILE__);
 
             std::string line;
             std::stringstream ss[2];
@@ -99,14 +99,27 @@ namespace Ember
 
         int32_t Shader::getUniform(const std::string& name)
         {
+            // uniform has been located, return from cache
             if (m_uniformCache.find(name.c_str()) != m_uniformCache.end())
                 return m_uniformCache[name.c_str()];
             
+            // add new uniform to the not found cache with print value 0
+            m_uniformNotFoundCache[name.c_str()] = 0;
 
             int32_t location = glGetUniformLocation(m_ID, name.c_str());
+
+            // uniform not found
             if (location == -1)
-                throw::std::runtime_error{ "ERROR::CANNOT FIND UNIFORM " + name };
-        
+            {
+                // only print this message once per uniform, otherwise endless logs will be printed
+                if (m_uniformNotFoundCache[name.c_str()] == 0)
+                {
+                    Core::Logger::getInstance().logError(std::string{"Cannot find uniform: " + name}, __FILE__);
+                    m_uniformNotFoundCache[name.c_str()] = 1;
+                }
+            }
+
+            // uniform found correctly, add it to location cache
             m_uniformCache[name.c_str()] = location;
             return location;
         }
