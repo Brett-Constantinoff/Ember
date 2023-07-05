@@ -8,12 +8,18 @@
 
 namespace Ember::Core
 {
+    enum class WindowApi
+    {
+        OpenGL, 
+        Vulkan
+    };
+
     struct WindowCreateInfo
     {
         std::string m_label{};
         int32_t m_width{};
         int32_t m_height{};
-        std::string m_api{};
+        WindowApi m_api{};
     };
 
     class Window
@@ -31,6 +37,7 @@ namespace Ember::Core
         void setViewPort();
 
     private:
+        void initOpenglWindow();
         static void resizeOpenGLApi(GLFWwindow* window, int width, int height);
 
     private:

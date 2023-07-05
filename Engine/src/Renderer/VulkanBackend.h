@@ -1,5 +1,6 @@
 #pragma once
 #include "RendererBackend.h"
+#include <vulkan/vulkan.h>
 
 namespace Ember::Renderer
 {

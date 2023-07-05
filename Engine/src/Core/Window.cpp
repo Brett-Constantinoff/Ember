@@ -6,25 +6,35 @@ namespace Ember::Core
         m_createInfo{createInfo}
     {
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        #endif
 
-        m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
+        if (createInfo.m_api == WindowApi::OpenGL)
+        {
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        if (!m_winID)
-            throw::std::runtime_error{ "ERROR::CANNOT CREATE GLFW WINDOW CONTEXT!" };
+            m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
 
-        glfwMakeContextCurrent(m_winID);
+            if (!m_winID)
+                throw::std::runtime_error{ "ERROR::CANNOT CREATE GLFW WINDOW CONTEXT!" };
 
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-            throw::std::runtime_error{ "ERROR::CANNOT INITIALIZE GLEW!" };
+            glfwMakeContextCurrent(m_winID);
 
-        if (m_createInfo.m_api.compare("API_OPENGL") == 0)
+            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+                throw::std::runtime_error{ "ERROR::CANNOT INITIALIZE GLEW!" };
+
             glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
+        }
+        else
+        {
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+            m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
+
+            if (!m_winID)
+                throw::std::runtime_error{ "ERROR::CANNOT CREATE GLFW WINDOW CONTEXT!" };
+        }
+
     }
 
     Window::~Window()
