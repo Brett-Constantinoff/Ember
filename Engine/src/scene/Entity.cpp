@@ -122,7 +122,7 @@ namespace Ember::Scene
 
 			bool result{ tinyobj::LoadObj(&m_attrib, &m_shapes, &m_materials, &warn, &err, m_createInfo.m_objFile.c_str(), m_createInfo.m_mtlFile.c_str()) };
 			if (!err.empty())
-				throw std::runtime_error{ "OBJ ERROR {" + m_createInfo.m_objFile +  "} :: " + err};
+				Core::Logger::getInstance().logError(std::string{ "OBJ ERROR {" + m_createInfo.m_objFile + "} :: " + err}, __FILE__);
 		}
 
 		// normalize the data first

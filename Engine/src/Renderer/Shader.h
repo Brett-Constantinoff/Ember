@@ -7,6 +7,7 @@
 
 #include "../core/OpenGL.h"
 #include "../core/Glm.h"
+#include "../Core/Logger.h"
 
 namespace Ember::Renderer
 {
@@ -31,13 +32,15 @@ namespace Ember::Renderer
         void disuse(void);
 
     private:
-        void parseShader(const std::string& filePath);
+        void parseShader();
         int32_t compileShader(const std::string& source, int32_t type);
         int32_t getUniform(const std::string& name);
 
     private:
         int32_t m_ID;
+        std::string m_shaderFile;
         std::unordered_map<const char*, int32_t> m_uniformCache;
+        std::unordered_map<const char*, int32_t> m_uniformNotFoundCache;
         ShaderSource m_shaderSource;
     };
 }

@@ -2,6 +2,7 @@
 #include "..//core/OpenGL.h"
 #include "../core/TinyObj.h"
 #include "../core/Glm.h"
+#include "../core/Logger.h"
 #include "Mesh.h"
 #include <string>
 #include <vector>

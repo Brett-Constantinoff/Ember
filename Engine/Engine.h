@@ -13,6 +13,7 @@
 #include "src/core/OpenGL.h"
 #include "src/core/Glm.h"
 #include "src/core/Memory.h"
+#include "src/core/Logger.h"
 
 #include "src/renderer/Renderer.h"
 #include "src/renderer/Shader.h"

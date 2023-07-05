@@ -10,13 +10,14 @@ int main(int argc, char** argv)
 
 		app.run();	
 	}
-	catch (const std::runtime_error& e)
+	catch (std::runtime_error e)
 	{
-		std::cout << e.what() << "\n";
+		return -1;
 	}
 
 #if defined(_WIN32)
 	_CrtDumpMemoryLeaks();
 #endif
+
 	return 0;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "OpenGL.h"
 #include "Glm.h"
+#include "Logger.h"
 
 #include <iostream>
 #include <string>

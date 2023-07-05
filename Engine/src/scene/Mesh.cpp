@@ -116,7 +116,7 @@ namespace Ember::Scene
 		}
 		else
 		{
-			throw std::runtime_error{ "ERROR LOADING TEXTURE: " + texture };
+			Core::Logger::getInstance().logError(std::string{"ERROR LOADING TEXTURE: " + texture}, __FILE__);
 		}
 	}
 }

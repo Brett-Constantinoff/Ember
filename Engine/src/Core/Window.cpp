@@ -15,22 +15,35 @@ namespace Ember::Core
 
         m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
 
+        // exit the app right away since if glfw isnt initialized, glad wont intialize and then
+        // any opengl api call in the future will crash the app. Better to catch here than later
         if (!m_winID)
-            throw::std::runtime_error{ "ERROR::CANNOT CREATE GLFW WINDOW CONTEXT!" };
+        {
+            Logger::getInstance().logError(std::string{ "GLFW failed to initialize" }, __FILE__);
+            Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
+            throw std::runtime_error{""};
+        }
+        else
+        {
+            Logger::getInstance().logInfo(std::string{ "GLFW initialized" }, __FILE__);
 
-        glfwMakeContextCurrent(m_winID);
+            glfwMakeContextCurrent(m_winID);
 
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-            throw::std::runtime_error{ "ERROR::CANNOT INITIALIZE GLEW!" };
+            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+                Logger::getInstance().logError(std::string{ "GLAD failed to initialize" }, __FILE__);
+            Logger::getInstance().logInfo(std::string{ "GLAD initialized" }, __FILE__);
 
-        if (m_createInfo.m_api.compare("API_OPENGL") == 0)
-            glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
+            if (m_createInfo.m_api.compare("API_OPENGL") == 0)
+                glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
+        }
+        Logger::getInstance().logInfo(std::string{"Window created successfully"}, __FILE__);
     }
 
     Window::~Window()
     {
         glfwDestroyWindow(m_winID);
         glfwTerminate();
+        Logger::getInstance().logInfo(std::string{"Window destroyed successfully"}, __FILE__);
     }
 
     GLFWwindow** Window::getContext()
