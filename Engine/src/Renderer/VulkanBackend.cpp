@@ -4,7 +4,7 @@ namespace Ember::Renderer
 {
 	void VulkanBackend::init(const RendererCreateInfo& createInfo)
 	{
-
+		m_createInfo = createInfo;
 	}
 
 	void VulkanBackend::destroy()

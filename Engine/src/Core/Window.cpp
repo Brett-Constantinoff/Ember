@@ -6,37 +6,52 @@ namespace Ember::Core
         m_createInfo{createInfo}
     {
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        #endif
 
-        m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
-
-        // exit the app right away since if glfw isnt initialized, glad wont intialize and then
-        // any opengl api call in the future will crash the app. Better to catch here than later
-        if (!m_winID)
+        if (createInfo.m_api == WindowApi::OpenGL)
         {
-            Logger::getInstance().logError(std::string{ "GLFW failed to initialize" }, __FILE__);
-            Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
-            throw std::runtime_error{""};
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+            m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
+
+
+            // exit the app right away since if glfw isnt initialized, glad wont intialize and then
+            // any opengl api call in the future will crash the app. Better to catch here than later
+            if (!m_winID)
+            {
+                Logger::getInstance().logError(std::string{ "GLFW failed to initialize" }, __FILE__);
+                Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
+                throw std::runtime_error{""};
+            }
+            else
+            {
+                Logger::getInstance().logInfo(std::string{ "GLFW initialized" }, __FILE__);
+
+
+                glfwMakeContextCurrent(m_winID);
+
+                if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+                    Logger::getInstance().logError(std::string{ "GLAD failed to initialize" }, __FILE__);
+                Logger::getInstance().logInfo(std::string{ "GLAD initialized" }, __FILE__);
+
+                glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
+            }
         }
         else
         {
-            Logger::getInstance().logInfo(std::string{ "GLFW initialized" }, __FILE__);
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+            m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
 
-            glfwMakeContextCurrent(m_winID);
-
-            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-                Logger::getInstance().logError(std::string{ "GLAD failed to initialize" }, __FILE__);
-            Logger::getInstance().logInfo(std::string{ "GLAD initialized" }, __FILE__);
-
-            if (m_createInfo.m_api.compare("API_OPENGL") == 0)
-                glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
+            if (!m_winID)
+            {
+                Logger::getInstance().logError(std::string{ "GLFW failed to initialize" }, __FILE__);
+                Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
+                throw std::runtime_error{""};
+            }
         }
-        Logger::getInstance().logInfo(std::string{"Window created successfully"}, __FILE__);
+
     }
 
     Window::~Window()
