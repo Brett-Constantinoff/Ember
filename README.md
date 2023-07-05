@@ -1,20 +1,16 @@
 # Ember Engine
- The Ember engine is a work in progress 3D rendering engine targeted for the Windows operating system using the OpenGL specification. 
+ The Ember engine is a work in progress 3D rendering engine targeted for the Windows operating system using the OpenGL and Vulkan specification. 
 
  # Platforms
- This project was built with the thought of cross compatability in mind, meaning it would succesfully build and run 
- on windows, macos and linux. However, the MacOS version was unstable and did not perform as inteded. This means that I 
- will switch to windows development for the time being.
-
- This shift will allow me to focus more on adding the features I want to add without worrying about cross 
- platform specifications. This isnt to say that this project will stay on windows forever and in the future Im
- making it a goal to fully incorporate cross platform capabilities.
+This project is currently supported for windows only
 
  ## Build
  First clone the repository using:
  ```git clone --recursive git@github.com:Brett-Constantinoff/Ember.git```
+
+ Then download the Vulkan SDK from https://www.lunarg.com/vulkan-sdk/
  
- To build run ```.\/bin/premake/premake5 vs2022```
+ To build run ```/bin/premake/premake5 vs2022``` in the root of the project
 
  This will generate a visual studio solution file in the root 
  directory which you can then use the build the poject
@@ -42,6 +38,7 @@ newEmberObject = std::make_shared<EmberObject>(createInfo);
 * ~~Skyboxes~~
 * PBR
 * Add cross platform support
+* Add Vulkan support
 
 ## Progress
 * ~~Load Obj Files~~
