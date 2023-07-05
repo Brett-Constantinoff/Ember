@@ -17,5 +17,11 @@ namespace Ember::Renderer
 		virtual void loadSkybox();
 		virtual void renderMesh(const std::shared_ptr<Scene::Entity>& entity, const std::shared_ptr<Scene::Mesh>& mesh);
 		virtual void renderSkybox();
+
+	private:
+		void createInstance();
+
+	private:
+		VkInstance m_instance;
 	};
 }
