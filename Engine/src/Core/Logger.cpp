@@ -2,9 +2,6 @@
 
 namespace Ember::Core
 {
-	Logger& logger = Logger::getInstance();
-
-
 	Logger& Logger::getInstance()
 	{
 		static Logger logger;

@@ -25,7 +25,9 @@ namespace Ember::Renderer
 
 	Renderer::~Renderer()
 	{
-		m_currentBackend->destroy();
+		// currently only the vulkan backend needs cleanup
+		if (m_createInfo.m_api == RendererApi::Vulkan)
+			m_currentBackend->destroy();
 	}
 
 	void Renderer::update(float dt)
