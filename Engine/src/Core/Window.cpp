@@ -50,8 +50,9 @@ namespace Ember::Core
                 Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
                 throw std::runtime_error{""};
             }
+            Logger::getInstance().logInfo(std::string{ "GLFW initialized" }, __FILE__);
         }
-
+        Logger::getInstance().logInfo(std::string{"Window created successfully"}, __FILE__);
     }
 
     Window::~Window()
@@ -99,6 +100,12 @@ namespace Ember::Core
 
         glfwGetFramebufferSize(m_winID, &width, &height);
         glViewport(0, 0, width, height);
+    }
+
+    WindowExtensions Window::getExtensions()
+    {
+        uint32_t glfwExtensionCount{ 0 };
+        return { glfwGetRequiredInstanceExtensions(&glfwExtensionCount), glfwExtensionCount };
     }
 
     void Window::resizeOpenGLApi(GLFWwindow* window, int width, int height)

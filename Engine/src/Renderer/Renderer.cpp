@@ -3,28 +3,38 @@
 namespace Ember::Renderer
 {
 	Renderer::Renderer(const RendererCreateInfo& createInfo) :
-		m_createInfo{ createInfo }, m_backend{ nullptr }
+		m_createInfo{ createInfo }, m_currentBackend{ nullptr },
+		m_openglBackend{nullptr}, m_vulkanBackend{nullptr}
 	{
-		if (m_createInfo.m_api == RendererApi::Opengl)
-			m_backend = std::make_unique<OpenglBackend>();
-		if (m_createInfo.m_api == RendererApi::Vulkan)
-			m_backend = std::make_unique<VulkanBackend>();
+		m_openglBackend = std::make_shared<OpenglBackend>();
+		m_vulkanBackend = std::make_shared<VulkanBackend>();
 
-		m_backend->init(m_createInfo);
+		if (m_createInfo.m_api == RendererApi::Opengl)
+		{
+			m_currentBackend = m_openglBackend;
+			Core::Logger::getInstance().logInfo(std::string{"Using OpenGL specification"}, __FILE__);
+		}
+		else
+		{
+			m_currentBackend = m_vulkanBackend;
+			Core::Logger::getInstance().logInfo(std::string{"Using Vulkan specification"}, __FILE__);
+		}
+
+		m_currentBackend->init(m_createInfo);
 	}
 
 	Renderer::~Renderer()
 	{
-		m_backend->destroy();
+		m_currentBackend->destroy();
 	}
 
 	void Renderer::update(float dt)
 	{
-		m_backend->update(dt);
+		m_currentBackend->update(dt);
 	}
 	
 	void Renderer::render()
 	{
-		m_backend->render();
+		m_currentBackend->render();
 	}
 }

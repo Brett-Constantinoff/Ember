@@ -13,17 +13,17 @@ namespace Ember::Core
 
 	LogResult Logger::logInfo(std::string& message, const char* file, LogType type)
 	{
-		return log(message, file, LogLevel::INFO, type);
+		return log(message, file, LogLevel::Info, type);
 	}
 
 	LogResult Logger::logWarn(std::string& message, const char* file, LogType type)
 	{
-		return log(message, file, LogLevel::WARN, type);
+		return log(message, file, LogLevel::Warn, type);
 	}
 
 	LogResult Logger::logError(std::string& message, const char* file, LogType type)
 	{
-		return log(message, file, LogLevel::ERROR, type);
+		return log(message, file, LogLevel::Error, type);
 	}
 
 	LogResult Logger::log(std::string& message, const char* file, LogLevel level, LogType type)
@@ -32,16 +32,17 @@ namespace Ember::Core
 		std::string endLog{m_resetColor + '\n'};
 		switch (level)
 		{
-			case LogLevel::INFO:
+			case LogLevel::Info:
 				std::cout << m_infoColor << startLog <<  ":::INFO:::" << message << endLog;
 				break;
-			case LogLevel::WARN:
+			case LogLevel::Warn:
 				std::cout << m_warnColor << startLog << ":::WARN:::" << message << endLog;
 				break;
-			case LogLevel::ERROR:
+			case LogLevel::Error:
 				std::cout << m_errorColor << startLog << ":::ERROR:::" << message << endLog;
 				break;
 		}
+		return LogResult::Success;
 	}
 
 	std::string Logger::getLogTime()

@@ -1,6 +1,7 @@
 #pragma once
 #include "OpenglBackend.h"
 #include "VulkanBackend.h"
+#include "../Core/Logger.h"
 #include <string>
 #include <memory>
 
@@ -17,6 +18,8 @@ namespace Ember::Renderer
 		
 	private:
 		const RendererCreateInfo m_createInfo;
-		std::unique_ptr<RendererBackend> m_backend;
+		std::shared_ptr<OpenglBackend> m_openglBackend;
+		std::shared_ptr < VulkanBackend> m_vulkanBackend;
+		std::shared_ptr<RendererBackend> m_currentBackend;
 	};
 }
