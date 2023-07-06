@@ -35,13 +35,13 @@ void Application3D::createWindow()
 	Ember::Core::WindowCreateInfo windowCreateInfo{};
 
 	// set our api
-	windowCreateInfo.m_api = "API_OPENGL";		
+	windowCreateInfo.m_api = Ember::Core::WindowApi::Vulkan;		
 
 	// give a width
-	windowCreateInfo.m_width = 720;	
+	windowCreateInfo.m_width = 500;	
 
 	// give a height
-	windowCreateInfo.m_height = 720;
+	windowCreateInfo.m_height = 500;
 
 	// give our app a name
 	windowCreateInfo.m_label = "Application 3D";
@@ -96,13 +96,13 @@ void Application3D::createScene()
 	sceneCreateInfo.m_camera = m_camera;	
 
 	// set our shading type
-	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::BASIC;
+	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::CUSTOM;
 
 	// dont want custom shading
 	sceneCreateInfo.m_customShader = nullptr;
 
 	// enable a skybox
-	sceneCreateInfo.m_enableSkybox = true;
+	sceneCreateInfo.m_enableSkybox = false;
 
 	// create scene
 	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
@@ -113,10 +113,10 @@ void Application3D::createRenderer()
 	Ember::Renderer::RendererCreateInfo rendererCreateInfo;
 
 	// set a backend API
-	rendererCreateInfo.m_api = "API_OPENGL";		
+	rendererCreateInfo.m_api = Ember::Renderer::RendererApi::Vulkan;		
 
 	// do we want a GUI
-	rendererCreateInfo.m_guiEnabled = true;
+	rendererCreateInfo.m_guiEnabled = false;
 
 	// set a background color
 	rendererCreateInfo.m_backgroundCol = { 0.2f, 0.3f, 0.3f, 1.0f };
@@ -129,7 +129,7 @@ void Application3D::createRenderer()
 
 	// pass our scene to the gui to be able to manipulate it
 	guiCreateInfo.m_scene = m_scene;
-	m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
+	//m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
 
 	// add the gui to our renderer
 	rendererCreateInfo.m_gui = m_gui;
@@ -153,7 +153,7 @@ void Application3D::addSceneObjects()
 	createInfo.m_objFile = OBJ_PATH "sponza/sponza.obj";
 	createInfo.m_mtlFile = OBJ_PATH "sponza/";
 	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	//m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 	
 }
 

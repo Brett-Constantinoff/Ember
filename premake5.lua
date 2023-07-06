@@ -1,3 +1,7 @@
+local vulkanSdk = os.getenv("VULKAN_SDK")
+local vulkanInclude = vulkanSdk.."/include"
+local vulkanLib = vulkanSdk.."/lib/vulkan-1.lib"
+
 workspace "Ember"
     configurations { "Debug", "Release" }
     startproject "Sandbox"
@@ -30,7 +34,8 @@ project "Engine"
         "Engine/libs/glad/include/",
         "Enigne/libs/imgui/",
         "Engine/libs/stb/",
-        "Engine/libs/objLoader/"
+        "Engine/libs/objLoader/",
+	 vulkanInclude
     }
     
     files 
@@ -46,7 +51,8 @@ project "Engine"
         "GLAD",
         "IMGUI",
         "STB",
-        "TINY_OBJ"
+        "TINY_OBJ",
+ 	vulkanLib
     }
 
     filter "system:windows"
@@ -77,6 +83,7 @@ project "Sandbox"
         "Engine/libs/imgui/",
         "Engine/libs/stb/",
         "Engine/libs/objLoader",
+	 vulkanInclude,
         "Engine"
     }
 
@@ -94,7 +101,8 @@ project "Sandbox"
         "GLM",
         "IMGUI",
         "STB",
-        "TINY_OBJ"
+        "TINY_OBJ",
+	vulkanLib
     }
     
     filter "system:windows"

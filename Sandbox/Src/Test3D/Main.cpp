@@ -15,9 +15,9 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
+	return 0;
+
 #if defined(_WIN32)
 	_CrtDumpMemoryLeaks();
 #endif
-
-	return 0;
 }
