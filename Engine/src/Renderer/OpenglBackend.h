@@ -1,6 +1,7 @@
 #pragma once
 #include "RendererBackend.h"
 #include "../core/ImageLoading.h"
+#include "../core/Logger.h"
 
 namespace Ember::Renderer
 {

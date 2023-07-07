@@ -8,16 +8,19 @@ namespace Ember::Core
 		return logger;
 	}
 
+	// for normal logging (creation, destruction etc)
 	LogResult Logger::logInfo(std::string& message, const char* file, LogType type)
 	{
 		return log(message, file, LogLevel::Info, type);
 	}
 
+	// something went wrong but it wont crash the app (shader uniforms cant be found, textures cant load etc)
 	LogResult Logger::logWarn(std::string& message, const char* file, LogType type)
 	{
 		return log(message, file, LogLevel::Warn, type);
 	}
 
+	// something went wrong and it will crash the app (api problems, library problems etc)
 	LogResult Logger::logError(std::string& message, const char* file, LogType type)
 	{
 		return log(message, file, LogLevel::Error, type);

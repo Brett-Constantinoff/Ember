@@ -55,7 +55,8 @@ namespace Ember::Renderer
 			}
 			else
 			{
-				throw std::runtime_error{ "File failed to load: " + files[i]};
+				//throw std::runtime_error{ "File failed to load: " + files[i]};
+				Core::Logger::getInstance().logWarn(std::string{"File failed to load: " + files[i]}, __FILE__);
 			}
 			stbi_image_free(fileData);
 		}
