@@ -37,7 +37,10 @@ namespace Ember::Core
 				break;
 			case LogLevel::Error:
 				std::cout << m_errorColor << startLog << ":::ERROR:::" << message << endLog;
-				break;
+				// throw an empty error so we exit gracefully,
+				// all errors that occur cannot be handled and
+				// the app will have to quit
+				throw std::runtime_error{""};
 		}
 		return LogResult::Success;
 	}
