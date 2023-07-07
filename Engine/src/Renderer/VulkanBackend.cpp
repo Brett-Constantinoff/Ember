@@ -2,10 +2,25 @@
 
 namespace Ember::Renderer
 {
+	struct VulkanBackend::QueueFamilyIndices
+	{
+	public:
+		bool isComplete()
+		{
+			return m_graphicsFamily.has_value();
+		}
+
+	public:
+		std::optional<uint32_t> m_graphicsFamily{};
+	};
+
 	void VulkanBackend::init(const RendererCreateInfo& createInfo)
 	{
 		m_createInfo = createInfo;
+		m_indices = std::make_shared<QueueFamilyIndices>();
+
 		createInstance();
+		createPhysicalDevice();
 	}
 
 	void VulkanBackend::destroy()
@@ -72,5 +87,59 @@ namespace Ember::Renderer
 			Core::Logger::getInstance().logError(std::string{"Failed to create vulkan instance"}, __FILE__);
 		else
 			Core::Logger::getInstance().logInfo(std::string{"Successfully created vulkan instance"}, __FILE__);
+	}
+
+	void VulkanBackend::createPhysicalDevice()
+	{
+		uint32_t count{ 0 };
+		vkEnumeratePhysicalDevices(m_instance, &count, nullptr);
+
+		if (count == 0)
+			Core::Logger::getInstance().logError(std::string{"No GPU's support Vulkan!"}, __FILE__);
+
+		std::vector<VkPhysicalDevice> devices{};
+		devices.resize(count);
+		vkEnumeratePhysicalDevices(m_instance, &count, devices.data());
+
+		for (const auto& device : devices)
+		{
+			if (physicalDeviceSuitable(device))
+			{
+				m_physicalDevice = device;
+				break;
+			}
+		}
+
+		if (m_physicalDevice == VK_NULL_HANDLE)
+			Core::Logger::getInstance().logError(std::string{"Failed to find suitable GPU for Vulkan"}, __FILE__);
+
+		Core::Logger::getInstance().logInfo(std::string{"Vulkan physical device created successfully"}, __FILE__);
+	}
+
+	bool VulkanBackend::physicalDeviceSuitable(VkPhysicalDevice device)
+	{
+		// returns any gpu that supports vulkan
+		// TODO: Add some other checks here ex. pick dedicated gpu instead of integrated graphics
+		getQueueFamilies(device);
+		return m_indices->isComplete();
+	}
+
+	void VulkanBackend::getQueueFamilies(VkPhysicalDevice device)
+	{
+		uint32_t count{ 0 };
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &count, nullptr);
+
+		std::vector<VkQueueFamilyProperties> queueFamilies{};
+		queueFamilies.resize(count);
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &count, queueFamilies.data());
+
+		for (int32_t i{ 0 }; i < count; i++)
+		{
+			const auto& family{ queueFamilies[i] };
+			if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+				m_indices->m_graphicsFamily = i;
+			if (m_indices->isComplete())
+				break;
+		}
 	}
 }

@@ -2,6 +2,7 @@
 #include "RendererBackend.h"
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
+#include <optional>
 
 namespace Ember::Renderer
 {
@@ -20,9 +21,20 @@ namespace Ember::Renderer
 		virtual void renderSkybox();
 
 	private:
+		// vulkan structs (hacky way to have a private struct within class)
+		struct QueueFamilyIndices;
+		std::shared_ptr<QueueFamilyIndices> m_indices{nullptr};
+
+		// vulkan creation
 		void createInstance();
+		void createPhysicalDevice();
+
+		// vulkan utils
+		bool physicalDeviceSuitable(VkPhysicalDevice device);
+		void getQueueFamilies(VkPhysicalDevice device);
 
 	private:
-		VkInstance m_instance;
+		VkInstance m_instance{};
+		VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
 	};
 }
