@@ -21,20 +21,13 @@ namespace Ember::Core
             if (!m_winID)
             {
                 Logger::getInstance().logError(std::string{ "GLFW failed to initialize" }, __FILE__);
-                Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
-                throw std::runtime_error{""};
             }
             else
             {
-                Logger::getInstance().logInfo(std::string{ "GLFW initialized" }, __FILE__);
-
-
                 glfwMakeContextCurrent(m_winID);
 
                 if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
                     Logger::getInstance().logError(std::string{ "GLAD failed to initialize" }, __FILE__);
-                Logger::getInstance().logInfo(std::string{ "GLAD initialized" }, __FILE__);
-
                 glfwSetFramebufferSizeCallback(m_winID, resizeOpenGLApi);
             }
         }
@@ -44,13 +37,11 @@ namespace Ember::Core
             glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
             m_winID = glfwCreateWindow(m_createInfo.m_width, m_createInfo.m_height, m_createInfo.m_label.c_str(), NULL, NULL);
 
+            // see above comment
             if (!m_winID)
             {
                 Logger::getInstance().logError(std::string{ "GLFW failed to initialize" }, __FILE__);
-                Logger::getInstance().logWarn(std::string{ "GLAD not initialized" }, __FILE__);
-                throw std::runtime_error{""};
             }
-            Logger::getInstance().logInfo(std::string{ "GLFW initialized" }, __FILE__);
         }
         Logger::getInstance().logInfo(std::string{"Window created successfully"}, __FILE__);
     }

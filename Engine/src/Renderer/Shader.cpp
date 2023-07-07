@@ -59,7 +59,7 @@ namespace Ember
             if (!success)
             {
                 glGetShaderInfoLog(shadermID, 512, NULL, infoLog);
-                Core::Logger::getInstance().logError(std::string{"Cannot compile shader from: " + m_shaderFile + " " + infoLog}, __FILE__);
+                Core::Logger::getInstance().logWarn(std::string{"Cannot compile shader from: " + m_shaderFile + " " + infoLog}, __FILE__);
             }
             return shadermID;
         }
@@ -74,7 +74,7 @@ namespace Ember
             ShaderType type = ShaderType::NONE;
             std::ifstream stream(m_shaderFile);
             if (!stream)
-                Core::Logger::getInstance().logError(std::string{"Cannot find shader file: " + m_shaderFile}, __FILE__);
+                Core::Logger::getInstance().logWarn(std::string{"Cannot find shader file: " + m_shaderFile}, __FILE__);
 
             std::string line;
             std::stringstream ss[2];
@@ -114,7 +114,7 @@ namespace Ember
                 // only print this message once per uniform, otherwise endless logs will be printed
                 if (m_uniformNotFoundCache[name.c_str()] == 0)
                 {
-                    Core::Logger::getInstance().logError(std::string{"Cannot find uniform: " + name}, __FILE__);
+                    Core::Logger::getInstance().logWarn(std::string{"Cannot find uniform: " + name}, __FILE__);
                     m_uniformNotFoundCache[name.c_str()] = 1;
                 }
             }

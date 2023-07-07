@@ -1,6 +1,7 @@
 #pragma once
 #include "../renderer/Shader.h"
 #include "../core/Memory.h"
+#include "../Core/Logger.h"
 #include "Camera.h"
 #include "Entity.h"
 #include <stdint.h>

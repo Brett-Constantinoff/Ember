@@ -7,10 +7,12 @@ namespace Ember::Scene
 		m_sceneShader{nullptr}, m_skyboxShader{nullptr}
 	{
 		setupShaders();
+		Core::Logger::getInstance().logInfo(std::string{"Scene created"}, __FILE__);
 	}
 
 	Scene::~Scene()
 	{
+		Core::Logger::getInstance().logInfo(std::string{"Scene destroyed"}, __FILE__);
 	}
 
 	void Scene::addEntity(Entity* e)
