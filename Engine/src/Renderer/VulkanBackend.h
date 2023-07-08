@@ -28,6 +28,7 @@ namespace Ember::Renderer
 		// vulkan creation
 		void createInstance();
 		void createPhysicalDevice();
+		void createLogicalDevice();
 
 		// vulkan utils
 		bool physicalDeviceSuitable(VkPhysicalDevice device);
@@ -36,5 +37,7 @@ namespace Ember::Renderer
 	private:
 		VkInstance m_instance{};
 		VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
+		VkDevice m_logicalDevice{};
+		VkQueue m_graphicsQueue{};
 	};
 }

@@ -25,6 +25,7 @@ namespace Ember::Renderer
 
 	void VulkanBackend::destroy()
 	{
+		vkDestroyDevice(m_logicalDevice, nullptr);
 		vkDestroyInstance(m_instance, nullptr);
 	}
 
@@ -114,6 +115,35 @@ namespace Ember::Renderer
 			Core::Logger::getInstance().logError(std::string{"Failed to find suitable GPU for Vulkan"}, __FILE__);
 
 		Core::Logger::getInstance().logInfo(std::string{"Vulkan physical device created successfully"}, __FILE__);
+	}
+
+	void VulkanBackend::createLogicalDevice()
+	{
+		getQueueFamilies(m_physicalDevice);
+
+		VkDeviceQueueCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		createInfo.queueFamilyIndex = m_indices->m_graphicsFamily.value();
+		createInfo.queueCount = 1;
+
+		float queuePriority{ 1.0f };
+		createInfo.pQueuePriorities = &queuePriority;
+
+		// TODO - Define some features for the future, right now its not important
+		VkPhysicalDeviceFeatures features{};
+		VkDeviceCreateInfo ci{};
+		ci.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		ci.pQueueCreateInfos = &createInfo;
+		ci.queueCreateInfoCount = 1;
+		ci.pEnabledFeatures = &features;
+
+		// TODO - Give layer count once implemented
+		ci.enabledLayerCount = 0;
+
+		if (vkCreateDevice(m_physicalDevice, &ci, nullptr, &m_logicalDevice) != VK_SUCCESS)
+			Core::Logger::getInstance().logError(std::string{ "Failed to create Vulkan logical device" }, __FILE__);
+		
+		vkGetDeviceQueue(m_logicalDevice, m_indices->m_graphicsFamily.value(), 0, &m_graphicsQueue);
 	}
 
 	bool VulkanBackend::physicalDeviceSuitable(VkPhysicalDevice device)
