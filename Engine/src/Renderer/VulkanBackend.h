@@ -1,7 +1,12 @@
 #pragma once
+#define VK_USE_PLATFORM_WIN32_KHR
+#define GLFW_EXPOSE_NATIVE_WIN32
+
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <optional>
+#include <set>
 
 #include "RendererBackend.h"
 
@@ -30,6 +35,7 @@ namespace Ember::Renderer
 		void createInstance();
 		void createPhysicalDevice();
 		void createLogicalDevice();
+		void createSurface();
 
 		// vulkan utils
 		bool physicalDeviceSuitable(VkPhysicalDevice device);
@@ -40,5 +46,7 @@ namespace Ember::Renderer
 		VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
 		VkDevice m_logicalDevice{};
 		VkQueue m_graphicsQueue{};
+		VkQueue m_presentQueue{};
+		VkSurfaceKHR m_surface{};
 	};
 }
