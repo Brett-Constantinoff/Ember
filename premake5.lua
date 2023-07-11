@@ -30,9 +30,8 @@ project "Engine"
     {
         "Engine/libs/windowCreation/include/", 
         "Engine/libs/math/", 
-        "Engine/libs/myImgui/", 
+        "Engine/libs/imgui/", 
         "Engine/libs/glad/include/",
-        "Enigne/libs/imgui/",
         "Engine/libs/stb/",
         "Engine/libs/objLoader/",
 	 vulkanInclude
