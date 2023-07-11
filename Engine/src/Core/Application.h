@@ -1,6 +1,7 @@
 #pragma once
-#include "Window.h"
 #include <string.h>
+
+#include "Window.h"
 
 namespace Ember::Core
 {

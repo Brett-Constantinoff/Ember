@@ -1,13 +1,14 @@
 #pragma once
-#include "../renderer/Shader.h"
-#include "../core/Memory.h"
-#include "../Core/Logger.h"
-#include "Camera.h"
-#include "Entity.h"
 #include <stdint.h>
 #include <memory>
 #include <filesystem>
 #include <string>
+
+#include "Camera.h"
+#include "Entity.h"
+#include "../renderer/Shader.h"
+#include "../core/Memory.h"
+#include "../Core/Logger.h"
 
 namespace Ember::Scene
 {

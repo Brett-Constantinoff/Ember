@@ -1,17 +1,19 @@
 #pragma once
-#include "..//core/OpenGL.h"
-#include "../core/TinyObj.h"
-#include "../core/Glm.h"
-#include "../core/Logger.h"
-#include "Mesh.h"
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <tiny_obj_loader.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <memory>
 #include <filesystem>
 #include <fstream>
-#include <thread>
-#include <mutex>
+
+#include "../core/Logger.h"
+#include "Mesh.h"
 
 namespace Ember::Scene
 {

@@ -4,9 +4,10 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
 
-#include "../core/OpenGL.h"
-#include "../core/Glm.h"
 #include "../Core/Logger.h"
 
 namespace Ember::Renderer

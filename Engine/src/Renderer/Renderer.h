@@ -1,9 +1,10 @@
 #pragma once
+#include <string>
+#include <memory>
+
 #include "OpenglBackend.h"
 #include "VulkanBackend.h"
 #include "../Core/Logger.h"
-#include <string>
-#include <memory>
 
 namespace Ember::Renderer
 {

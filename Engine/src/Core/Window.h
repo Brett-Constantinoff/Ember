@@ -1,11 +1,13 @@
 #pragma once
-#include "OpenGL.h"
-#include "Glm.h"
-#include "Logger.h"
-
+#define GL_SILENCE_DEPRECATION
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <iostream>
 #include <string>
 #include <functional>
+
+#include "Logger.h"
 
 namespace Ember::Core
 {

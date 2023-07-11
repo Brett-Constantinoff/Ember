@@ -4,14 +4,19 @@
 #define OBJ_PATH ".\\.\\Src\\Test3D\\assets\\models\\"
 #define TEXTURE_PATH ".\\.\\Src\\Test3D\\assets\\textures\\"
 
-#include "libs/objLoader/tiny_obj_loader.h"
-#include "src/core/Glm.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <tiny_obj_loader.h>
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include "src/core/Application.h"
 #include "src/core/Window.h"
 #include "src/core/Gui.h"
-#include "src/core/ImGui.h"
-#include "src/core/OpenGL.h"
-#include "src/core/Glm.h"
 #include "src/core/Memory.h"
 #include "src/core/Logger.h"
 

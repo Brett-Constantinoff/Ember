@@ -1,8 +1,9 @@
 #pragma once
-#include "RendererBackend.h"
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 #include <optional>
+
+#include "RendererBackend.h"
 
 namespace Ember::Renderer
 {
