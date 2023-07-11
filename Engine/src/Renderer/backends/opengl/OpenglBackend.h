@@ -1,8 +1,8 @@
 #pragma once
 #include <stb_image.h>
 
-#include "RendererBackend.h"
-#include "../core/Logger.h"
+#include "../RendererBackend.h"
+#include "../../../core/Logger.h"
 
 namespace Ember::Renderer
 {
@@ -20,6 +20,10 @@ namespace Ember::Renderer
 		virtual void renderSkybox();
 		virtual void loadSkybox();
 
-		
+		virtual void initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh);
+		virtual void initMeshTextures(const std::shared_ptr < Scene::Mesh>& mesh);
+		virtual void loadMeshTexture(const std::string& texture);
+
+		friend class Renderer;
 	};
 }

@@ -7,23 +7,22 @@ namespace Ember::Renderer
 		m_openglBackend{nullptr}, m_vulkanBackend{nullptr}
 	{
 		m_openglBackend = std::make_shared<OpenglBackend>();
+		m_openglBackend->init(m_createInfo);
 		m_vulkanBackend = std::make_shared<VulkanBackend>();
+		m_vulkanBackend->init(m_createInfo);
 
-		if (m_createInfo.m_api == RendererApi::Opengl)
+		if (m_createInfo.m_window->getApi() == Core::WindowApi::OpenGL)
 			m_currentBackend = m_openglBackend;
 		else
 			m_currentBackend = m_vulkanBackend;
-
-		m_currentBackend->init(m_createInfo);
 
 		Core::Logger::getInstance().logInfo(std::string{"Renderer created"}, __FILE__);
 	}
 
 	Renderer::~Renderer()
 	{
-		// currently only the vulkan backend needs cleanup
-		if (m_createInfo.m_api == RendererApi::Vulkan)
-			m_currentBackend->destroy();
+		m_openglBackend->destroy();
+		m_vulkanBackend->destroy();
 
 		Core::Logger::getInstance().logInfo(std::string{"Renderer destroyed"}, __FILE__);
 	}

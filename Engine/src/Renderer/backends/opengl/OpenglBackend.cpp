@@ -6,13 +6,39 @@ namespace Ember::Renderer
 	{
 		m_createInfo = createInfo;
 		glEnable(GL_DEPTH_TEST);
+
 		if (m_createInfo.m_scene->getSkyboxEnabled())
+		{
+			initMeshRenderData(m_createInfo.m_scene->getSkybox()->getMeshes()[0]);
 			loadSkybox();
+		}
+
+		for (const auto& entity : m_createInfo.m_scene->getEntities())
+		{
+			for (const auto& mesh : entity->getMeshes())
+			{
+				initMeshRenderData(mesh);
+				initMeshTextures(mesh);
+			}
+		}
 	}
 
 	void OpenglBackend::destroy()
 	{
+		for (const auto& entity : m_createInfo.m_scene->getEntities())
+		{
+			for (const auto& mesh : entity->getMeshes())
+			{
+				auto renderData{ mesh->getRenderData() };
 
+				for (const auto& resource : renderData.m_resources)
+					glDeleteBuffers(1, &resource);
+				for (const auto& resource : renderData.m_textures)
+					glDeleteTextures(1, &resource);
+
+				glDeleteVertexArrays(1, &renderData.m_vao);
+			}
+		}
 	}
 
 	void OpenglBackend::loadSkybox()
@@ -55,7 +81,6 @@ namespace Ember::Renderer
 			}
 			else
 			{
-				//throw std::runtime_error{ "File failed to load: " + files[i]};
 				Core::Logger::getInstance().logWarn(std::string{"File failed to load: " + files[i]}, __FILE__);
 			}
 			stbi_image_free(fileData);
@@ -96,7 +121,7 @@ namespace Ember::Renderer
 		for (const auto& entity : objects)
 		{
 			// only render the physical objetcs in the scene
-			if (entity->getType() == Ember::Scene::EntityType::RENDERABLE)
+			if (entity->getType() == Ember::Scene::EntityType::Renderable)
 			{
 				for (const auto& mesh : entity->getMeshes())
 				{
@@ -202,5 +227,107 @@ namespace Ember::Renderer
 
 		skyboxShader->disuse();
 		glDepthFunc(GL_LESS);
+	}
+
+	void OpenglBackend::initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh)
+	{
+		auto renderData{ mesh->getRenderData() };
+
+		// vertex array
+		glGenVertexArrays(1, &renderData.m_vao);
+		glBindVertexArray(renderData.m_vao);
+
+		// normals
+		if (renderData.m_normals.size() != 0)
+		{
+			glGenBuffers(1, &renderData.m_nbo);
+			renderData.m_resources.push_back(renderData.m_nbo);
+
+			// normal buffer
+			glBindBuffer(GL_ARRAY_BUFFER, renderData.m_nbo);
+			glBufferData(GL_ARRAY_BUFFER, renderData.m_normals.size() * sizeof(float), renderData.m_normals.data(), GL_STATIC_DRAW);
+
+			// normal attribute
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(1);
+		}
+
+		// text coords
+		if (renderData.m_uvCoords.size() != 0)
+		{
+			glGenBuffers(1, &renderData.m_uvbo);
+			renderData.m_resources.push_back(renderData.m_uvbo);
+
+			// uv buffer
+			glBindBuffer(GL_ARRAY_BUFFER, renderData.m_uvbo);
+			glBufferData(GL_ARRAY_BUFFER, renderData.m_uvCoords.size() * sizeof(float), renderData.m_uvCoords.data(), GL_STATIC_DRAW);
+
+			// uv attribute attribute
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(2);
+		}
+
+		// positions
+		glGenBuffers(1, &renderData.m_vbo);
+		renderData.m_resources.push_back(renderData.m_vbo);
+
+		// position buffer
+		glBindBuffer(GL_ARRAY_BUFFER, renderData.m_vbo);
+		glBufferData(GL_ARRAY_BUFFER, renderData.m_vertexPositions.size() * sizeof(float), renderData.m_vertexPositions.data(), GL_STATIC_DRAW);
+
+		// position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		glBindVertexArray(0);
+
+		mesh->setRenderData(renderData);
+	}
+
+	void  OpenglBackend::initMeshTextures(const std::shared_ptr<Scene::Mesh>& mesh)
+	{
+		auto renderData{ mesh->getRenderData() };
+
+		if (!renderData.m_material.m_diffuseTexture.empty())
+		{
+			glGenTextures(1, &renderData.m_diffuseTexId);
+			glBindTexture(GL_TEXTURE_2D, renderData.m_diffuseTexId);
+			loadMeshTexture(renderData.m_material.m_texturePath + renderData.m_material.m_diffuseTexture);
+			renderData.m_textures.push_back(renderData.m_diffuseTexId);
+		}
+
+		mesh->setRenderData(renderData);
+	}
+	void OpenglBackend::loadMeshTexture(const std::string& texture)
+	{
+		int32_t width{};
+		int32_t height{};
+		int32_t channels{};
+
+		stbi_set_flip_vertically_on_load_thread(true);
+		uint8_t* data = stbi_load(texture.c_str(), &width, &height, &channels, 0);
+		if (data)
+		{
+			GLenum format{};
+			if (channels == 1)
+				format = GL_RED;
+			else if (channels == 3)
+				format = GL_RGB;
+			else if (channels == 4)
+				format = GL_RGBA;
+
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glGenerateMipmap(GL_TEXTURE_2D);
+
+			stbi_image_free(data);
+		}
+		else
+		{
+			Core::Logger::getInstance().logError(std::string{"ERROR LOADING TEXTURE: " + texture}, __FILE__);
+		}
 	}
 }
