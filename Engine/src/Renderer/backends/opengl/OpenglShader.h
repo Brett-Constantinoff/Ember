@@ -8,7 +8,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "../Core/Logger.h"
+#include "../../../Core/Logger.h"
 
 namespace Ember::Renderer
 {
@@ -18,11 +18,11 @@ namespace Ember::Renderer
         std::string fragmentSource;
     };
 
-    class Shader
+    class OpenglShader
     {
     public:
-        Shader(const std::string& filepath);
-        ~Shader();
+        OpenglShader(const std::string& filepath);
+        ~OpenglShader();
         int32_t getId(void) const;
         void setVec3(const std::string& name, const glm::vec3& uniform);
         void setVec4(const std::string& name, const glm::vec4& uniform);

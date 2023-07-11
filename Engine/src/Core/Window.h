@@ -38,6 +38,7 @@ namespace Ember::Core
         ~Window();
 
         GLFWwindow** getContext();
+        WindowApi getApi() const;
         int32_t getWidth() const;
         int32_t getHeight() const;
         void update();

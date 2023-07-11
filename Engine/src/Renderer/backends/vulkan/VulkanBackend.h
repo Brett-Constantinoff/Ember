@@ -8,7 +8,7 @@
 #include <optional>
 #include <set>
 
-#include "RendererBackend.h"
+#include "../RendererBackend.h"
 
 namespace Ember::Renderer
 {
@@ -25,6 +25,10 @@ namespace Ember::Renderer
 		virtual void loadSkybox();
 		virtual void renderMesh(const std::shared_ptr<Scene::Entity>& entity, const std::shared_ptr<Scene::Mesh>& mesh);
 		virtual void renderSkybox();
+
+		virtual void initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh);
+		virtual void initMeshTextures(const std::shared_ptr < Scene::Mesh>& mesh);
+		virtual void loadMeshTexture(const std::string& texture);
 
 	private:
 		// vulkan structs (hacky way to have a private struct within class)
@@ -48,5 +52,8 @@ namespace Ember::Renderer
 		VkQueue m_graphicsQueue{};
 		VkQueue m_presentQueue{};
 		VkSurfaceKHR m_surface{};
+
+
+		friend class Renderer;
 	};
 }

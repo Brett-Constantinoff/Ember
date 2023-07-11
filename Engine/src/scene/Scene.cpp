@@ -17,7 +17,7 @@ namespace Ember::Scene
 
 	void Scene::addEntity(Entity* e)
 	{
-		if (e->m_createInfo.m_type == EntityType::RENDERABLE || e->m_createInfo.m_type == EntityType::SKYBOX)
+		if (e->m_createInfo.m_type == EntityType::Renderable || e->m_createInfo.m_type == EntityType::Skybox)
 		{
 			// for file data
 			const auto& iterator{ m_fileDataMap.find(e->m_createInfo.m_objFile) };
@@ -94,12 +94,12 @@ namespace Ember::Scene
 		return m_createInfo.m_camera;
 	}
 
-	std::shared_ptr<Renderer::Shader> Scene::getShader() const
+	std::shared_ptr<Renderer::OpenglShader> Scene::getShader() const
 	{
 		return m_sceneShader;
 	}
 
-	std::shared_ptr<Renderer::Shader> Scene::getSkyboxShader() const
+	std::shared_ptr<Renderer::OpenglShader> Scene::getSkyboxShader() const
 	{
 		return m_skyboxShader;
 	}
@@ -122,23 +122,23 @@ namespace Ember::Scene
 		{
 			std::filesystem::path skyboxShader{ relShader };
 			std::filesystem::path skyboxObj{ relObj };
-			m_skyboxShader.reset(new Renderer::Shader(skyboxShader.append("skyBox.hlsl").string()));
+			m_skyboxShader.reset(new Renderer::OpenglShader(skyboxShader.append("skyBox.hlsl").string()));
 
 			EntityCreateInfo createInfo{};
 			createInfo.m_name = "Skybox";
 			createInfo.m_objFile = skyboxObj.append("skybox.obj").string();
 			createInfo.m_mtlFile = "";
-			createInfo.m_type = EntityType::SKYBOX;
+			createInfo.m_type = EntityType::Skybox;
 			m_skyBox.reset(EMBER_NEW Entity(createInfo));
 			m_skyBox->createMeshes(true);
 		}
 
-		if (m_createInfo.m_sceneShading == SceneShading::BASIC)
+		if (m_createInfo.m_sceneShading == SceneShading::Basic)
 		{
 			std::filesystem::path shadingPath{ relShader };
-			m_sceneShader.reset(new Renderer::Shader(shadingPath.append("basicShading.hlsl").string()));
+			m_sceneShader.reset(new Renderer::OpenglShader(shadingPath.append("basicShading.hlsl").string()));
 		}
-		else if (m_createInfo.m_sceneShading == SceneShading::CUSTOM)
+		else if (m_createInfo.m_sceneShading == SceneShading::Custom)
 		{
 			// allow custom shading
 		}

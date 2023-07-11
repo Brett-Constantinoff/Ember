@@ -73,6 +73,21 @@ namespace Ember::Renderer
 
 	}
 
+	void VulkanBackend::initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh)
+	{
+
+	}
+
+	void VulkanBackend::initMeshTextures(const std::shared_ptr < Scene::Mesh>& mesh)
+	{
+
+	}
+
+	void VulkanBackend::loadMeshTexture(const std::string& texture)
+	{
+
+	}
+
 	void VulkanBackend::createInstance()
 	{
 		VkApplicationInfo appInfo{};

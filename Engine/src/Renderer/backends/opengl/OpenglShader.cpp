@@ -1,17 +1,17 @@
-#include "Shader.h"
+#include "OpenglShader.h"
 
 namespace Ember
 {
     namespace Renderer
     {
-        Shader::Shader(const std::string& filepath) :
+        OpenglShader::OpenglShader(const std::string& filepath) :
             m_shaderFile{filepath}
         {
             m_ID = glCreateProgram(); //creates current shader program
 
-            Shader::parseShader();
-            uint32_t vShader = Shader::compileShader(m_shaderSource.vertexSource, GL_VERTEX_SHADER); //compiles vertex source
-            uint32_t fShader = Shader::compileShader(m_shaderSource.fragmentSource, GL_FRAGMENT_SHADER); //compiles fragment source
+            parseShader();
+            uint32_t vShader = compileShader(m_shaderSource.vertexSource, GL_VERTEX_SHADER); //compiles vertex source
+            uint32_t fShader = compileShader(m_shaderSource.fragmentSource, GL_FRAGMENT_SHADER); //compiles fragment source
 
             //attaches shaders to program
             glAttachShader(m_ID, vShader);
@@ -25,27 +25,27 @@ namespace Ember
             glDeleteShader(fShader);
         }
 
-        Shader::~Shader()
+        OpenglShader::~OpenglShader()
         {
             glDeleteProgram(m_ID);
         }
 
-        void Shader::use(void)
+        void OpenglShader::use(void)
         {
             glUseProgram(m_ID);
         }
 
-        void Shader::disuse(void)
+        void OpenglShader::disuse(void)
         {
             glUseProgram(0);
         }
 
-        int32_t Shader::getId(void) const
+        int32_t OpenglShader::getId(void) const
         {
             return m_ID;
         }
 
-        int32_t Shader::compileShader(const std::string& source, int32_t type)
+        int32_t OpenglShader::compileShader(const std::string& source, int32_t type)
         {
             const char* src = source.c_str();
 
@@ -64,7 +64,7 @@ namespace Ember
             return shadermID;
         }
 
-        void Shader::parseShader()
+        void OpenglShader::parseShader()
         {
             enum class ShaderType
             {
@@ -97,7 +97,7 @@ namespace Ember
             m_shaderSource.fragmentSource = ss[1].str();
         }
 
-        int32_t Shader::getUniform(const std::string& name)
+        int32_t OpenglShader::getUniform(const std::string& name)
         {
             // uniform has been located, return from cache
             if (m_uniformCache.find(name.c_str()) != m_uniformCache.end())
@@ -124,28 +124,28 @@ namespace Ember
             return location;
         }
 
-        void Shader::setVec4(const std::string& name, const glm::vec4& uniform)
+        void OpenglShader::setVec4(const std::string& name, const glm::vec4& uniform)
         {
             int32_t location = getUniform(name);
             if (location != -1)
                 glUniform4fv(location, 1, &uniform[0]);
         }
 
-        void Shader::setVec3(const std::string& name, const glm::vec3& uniform)
+        void OpenglShader::setVec3(const std::string& name, const glm::vec3& uniform)
         {
             int32_t location = getUniform(name);
             if (location != -1)
                 glUniform3fv(location, 1, &uniform[0]);
         }
 
-        void Shader::setMat4(const std::string& name, const glm::mat4& uniform)
+        void OpenglShader::setMat4(const std::string& name, const glm::mat4& uniform)
         {
             int32_t location = getUniform(name);
             if (location != -1)
                 glUniformMatrix4fv(location, 1, GL_FALSE, &uniform[0][0]);
         }
 
-        void Shader::setInt(const std::string& name, int32_t uniform)
+        void OpenglShader::setInt(const std::string& name, int32_t uniform)
         {
             int32_t location = getUniform(name);
             if (location != -1)
@@ -153,7 +153,7 @@ namespace Ember
             
         }
 
-        void Shader::setFloat(const std::string& name, float uniform)
+        void OpenglShader::setFloat(const std::string& name, float uniform)
         {
             int32_t location = getUniform(name);
             if (location != -1)

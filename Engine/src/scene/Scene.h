@@ -6,7 +6,7 @@
 
 #include "Camera.h"
 #include "Entity.h"
-#include "../renderer/Shader.h"
+#include "../renderer/backends/opengl/OpenglShader.h"
 #include "../core/Memory.h"
 #include "../Core/Logger.h"
 
@@ -15,14 +15,14 @@ namespace Ember::Scene
 	// holds different shading effects
 	enum class SceneShading
 	{
-		BASIC,
-		CUSTOM,
+		Basic,
+		Custom,
 	};
 
 	struct SceneCreateInfo
 	{
 		std::shared_ptr<Camera> m_camera{};
-		std::shared_ptr<Renderer::Shader> m_customShader{};
+		std::shared_ptr<Renderer::OpenglShader> m_customShader{};
 		SceneShading m_sceneShading{};
 		bool m_enableSkybox{};
 	};
@@ -57,8 +57,8 @@ namespace Ember::Scene
 		int32_t getDifferingObjects() const;
 		int32_t getEntityCount() const;
 		std::shared_ptr<Camera> getCamera() const;
-		std::shared_ptr<Renderer::Shader> getShader() const;
-		std::shared_ptr<Renderer::Shader> getSkyboxShader() const;
+		std::shared_ptr<Renderer::OpenglShader> getShader() const;
+		std::shared_ptr<Renderer::OpenglShader> getSkyboxShader() const;
 		std::shared_ptr<Entity> getSkybox() const;
 
 	private:
@@ -66,8 +66,8 @@ namespace Ember::Scene
 
 	private:
 		SceneCreateInfo m_createInfo;
-		std::shared_ptr<Renderer::Shader> m_sceneShader;
-		std::shared_ptr<Renderer::Shader> m_skyboxShader;
+		std::shared_ptr<Renderer::OpenglShader> m_sceneShader;
+		std::shared_ptr<Renderer::OpenglShader> m_skyboxShader;
 		std::vector<std::shared_ptr<Entity>> m_sceneEntities;
 		std::shared_ptr<Entity> m_skyBox;
 		std::unordered_map<std::string, EntityFileData> m_fileDataMap;

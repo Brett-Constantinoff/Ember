@@ -21,7 +21,7 @@
 #include "src/core/Logger.h"
 
 #include "src/renderer/Renderer.h"
-#include "src/renderer/Shader.h"
+#include "src/renderer/backends/opengl/OpenglShader.h"
 
 #include "src/scene/Camera.h"
 #include "src/scene/Scene.h"

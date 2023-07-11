@@ -19,16 +19,16 @@ namespace Ember::Scene
 {
 	enum class EntityType
 	{
-		NO_TYPE,
-		RENDERABLE,
-		SKYBOX,
-		DIRECTIONAL_LIGHT,
-		POINT_LIGHT,
+		None,
+		Renderable,
+		Skybox,
+		DirectionalLight,
+		PointLight,
 	};
 	
 	struct EntityCreateInfo
 	{
-		EntityType m_type{ EntityType::NO_TYPE };
+		EntityType m_type{ EntityType::None };
 		std::string m_name{};
 		std::string m_objFile{};
 		std::string m_mtlFile{};

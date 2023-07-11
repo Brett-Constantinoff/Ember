@@ -126,7 +126,7 @@ namespace Ember::Scene
 		}
 
 		// normalize the data first
-		if (m_createInfo.m_type == EntityType::RENDERABLE)
+		if (m_createInfo.m_type == EntityType::Renderable)
 		{
 			normalize();
 			calculateCentroid();
@@ -141,7 +141,7 @@ namespace Ember::Scene
 		}
 			
 		// create skybox
-		if (m_createInfo.m_type == EntityType::SKYBOX)
+		if (m_createInfo.m_type == EntityType::Skybox)
 			createSkyboxMesh();
 	}
 

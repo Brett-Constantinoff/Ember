@@ -1,24 +1,17 @@
 #pragma once
 #include <memory>
 
-#include "../scene/Entity.h"
-#include "../core/Window.h"
-#include "../core//Gui.h"
-#include "../scene/Scene.h"
-#include "../scene/Entity.h"
+#include "../../scene/Entity.h"
+#include "../../core/Window.h"
+#include "../../core//Gui.h"
+#include "../../scene/Scene.h"
+#include "../../scene/Entity.h"
 
 namespace Ember::Renderer
 {
-	enum class RendererApi
-	{
-		Opengl,
-		Vulkan
-	};
-
 	// more will be added in the future
 	struct RendererCreateInfo
 	{
-		RendererApi m_api{};
 		glm::vec4 m_backgroundCol{};
 		std::shared_ptr<Core::Window> m_window{};
 		std::shared_ptr<Scene::Scene> m_scene{};
@@ -49,6 +42,10 @@ namespace Ember::Renderer
 		}
 		virtual void renderMesh(const std::shared_ptr<Scene::Entity>& entity, const std::shared_ptr<Scene::Mesh>& mesh) {};
 		virtual void renderSkybox() {};
+
+		virtual void initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh) {};
+		virtual void initMeshTextures(const std::shared_ptr < Scene::Mesh>& mesh) {};
+		virtual void loadMeshTexture(const std::string& texture) {};
 
 	protected:
 		RendererCreateInfo m_createInfo{};

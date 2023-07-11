@@ -1,15 +1,9 @@
 #pragma once
-#include <tiny_obj_loader.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-#include <stb_image.h>
+#include <vector>
 #include <string>
-#include <stdexcept>
-
-#include "../core/Logger.h"
 
 namespace Ember::Scene
 {
@@ -38,7 +32,6 @@ namespace Ember::Scene
 
 		Material m_material{};
 
-		// this contatins things created by opengl
 		std::vector<uint32_t> m_resources;
 		std::vector<uint32_t> m_textures;
 
@@ -51,18 +44,14 @@ namespace Ember::Scene
 		uint32_t m_diffuseTexId{};
 	};
 
-	class Mesh
+	struct Mesh
 	{
 	public:
 		Mesh(const RenderData& renderData);
 		~Mesh();
 
 		RenderData& getRenderData();
-
-	private:
-		void initRenderData();
-		void initTextures();
-		void loadTexture(const std::string& texture);
+		void setRenderData(const RenderData& renderData);
 
 	private:
 		RenderData m_renderData;

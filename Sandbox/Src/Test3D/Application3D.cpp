@@ -33,9 +33,9 @@ void Application3D::run()
 void Application3D::createWindow()
 {
 	Ember::Core::WindowCreateInfo windowCreateInfo{};
-	windowCreateInfo.m_api = Ember::Core::WindowApi::Vulkan;		
-	windowCreateInfo.m_width = 1080;	
-	windowCreateInfo.m_height = 720;
+	windowCreateInfo.m_api = Ember::Core::WindowApi::OpenGL;		
+	windowCreateInfo.m_width = 500;	
+	windowCreateInfo.m_height = 500;
 	windowCreateInfo.m_label = "Application 3D";
 	m_window = std::make_shared<Ember::Core::Window>(windowCreateInfo);
 }
@@ -59,24 +59,23 @@ void Application3D::createScene()
 
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 	sceneCreateInfo.m_camera = m_camera;	
-	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::CUSTOM;
+	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::Basic;
 	sceneCreateInfo.m_customShader = nullptr;
-	sceneCreateInfo.m_enableSkybox = false;
+	sceneCreateInfo.m_enableSkybox = true;
 	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
 }
 
 void Application3D::createRenderer()
 {
 	Ember::Renderer::RendererCreateInfo rendererCreateInfo;
-
-	rendererCreateInfo.m_api = Ember::Renderer::RendererApi::Vulkan;		
-	rendererCreateInfo.m_guiEnabled = false;
+	
+	rendererCreateInfo.m_guiEnabled = true;
 	rendererCreateInfo.m_backgroundCol = { 0.2f, 0.3f, 0.3f, 1.0f };
 	Ember::Core::GuiCreateInfo guiCreateInfo{};
 	guiCreateInfo.m_window = m_window;
-	//guiCreateInfo.m_scene = m_scene;
-	//m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
-	//rendererCreateInfo.m_gui = m_gui;
+	guiCreateInfo.m_scene = m_scene;
+	m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
+	rendererCreateInfo.m_gui = m_gui;
 	rendererCreateInfo.m_scene = m_scene;
 	rendererCreateInfo.m_window = m_window;		
 	m_renderer = std::make_shared<Ember::Renderer::Renderer>(rendererCreateInfo);
@@ -84,16 +83,14 @@ void Application3D::createRenderer()
 
 void Application3D::addSceneObjects()
 {
-	/*
 	// add some objects to the scene
 	Ember::Scene::EntityCreateInfo createInfo{};
 
 	createInfo.m_name = "sponza";
 	createInfo.m_objFile = OBJ_PATH "sponza/sponza.obj";
 	createInfo.m_mtlFile = OBJ_PATH "sponza/";
-	createInfo.m_type = Ember::Scene::EntityType::RENDERABLE;
-	//m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
-	*/
+	createInfo.m_type = Ember::Scene::EntityType::Renderable;
+	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
 void Application3D::onStart()

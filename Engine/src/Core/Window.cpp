@@ -53,6 +53,11 @@ namespace Ember::Core
         Logger::getInstance().logInfo(std::string{"Window destroyed successfully"}, __FILE__);
     }
 
+    WindowApi Window::getApi() const
+    {
+        return m_createInfo.m_api;
+    }
+
     GLFWwindow** Window::getContext()
     {
         return &m_winID;
