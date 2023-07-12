@@ -22,6 +22,7 @@ namespace Ember::Renderer
 		m_indices = std::make_shared<QueueFamilyIndices>();
 
 		createInstance();
+		createDebugMessenger();
 		createSurface();
 		createPhysicalDevice();
 		createLogicalDevice();
@@ -29,6 +30,9 @@ namespace Ember::Renderer
 
 	void VulkanBackend::destroy()
 	{
+		if (m_enableValidationLayers)
+			destroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
+
 		vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
 		vkDestroyDevice(m_logicalDevice, nullptr);
 		vkDestroyInstance(m_instance, nullptr);
@@ -88,8 +92,14 @@ namespace Ember::Renderer
 
 	}
 
+	///////////////// VULKAN CREATION ////////////////////
+	//////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	void VulkanBackend::createInstance()
 	{
+		if (m_enableValidationLayers && !checkValidationLayerSupport())
+			Core::Logger::getInstance().logError(std::string{"No validation layers available"}, __FILE__);
+
 		VkApplicationInfo appInfo{};
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pApplicationName = "Ember";
@@ -102,12 +112,39 @@ namespace Ember::Renderer
 		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pApplicationInfo = &appInfo;
 
-		Core::WindowExtensions extensions{m_createInfo.m_window->getExtensions()};
-		createInfo.enabledExtensionCount = extensions.m_count;
-		createInfo.ppEnabledExtensionNames = extensions.m_extensions;
+		auto extensions{ getRequiredExtenions() };
+		createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+		createInfo.ppEnabledExtensionNames = extensions.data();
+
+		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+		if (m_enableValidationLayers)
+		{
+			createInfo.enabledLayerCount = static_cast<uint32_t>(m_validationLayers.size());
+			createInfo.ppEnabledLayerNames = m_validationLayers.data();
+
+			populateDebugMessengerCreateInfo(debugCreateInfo);
+			createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
+		}
+		else
+		{
+			createInfo.enabledLayerCount = 0;
+			createInfo.pNext = nullptr;
+		}
 
 		if (vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS)
 			Core::Logger::getInstance().logError(std::string{"Failed to create vulkan instance"}, __FILE__);
+	}
+
+	void VulkanBackend::createDebugMessenger()
+	{
+		if (!m_enableValidationLayers)
+			return;
+
+		VkDebugUtilsMessengerCreateInfoEXT createInfo;
+		populateDebugMessengerCreateInfo(createInfo);
+
+		if (createDebugUtilsMessengerEXT(m_instance, &createInfo, nullptr, &m_debugMessenger) != VK_SUCCESS)
+			Core::Logger::getInstance().logError(std::string{"Failed to create vulkan debug messanger"}, __FILE__);
 	}
 
 	void VulkanBackend::createPhysicalDevice()
@@ -182,6 +219,20 @@ namespace Ember::Renderer
 			Core::Logger::getInstance().logError(std::string{"Failed to create vulkan surface"}, __FILE__);
 	}
 
+	///////////////// VULKAN DESTRUCTION //////////////////
+	//////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
+	void VulkanBackend::destroyDebugUtilsMessengerEXT(VkInstance instance,
+		VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
+	{
+		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+		if (func != nullptr) 
+			func(instance, debugMessenger, pAllocator);
+	}
+
+	///////////////// VULKAN UTILITIES ///////////////////
+	//////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	bool VulkanBackend::physicalDeviceSuitable(VkPhysicalDevice device)
 	{
 		// returns any gpu that supports vulkan
@@ -215,5 +266,92 @@ namespace Ember::Renderer
 			if (m_indices->isComplete())
 				break;
 		}
+	}
+
+	bool VulkanBackend::checkValidationLayerSupport()
+	{
+		uint32_t count{};
+		vkEnumerateInstanceLayerProperties(&count, nullptr);
+
+		std::vector<VkLayerProperties> layers{};
+		layers.resize(count);
+		vkEnumerateInstanceLayerProperties(&count, layers.data());
+
+		const int32_t length{ 256 };
+		for (const auto layerName : m_validationLayers)
+		{
+			bool found{ false };
+
+			for (const auto& layerProps : layers)
+			{
+				if (strncmp(layerName, layerProps.layerName, length))
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+				return false;
+		}
+		return true;
+	}
+
+	std::vector<const char*> VulkanBackend::getRequiredExtenions()
+	{
+		Core::WindowExtensions e{m_createInfo.m_window->getExtensions()};
+
+		std::vector<const char*> extensions(e.m_extensions, e.m_extensions + e.m_count);
+
+		if (m_enableValidationLayers)
+			extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+		return extensions;
+	}
+
+	///////////////// VULKAN DEBUG ///////////////////////
+	//////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
+	VKAPI_ATTR VkBool32 VKAPI_CALL VulkanBackend::debugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+		VkDebugUtilsMessageTypeFlagsEXT messageType,
+		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+		void* pUserData)
+	{
+		switch (messageSeverity)
+		{
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+			Core::Logger::getInstance().logInfo(std::string{"Validaion layer: "} + pCallbackData->pMessage, __FILE__);
+			break;
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+			Core::Logger::getInstance().logWarn(std::string{"Validaion layer: "} + pCallbackData->pMessage, __FILE__);
+			break;
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+			Core::Logger::getInstance().logError(std::string{"Validaion layer: "} + pCallbackData->pMessage, __FILE__);
+			break;
+		}
+		
+		return VK_FALSE;
+	}
+
+	VkResult VulkanBackend::createDebugUtilsMessengerEXT(VkInstance instance, 
+		const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, 
+		const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
+	{
+		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+		if (func != nullptr) 
+			return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+		else 
+			return VK_ERROR_EXTENSION_NOT_PRESENT;
+		
+	}
+
+	void VulkanBackend::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
+	{
+		createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+		createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+		createInfo.pfnUserCallback = debugCallback;
 	}
 }

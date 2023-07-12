@@ -33,7 +33,7 @@ void Application3D::run()
 void Application3D::createWindow()
 {
 	Ember::Core::WindowCreateInfo windowCreateInfo{};
-	windowCreateInfo.m_api = Ember::Core::WindowApi::OpenGL;		
+	windowCreateInfo.m_api = Ember::Core::WindowApi::Vulkan;		
 	windowCreateInfo.m_width = 500;	
 	windowCreateInfo.m_height = 500;
 	windowCreateInfo.m_label = "Application 3D";
@@ -59,9 +59,9 @@ void Application3D::createScene()
 
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 	sceneCreateInfo.m_camera = m_camera;	
-	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::Basic;
+	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::Custom;
 	sceneCreateInfo.m_customShader = nullptr;
-	sceneCreateInfo.m_enableSkybox = true;
+	sceneCreateInfo.m_enableSkybox = false;
 	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
 }
 
@@ -69,13 +69,13 @@ void Application3D::createRenderer()
 {
 	Ember::Renderer::RendererCreateInfo rendererCreateInfo;
 	
-	rendererCreateInfo.m_guiEnabled = true;
+	rendererCreateInfo.m_guiEnabled = false;
 	rendererCreateInfo.m_backgroundCol = { 0.2f, 0.3f, 0.3f, 1.0f };
 	Ember::Core::GuiCreateInfo guiCreateInfo{};
 	guiCreateInfo.m_window = m_window;
 	guiCreateInfo.m_scene = m_scene;
-	m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
-	rendererCreateInfo.m_gui = m_gui;
+	//m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
+	//rendererCreateInfo.m_gui = m_gui;
 	rendererCreateInfo.m_scene = m_scene;
 	rendererCreateInfo.m_window = m_window;		
 	m_renderer = std::make_shared<Ember::Renderer::Renderer>(rendererCreateInfo);
@@ -90,7 +90,7 @@ void Application3D::addSceneObjects()
 	createInfo.m_objFile = OBJ_PATH "sponza/sponza.obj";
 	createInfo.m_mtlFile = OBJ_PATH "sponza/";
 	createInfo.m_type = Ember::Scene::EntityType::Renderable;
-	m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
+	//m_scene->addEntity(EMBER_NEW Ember::Scene::Entity(createInfo));
 }
 
 void Application3D::onStart()
