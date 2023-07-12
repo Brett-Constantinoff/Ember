@@ -6,8 +6,8 @@ namespace Ember::Renderer
 		m_createInfo{ createInfo }, m_currentBackend{ nullptr },
 		m_openglBackend{nullptr}, m_vulkanBackend{nullptr}
 	{
-		m_openglBackend = std::make_shared<OpenglBackend>();
-		m_openglBackend->init(m_createInfo);
+		//m_openglBackend = std::make_shared<OpenglBackend>();
+		//m_openglBackend->init(m_createInfo);
 		m_vulkanBackend = std::make_shared<VulkanBackend>();
 		m_vulkanBackend->init(m_createInfo);
 
@@ -21,7 +21,7 @@ namespace Ember::Renderer
 
 	Renderer::~Renderer()
 	{
-		m_openglBackend->destroy();
+		//m_openglBackend->destroy();
 		m_vulkanBackend->destroy();
 
 		Core::Logger::getInstance().logInfo(std::string{"Renderer destroyed"}, __FILE__);
