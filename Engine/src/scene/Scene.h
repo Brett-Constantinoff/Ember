@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "../renderer/backends/opengl/OpenglShader.h"
+#include "../Renderer/backends/vulkan/VulkanShader.h"
 #include "../core/Memory.h"
 #include "../Core/Logger.h"
 
@@ -51,23 +52,27 @@ namespace Ember::Scene
 		void addEntity(Entity* e);
 		std::vector<std::shared_ptr<Entity>> getEntities() const;
 		bool getSkyboxEnabled() const;
+		void createSkyboxShadergl(std::string& shaderFile);
+		void createSceneShadergl(std::string& shaderFile);
+		void createSceneShadervk(std::string& shadeFile);
 		int32_t getMeshCount() const;
 		int32_t getVertexCount() const;
 		int32_t getPolygonCount() const;
 		int32_t getDifferingObjects() const;
 		int32_t getEntityCount() const;
 		std::shared_ptr<Camera> getCamera() const;
-		std::shared_ptr<Renderer::OpenglShader> getShader() const;
-		std::shared_ptr<Renderer::OpenglShader> getSkyboxShader() const;
+		std::shared_ptr<Renderer::OpenglShader> getShadergl() const;
+		std::shared_ptr<Renderer::OpenglShader> getSkyboxShadergl() const;
 		std::shared_ptr<Entity> getSkybox() const;
-
-	private:
-		void setupShaders();
+		SceneShading getSceneShading() const;
+		void createSkybox(Entity* e);
 
 	private:
 		SceneCreateInfo m_createInfo;
 		std::shared_ptr<Renderer::OpenglShader> m_sceneShader;
 		std::shared_ptr<Renderer::OpenglShader> m_skyboxShader;
+		std::shared_ptr<Renderer::VulkanShader> m_sceneShadervk;
+		std::shared_ptr<Renderer::VulkanShader> m_skyboxShadervk;
 		std::vector<std::shared_ptr<Entity>> m_sceneEntities;
 		std::shared_ptr<Entity> m_skyBox;
 		std::unordered_map<std::string, EntityFileData> m_fileDataMap;

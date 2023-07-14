@@ -32,6 +32,7 @@ namespace Ember::Renderer
 		virtual void initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh);
 		virtual void initMeshTextures(const std::shared_ptr < Scene::Mesh>& mesh);
 		virtual void loadMeshTexture(const std::string& texture);
+		virtual void setupShaders();
 
 	private:
 		// vulkan structs (hacky way to have a private struct within class)

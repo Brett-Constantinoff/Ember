@@ -6,7 +6,6 @@ namespace Ember::Scene
 		m_createInfo{ createInfo }, m_sceneEntities{}, m_skyBox{nullptr}, m_fileDataMap{},
 		m_sceneShader{nullptr}, m_skyboxShader{nullptr}
 	{
-		setupShaders();
 		Core::Logger::getInstance().logInfo(std::string{"Scene created"}, __FILE__);
 	}
 
@@ -94,12 +93,12 @@ namespace Ember::Scene
 		return m_createInfo.m_camera;
 	}
 
-	std::shared_ptr<Renderer::OpenglShader> Scene::getShader() const
+	std::shared_ptr<Renderer::OpenglShader> Scene::getShadergl() const
 	{
 		return m_sceneShader;
 	}
 
-	std::shared_ptr<Renderer::OpenglShader> Scene::getSkyboxShader() const
+	std::shared_ptr<Renderer::OpenglShader> Scene::getSkyboxShadergl() const
 	{
 		return m_skyboxShader;
 	}
@@ -109,39 +108,29 @@ namespace Ember::Scene
 		return m_skyBox;
 	}
 
-	void Scene::setupShaders()
+	SceneShading Scene::getSceneShading() const
 	{
-		std::filesystem::path dir{ std::filesystem::current_path() };
-		std::string shaderPath{ "../Engine/assets/shaders/" };
-		std::string objPath{ "../Engine/assets/models/" };
-		std::filesystem::path relShader{ std::filesystem::relative(shaderPath, dir) };
-		std::filesystem::path relObj{ std::filesystem::relative(objPath, dir) };
+		return m_createInfo.m_sceneShading;
+	}
 
-		// create skybox shader and entity
-		if (m_createInfo.m_enableSkybox)
-		{
-			std::filesystem::path skyboxShader{ relShader };
-			std::filesystem::path skyboxObj{ relObj };
-			m_skyboxShader.reset(new Renderer::OpenglShader(skyboxShader.append("skyBox.hlsl").string()));
+	void Scene::createSkybox(Entity* e)
+	{
+		m_skyBox.reset(e);
+		m_skyBox->createMeshes(true);
+	}
 
-			EntityCreateInfo createInfo{};
-			createInfo.m_name = "Skybox";
-			createInfo.m_objFile = skyboxObj.append("skybox.obj").string();
-			createInfo.m_mtlFile = "";
-			createInfo.m_type = EntityType::Skybox;
-			m_skyBox.reset(EMBER_NEW Entity(createInfo));
-			m_skyBox->createMeshes(true);
-		}
+	void Scene::createSkyboxShadergl(std::string& shaderFile)
+	{
+		m_skyboxShader.reset(EMBER_NEW Renderer::OpenglShader(shaderFile));
+	}
 
-		if (m_createInfo.m_sceneShading == SceneShading::Basic)
-		{
-			std::filesystem::path shadingPath{ relShader };
-			m_sceneShader.reset(new Renderer::OpenglShader(shadingPath.append("basicShading.hlsl").string()));
-		}
-		else if (m_createInfo.m_sceneShading == SceneShading::Custom)
-		{
-			// allow custom shading
-		}
+	void Scene::createSceneShadergl(std::string& shaderFile)
+	{
+		m_sceneShader.reset(EMBER_NEW Renderer::OpenglShader(shaderFile));
+	}
 
+	void Scene::createSceneShadervk(std::string& shaderFile)
+	{
+		m_sceneShadervk.reset(EMBER_NEW Renderer::VulkanShader(shaderFile));
 	}
 }

@@ -39,6 +39,8 @@ namespace Ember::Renderer
 		createPhysicalDevice();
 		createLogicalDevice();
 		createSwapChain();
+
+		setupShaders();
 	}
 
 	void VulkanBackend::destroy()
@@ -107,6 +109,21 @@ namespace Ember::Renderer
 	void VulkanBackend::loadMeshTexture(const std::string& texture)
 	{
 
+	}
+
+	void VulkanBackend::setupShaders()
+	{
+		std::filesystem::path dir{ std::filesystem::current_path() };
+		std::string shaderPath{ "../Engine/assets/shaders/" };
+		std::string objPath{ "../Engine/assets/models/" };
+		std::filesystem::path relShader{ std::filesystem::relative(shaderPath, dir) };
+		std::filesystem::path relObj{ std::filesystem::relative(objPath, dir) };
+
+		if (m_createInfo.m_scene->getSceneShading() == Scene::SceneShading::Basic)
+		{
+			std::filesystem::path shadingPath{ relShader };
+			m_createInfo.m_scene->createSceneShadervk(shadingPath.append("basicShading.vk").string());
+		}
 	}
 
 	///////////////// VULKAN CREATION ////////////////////

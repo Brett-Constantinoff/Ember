@@ -4,6 +4,7 @@ int main(int argc, char** argv)
 {
 	try
 	{
+		// opengl
 		Ember::Core::ApplicationCreateInfo createInfo;
 		createInfo.m_label = "Application 3D";
 		Application3D app{ createInfo };

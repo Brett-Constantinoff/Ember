@@ -15,7 +15,6 @@ namespace Ember::Renderer
 			m_currentBackend = m_openglBackend;
 		else
 			m_currentBackend = m_vulkanBackend;
-
 		Core::Logger::getInstance().logInfo(std::string{"Renderer created"}, __FILE__);
 	}
 
