@@ -59,7 +59,7 @@ void Application3D::createScene()
 
 	Ember::Scene::SceneCreateInfo sceneCreateInfo{};
 	sceneCreateInfo.m_camera = m_camera;	
-	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::Custom;
+	sceneCreateInfo.m_sceneShading = Ember::Scene::SceneShading::Basic;
 	sceneCreateInfo.m_customShader = nullptr;
 	sceneCreateInfo.m_enableSkybox = false;
 	m_scene = std::make_shared<Ember::Scene::Scene>(sceneCreateInfo);
@@ -75,7 +75,7 @@ void Application3D::createRenderer()
 	guiCreateInfo.m_window = m_window;
 	guiCreateInfo.m_scene = m_scene;
 	//m_gui = std::make_shared<ImguiGui>(guiCreateInfo);
-	//rendererCreateInfo.m_gui = m_gui;
+	rendererCreateInfo.m_gui = m_gui;
 	rendererCreateInfo.m_scene = m_scene;
 	rendererCreateInfo.m_window = m_window;		
 	m_renderer = std::make_shared<Ember::Renderer::Renderer>(rendererCreateInfo);

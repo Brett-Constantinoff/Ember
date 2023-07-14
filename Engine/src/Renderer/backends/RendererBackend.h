@@ -19,7 +19,6 @@ namespace Ember::Renderer
 		std::shared_ptr<Core::Gui> m_gui{};
 	};
 
-
 	 // nothing should access a backend except for the renderer
 	class RendererBackend
 	{
@@ -46,6 +45,7 @@ namespace Ember::Renderer
 		virtual void initMeshRenderData(const std::shared_ptr<Scene::Mesh>& mesh) {};
 		virtual void initMeshTextures(const std::shared_ptr < Scene::Mesh>& mesh) {};
 		virtual void loadMeshTexture(const std::string& texture) {};
+		virtual void setupShaders() {};
 
 	protected:
 		RendererCreateInfo m_createInfo{};

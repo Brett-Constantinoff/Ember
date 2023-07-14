@@ -4,8 +4,9 @@ namespace Ember::Renderer
 {
 	void OpenglBackend::init(const RendererCreateInfo& createInfo)
 	{
-		m_createInfo = createInfo;
 		glEnable(GL_DEPTH_TEST);
+		m_createInfo = createInfo;
+		setupShaders();
 
 		if (m_createInfo.m_scene->getSkyboxEnabled())
 		{
@@ -162,7 +163,7 @@ namespace Ember::Renderer
 		model = glm::translate(model, -centroid);
 
 		// update the uniforms
-		const auto& sceneShader{ m_createInfo.m_scene->getShader() };
+		const auto& sceneShader{ m_createInfo.m_scene->getShadergl() };
 		sceneShader->use();
 		sceneShader->setMat4("model", model);
 		sceneShader->setMat4("projection", m_perspective);
@@ -209,7 +210,7 @@ namespace Ember::Renderer
 		const auto& skybox{ m_createInfo.m_scene->getSkybox() };
 		const auto& camera{ m_createInfo.m_scene->getCamera() };
 		const auto& skyboxRenderData{ skybox->getMeshes()[0]->getRenderData() };
-		const auto& skyboxShader{ m_createInfo.m_scene->getSkyboxShader() };
+		const auto& skyboxShader{ m_createInfo.m_scene->getSkyboxShadergl() };
 
 		skyboxShader->use();
 		skyboxShader->setMat4("uProjection", m_perspective);
@@ -328,6 +329,36 @@ namespace Ember::Renderer
 		else
 		{
 			Core::Logger::getInstance().logError(std::string{"ERROR LOADING TEXTURE: " + texture}, __FILE__);
+		}
+	}
+
+	void OpenglBackend::setupShaders()
+	{
+		std::filesystem::path dir{ std::filesystem::current_path() };
+		std::string shaderPath{ "../Engine/assets/shaders/" };
+		std::string objPath{ "../Engine/assets/models/" };
+		std::filesystem::path relShader{ std::filesystem::relative(shaderPath, dir) };
+		std::filesystem::path relObj{ std::filesystem::relative(objPath, dir) };
+
+		// create skybox shader and entity
+		if (m_createInfo.m_scene->getSkyboxEnabled())
+		{
+			std::filesystem::path skyboxShader{ relShader };
+			std::filesystem::path skyboxObj{ relObj };
+			m_createInfo.m_scene->createSkyboxShadergl((skyboxShader.append("skyBox.hlsl").string()));
+
+			Scene::EntityCreateInfo createInfo{};
+			createInfo.m_name = "Skybox";
+			createInfo.m_objFile = skyboxObj.append("skybox.obj").string();
+			createInfo.m_mtlFile = "";
+			createInfo.m_type = Scene::EntityType::Skybox;
+			m_createInfo.m_scene->createSkybox(EMBER_NEW Scene::Entity(createInfo));
+		}
+
+		if (m_createInfo.m_scene->getSceneShading() == Scene::SceneShading::Basic)
+		{
+			std::filesystem::path shadingPath{ relShader };
+			m_createInfo.m_scene->createSceneShadergl(shadingPath.append("basicShading.hlsl").string());
 		}
 	}
 }
