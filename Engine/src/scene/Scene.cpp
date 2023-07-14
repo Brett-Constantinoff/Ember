@@ -98,6 +98,11 @@ namespace Ember::Scene
 		return m_sceneShader;
 	}
 
+	std::shared_ptr<Renderer::VulkanShader> Scene::getShadervk() const
+	{
+		return m_sceneShadervk;
+	}
+
 	std::shared_ptr<Renderer::OpenglShader> Scene::getSkyboxShadergl() const
 	{
 		return m_skyboxShader;

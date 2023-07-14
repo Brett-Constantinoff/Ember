@@ -9,15 +9,10 @@
 #include <glm/glm.hpp>
 
 #include "../../../Core/Logger.h"
+#include "../../Shader.h"
 
 namespace Ember::Renderer
 {
-    struct ShaderSource
-    {
-        std::string vertexSource;
-        std::string fragmentSource;
-    };
-
     class OpenglShader
     {
     public:

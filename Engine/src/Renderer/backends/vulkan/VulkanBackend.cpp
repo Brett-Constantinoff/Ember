@@ -342,6 +342,44 @@ namespace Ember::Renderer
 		}
 	}
 
+	void VulkanBackend::createPipeline()
+	{
+		VkShaderModule vertModule = createShaderModule(m_createInfo.m_scene->getShadervk()->getSource().vertexSource);
+		VkShaderModule fragModule = createShaderModule(m_createInfo.m_scene->getShadervk()->getSource().fragmentSource);
+
+		VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+		vertShaderStageInfo.module = vertModule;
+		vertShaderStageInfo.pName = "main";
+
+		VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
+		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+		fragShaderStageInfo.module = fragModule;
+		fragShaderStageInfo.pName = "main";
+
+		vkDestroyShaderModule(m_logicalDevice, fragModule, nullptr);
+		vkDestroyShaderModule(m_logicalDevice, vertModule, nullptr);
+
+		VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
+	}
+
+	VkShaderModule VulkanBackend::createShaderModule(const std::string& source)
+	{
+		VkShaderModuleCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		createInfo.codeSize = source.size();
+		createInfo.pCode = reinterpret_cast<const uint32_t*>(source.c_str());
+
+		VkShaderModule shaderModule;
+		if (vkCreateShaderModule(m_logicalDevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+			Core::Logger::getInstance().logError(std::string{ "Failed to create vulkan shader module" }, __FILE__);
+		}
+
+		return shaderModule;
+	}
+
 	///////////////// VULKAN DESTRUCTION //////////////////
 	//////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////

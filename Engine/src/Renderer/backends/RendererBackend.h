@@ -19,7 +19,6 @@ namespace Ember::Renderer
 		std::shared_ptr<Core::Gui> m_gui{};
 	};
 
-
 	 // nothing should access a backend except for the renderer
 	class RendererBackend
 	{

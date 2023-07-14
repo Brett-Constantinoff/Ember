@@ -72,9 +72,41 @@ namespace Ember::Renderer
         std::string vertCommand{std::string{sdkPath} + "/Bin/glslc.exe " + absolutePath.string() + "vulkanShader.vert" + " -o " + absolutePath.string() + "vulkanShaderVert.spv"};
         std::string fragCommand{std::string{sdkPath} + "/Bin/glslc.exe " + absolutePath.string() + "vulkanShader.frag" + " -o " + absolutePath.string() + "vulkanShaderFrag.spv"};
 
-        std::cout << vertCommand << std::endl;
-
         std::system(vertCommand.c_str());
         std::system(fragCommand.c_str());
+
+        m_source.vertexSource = getSource(shaderPath + "/vulkanShaderVert.spv");
+        m_source.fragmentSource = getSource(shaderPath + "/vulkanShaderFrag.spv");
+
+        // delete intermediate shader files
+        std::remove(std::string{ shaderPath + "/vulkanShader.vert" }.c_str());
+        std::remove(std::string{ shaderPath + "/vulkanShader.frag" }.c_str());
+        std::remove(std::string{ shaderPath + "/vulkanShaderVert.spv" }.c_str());
+        std::remove(std::string{ shaderPath + "/vulkanShaderFrag.spv" }.c_str());
     }
+
+    std::string VulkanShader::getSource(const std::string& file)
+    {
+        std::ifstream f(file, std::ios::ate | std::ios::binary);
+
+        if (!f.is_open()) 
+            Core::Logger::getInstance().logError(std::string{ "Cant open shader file" }, __FILE__);
+        
+
+        std::size_t fileSize = static_cast<std::size_t>(f.tellg());
+        std::vector<char> buffer(fileSize);
+
+        f.seekg(0);
+        f.read(buffer.data(), fileSize);
+        std::string source{buffer.begin(), buffer.end()};
+        f.close();
+
+        return source;
+    }
+
+    ShaderSource VulkanShader::getSource()
+    {
+        return m_source;
+    }
+  
 }

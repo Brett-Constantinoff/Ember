@@ -50,6 +50,8 @@ namespace Ember::Renderer
 		void createSurface();
 		void createSwapChain();
 		void createImageViews();
+		void createPipeline();
+		VkShaderModule createShaderModule(const std::string& source);
 
 		// vulkan destruction
 		void destroyDebugUtilsMessengerEXT(VkInstance instance,

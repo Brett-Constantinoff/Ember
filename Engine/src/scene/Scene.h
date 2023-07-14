@@ -62,6 +62,7 @@ namespace Ember::Scene
 		int32_t getEntityCount() const;
 		std::shared_ptr<Camera> getCamera() const;
 		std::shared_ptr<Renderer::OpenglShader> getShadergl() const;
+		std::shared_ptr<Renderer::VulkanShader> getShadervk() const;
 		std::shared_ptr<Renderer::OpenglShader> getSkyboxShadergl() const;
 		std::shared_ptr<Entity> getSkybox() const;
 		SceneShading getSceneShading() const;
