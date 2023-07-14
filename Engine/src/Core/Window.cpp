@@ -104,6 +104,15 @@ namespace Ember::Core
         return { glfwGetRequiredInstanceExtensions(&glfwExtensionCount), glfwExtensionCount };
     }
 
+    FrameBufferSize Window::getFraneBufferSize()
+    {
+        int32_t w{};
+        int32_t h{};
+        glfwGetFramebufferSize(m_winID, &w, &h);
+
+        return { w, h };
+    }
+
     void Window::resizeOpenGLApi(GLFWwindow* window, int width, int height)
     {
         glViewport(0, 0, width, height);

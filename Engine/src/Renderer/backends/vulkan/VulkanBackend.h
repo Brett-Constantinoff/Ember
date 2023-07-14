@@ -8,6 +8,8 @@
 #include <optional>
 #include <set>
 #include <cstring>
+#include <limits>
+#include <algorithm>
 
 #include "../RendererBackend.h"
 
@@ -36,12 +38,17 @@ namespace Ember::Renderer
 		struct QueueFamilyIndices;
 		std::shared_ptr<QueueFamilyIndices> m_indices{nullptr};
 
+		struct SwapChainSupportDetails;
+		std::shared_ptr<SwapChainSupportDetails> m_swapChainDetails{nullptr};
+
 		// vulkan creation
 		void createInstance();
 		void createDebugMessenger();
 		void createPhysicalDevice();
 		void createLogicalDevice();
 		void createSurface();
+		void createSwapChain();
+		void createImageViews();
 
 		// vulkan destruction
 		void destroyDebugUtilsMessengerEXT(VkInstance instance,
@@ -52,6 +59,11 @@ namespace Ember::Renderer
 		void getQueueFamilies(VkPhysicalDevice device);
 		bool checkValidationLayerSupport();
 		std::vector<const char*> getRequiredExtenions();
+		bool checkDeviceExtensionSupport(VkPhysicalDevice);
+		void querySwapChainSupport(VkPhysicalDevice device);
+		VkSurfaceFormatKHR chooseSwapSurfaceFormat();
+		VkPresentModeKHR chooseSwapPresentMode();
+		VkExtent2D chooseSwapExtent();
 
 		// vulkan debug
 		static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
@@ -68,6 +80,10 @@ namespace Ember::Renderer
 		const std::vector<const char*> m_validationLayers = {
 			"VK_LAYER_KHRONOS_validation"
 		};
+
+		const std::vector<const char*> m_deviceExtensions = {
+			VK_KHR_SWAPCHAIN_EXTENSION_NAME
+		};
 	#if NDEBUG
 		const bool m_enableValidatonLayers{ false };
 	#else
@@ -81,7 +97,11 @@ namespace Ember::Renderer
 		VkQueue m_graphicsQueue{};
 		VkQueue m_presentQueue{};
 		VkSurfaceKHR m_surface{};
-
+		VkSwapchainKHR m_swapChain{};
+		std::vector<VkImage> m_swapChainImages{};
+		VkFormat m_swapChainImageFormat{};
+		VkExtent2D m_swapChainExtent{};
+		std::vector<VkImageView> m_swapChainImageViews{};
 
 		friend class Renderer;
 	};

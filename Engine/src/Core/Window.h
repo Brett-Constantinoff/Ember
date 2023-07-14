@@ -31,6 +31,12 @@ namespace Ember::Core
         uint32_t m_count{};
     };
 
+    struct FrameBufferSize
+    {
+        int32_t m_width{};
+        int32_t m_height{};
+    };
+
     class Window
     {
     public:
@@ -46,6 +52,7 @@ namespace Ember::Core
         void setViewPort(int32_t width, int32_t height);
         void setViewPort();
         WindowExtensions getExtensions();
+        FrameBufferSize getFraneBufferSize();
 
     private:
         static void resizeOpenGLApi(GLFWwindow* window, int width, int height);

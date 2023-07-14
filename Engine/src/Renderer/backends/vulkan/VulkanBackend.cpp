@@ -2,6 +2,9 @@
 
 namespace Ember::Renderer
 {
+	///////////////// VULKAN STRUCTS //////////////////////
+	//////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	struct VulkanBackend::QueueFamilyIndices
 	{
 	public:
@@ -16,23 +19,37 @@ namespace Ember::Renderer
 		std::optional<uint32_t> m_presentFamily{};
 	};
 
+	struct VulkanBackend::SwapChainSupportDetails
+	{
+	public:
+		VkSurfaceCapabilitiesKHR m_cap{};
+		std::vector<VkSurfaceFormatKHR> m_formats{};
+		std::vector<VkPresentModeKHR> m_presentModes{};
+	};
+
 	void VulkanBackend::init(const RendererCreateInfo& createInfo)
 	{
 		m_createInfo = createInfo;
 		m_indices = std::make_shared<QueueFamilyIndices>();
+		m_swapChainDetails = std::make_shared<SwapChainSupportDetails>();
 
 		createInstance();
 		createDebugMessenger();
 		createSurface();
 		createPhysicalDevice();
 		createLogicalDevice();
+		createSwapChain();
 	}
 
 	void VulkanBackend::destroy()
 	{
+		for (const auto& imageView : m_swapChainImageViews)
+			vkDestroyImageView(m_logicalDevice, imageView, nullptr);
+
 		if (m_enableValidationLayers)
 			destroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
 
+		vkDestroySwapchainKHR(m_logicalDevice, m_swapChain, nullptr);
 		vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
 		vkDestroyDevice(m_logicalDevice, nullptr);
 		vkDestroyInstance(m_instance, nullptr);
@@ -197,9 +214,19 @@ namespace Ember::Renderer
 		ci.pQueueCreateInfos = createInfos.data();
 		ci.queueCreateInfoCount = static_cast<uint32_t>(createInfos.size());
 		ci.pEnabledFeatures = &features;
+		ci.enabledExtensionCount = static_cast<uint32_t>(m_deviceExtensions.size());
+		ci.ppEnabledExtensionNames = m_deviceExtensions.data();
 
-		// TODO - Give layer count once implemented
-		ci.enabledLayerCount = 0;
+		if (m_enableValidationLayers)
+		{
+			ci.enabledLayerCount = static_cast<uint32_t>(m_validationLayers.size());
+			ci.ppEnabledLayerNames = m_validationLayers.data();
+		}
+		else
+		{
+			ci.enabledLayerCount = 0;
+		}
+
 
 		if (vkCreateDevice(m_physicalDevice, &ci, nullptr, &m_logicalDevice) != VK_SUCCESS)
 			Core::Logger::getInstance().logError(std::string{ "Failed to create Vulkan logical device" }, __FILE__);
@@ -217,6 +244,85 @@ namespace Ember::Renderer
 
 		if (vkCreateWin32SurfaceKHR(m_instance, &createInfo, nullptr, &m_surface) != VK_SUCCESS)
 			Core::Logger::getInstance().logError(std::string{"Failed to create vulkan surface"}, __FILE__);
+	}
+
+	void VulkanBackend::createSwapChain()
+	{
+		VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat();
+		VkPresentModeKHR presentMode = chooseSwapPresentMode();
+		VkExtent2D extent = chooseSwapExtent();
+		
+		uint32_t imageCount{ m_swapChainDetails->m_cap.minImageCount + 1 };
+		uint32_t maxImageCount{ m_swapChainDetails->m_cap.maxImageCount };
+		if (maxImageCount > 0 && imageCount > maxImageCount)
+			imageCount = maxImageCount;
+
+		VkSwapchainCreateInfoKHR createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+		createInfo.surface = m_surface;
+		createInfo.minImageCount = imageCount;
+		createInfo.imageFormat = surfaceFormat.format;
+		createInfo.imageColorSpace = surfaceFormat.colorSpace;
+		createInfo.imageExtent = extent;
+		createInfo.imageArrayLayers = 1;
+		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+		getQueueFamilies(m_physicalDevice);
+		uint32_t indices[] = { m_indices->m_graphicsFamily.value(),m_indices->m_graphicsFamily.value() };
+		if (m_indices->m_graphicsFamily != m_indices->m_graphicsFamily) 
+		{
+			createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+			createInfo.queueFamilyIndexCount = 2;
+			createInfo.pQueueFamilyIndices = indices;
+		}
+		else 
+		{
+			createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+			createInfo.queueFamilyIndexCount = 0;
+			createInfo.pQueueFamilyIndices = nullptr;
+		}
+
+		createInfo.preTransform = m_swapChainDetails->m_cap.currentTransform;
+		createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+		createInfo.presentMode = presentMode;
+		createInfo.clipped = VK_TRUE;
+		createInfo.oldSwapchain = VK_NULL_HANDLE;
+
+		if (vkCreateSwapchainKHR(m_logicalDevice, &createInfo, nullptr, &m_swapChain) != VK_SUCCESS) 
+			Core::Logger::getInstance().logError(std::string{"Failed to create vulkan swap chain"}, __FILE__);
+
+		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapChain, &imageCount, nullptr);
+		m_swapChainImages.resize(imageCount);
+		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapChain, &imageCount, m_swapChainImages.data());
+
+		m_swapChainImageFormat = surfaceFormat.format;
+		m_swapChainExtent = extent;
+	}
+
+	void VulkanBackend::createImageViews()
+	{
+		m_swapChainImageViews.resize(m_swapChainImages.size());
+
+		for (std::size_t i{0}; i < m_swapChainImages.size(); i++)
+		{
+			VkImageViewCreateInfo ci{};
+			ci.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+			ci.image = m_swapChainImages[i];
+			ci.viewType = VK_IMAGE_VIEW_TYPE_2D;
+			ci.format = m_swapChainImageFormat;
+			ci.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+			ci.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+			ci.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+			ci.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+			ci.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			ci.subresourceRange.baseMipLevel = 0;
+			ci.subresourceRange.levelCount = 1;
+			ci.subresourceRange.baseArrayLayer = 0;
+			ci.subresourceRange.layerCount = 1;
+
+			if (vkCreateImageView(m_logicalDevice, &ci, nullptr, &m_swapChainImageViews[i]) != VK_SUCCESS)
+				Core::Logger::getInstance().logError(std::string{"Failed to create vulkan image views"}, __FILE__);
+		}
 	}
 
 	///////////////// VULKAN DESTRUCTION //////////////////
@@ -238,7 +344,16 @@ namespace Ember::Renderer
 		// returns any gpu that supports vulkan
 		// TODO: Add some other checks here ex. pick dedicated gpu instead of integrated graphics
 		getQueueFamilies(device);
-		return m_indices->isComplete();
+		bool extensionsSupported{ checkDeviceExtensionSupport(device) };
+		bool swapChainAdequate{ false };
+
+		if (extensionsSupported)
+		{
+			querySwapChainSupport(device);
+			swapChainAdequate = !m_swapChainDetails->m_formats.empty() && !m_swapChainDetails->m_presentModes.empty();
+		}
+
+		return m_indices->isComplete() && extensionsSupported && swapChainAdequate;
 	}
 
 	void VulkanBackend::getQueueFamilies(VkPhysicalDevice device)
@@ -309,6 +424,88 @@ namespace Ember::Renderer
 		return extensions;
 	}
 
+	bool VulkanBackend::checkDeviceExtensionSupport(VkPhysicalDevice device)
+	{
+		uint32_t count{};
+		vkEnumerateDeviceExtensionProperties(device, nullptr, &count, nullptr);
+
+		std::vector<VkExtensionProperties> extensions{};
+		extensions.resize(count);
+		vkEnumerateDeviceExtensionProperties(device, nullptr, &count, extensions.data());
+		std::vector<std::string> requiredExtensions(m_deviceExtensions.begin(), m_deviceExtensions.end());
+
+		for (const auto& extension : extensions)
+		{
+			std::string extensionName{ extension.extensionName };
+			requiredExtensions.erase(
+				std::remove(requiredExtensions.begin(), requiredExtensions.end(), extensionName),
+				requiredExtensions.end()
+			);
+		}
+			
+		return requiredExtensions.empty();
+	}
+
+	void VulkanBackend::querySwapChainSupport(VkPhysicalDevice device)
+	{
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_surface, &m_swapChainDetails->m_cap);
+
+		uint32_t count{};
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_surface, &count, nullptr);
+		if (count != 0)
+		{
+			m_swapChainDetails->m_formats.resize(count);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_surface, &count, m_swapChainDetails->m_formats.data());
+		}
+
+		count = 0;
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_surface, &count, nullptr);
+		if (count != 0)
+		{
+			m_swapChainDetails->m_presentModes.resize(count);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_surface, &count, m_swapChainDetails->m_presentModes.data());
+		}
+	}
+
+	VkSurfaceFormatKHR VulkanBackend::chooseSwapSurfaceFormat()
+	{
+		for (const auto& format : m_swapChainDetails->m_formats)
+		{
+			if (format.format == VK_FORMAT_B8G8R8A8_SRGB && format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+				return format;
+		}
+		// just return first format for now
+		return m_swapChainDetails->m_formats[0];
+	}
+
+	VkPresentModeKHR VulkanBackend::chooseSwapPresentMode()
+	{
+		for (const auto& presentMode : m_swapChainDetails->m_presentModes)
+		{
+			if (presentMode == VK_PRESENT_MODE_MAILBOX_KHR)
+				return presentMode;
+		}
+		return VK_PRESENT_MODE_FIFO_KHR;
+	}
+
+	VkExtent2D VulkanBackend::chooseSwapExtent()
+	{
+		if (m_swapChainDetails->m_cap.currentExtent.width != std::numeric_limits<uint32_t>::max())
+			return m_swapChainDetails->m_cap.currentExtent;
+		else
+		{
+			Core::FrameBufferSize size{m_createInfo.m_window->getFraneBufferSize()};
+
+			VkExtent2D extent = {
+				static_cast<uint32_t>(size.m_width),
+				static_cast<uint32_t>(size.m_height)
+			};
+			extent.width = std::clamp(extent.width, m_swapChainDetails->m_cap.minImageExtent.width, m_swapChainDetails->m_cap.maxImageExtent.width);
+			extent.height = std::clamp(extent.height, m_swapChainDetails->m_cap.minImageExtent.height, m_swapChainDetails->m_cap.maxImageExtent.height);
+			return extent;
+		}
+	}
+
 	///////////////// VULKAN DEBUG ///////////////////////
 	//////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////
@@ -330,7 +527,6 @@ namespace Ember::Renderer
 			Core::Logger::getInstance().logError(std::string{"Validaion layer: "} + pCallbackData->pMessage, __FILE__);
 			break;
 		}
-		
 		return VK_FALSE;
 	}
 
